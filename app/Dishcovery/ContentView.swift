@@ -28,6 +28,8 @@ struct ContentView: View {
                 set: { newValue in
                     if let page = newValue {
                         path.append(page)
+                    } else {
+                        path.removeLast(path.count)
                     }
                 }
             )
