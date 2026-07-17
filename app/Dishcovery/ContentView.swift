@@ -143,7 +143,7 @@ struct ContentView: View {
                         .navigationTitle("회원가입")
                         .navigationBarTitleDisplayMode(.inline)
                 case .recipeWrite:
-                    RecipeRegisterView()
+                    RecipeRegisterView(path: $path)
                         .navigationTitle("레시피 등록")
                         .navigationBarTitleDisplayMode(.inline)
                     

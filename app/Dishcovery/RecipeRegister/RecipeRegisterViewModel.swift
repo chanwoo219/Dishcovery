@@ -20,6 +20,7 @@ class RecipeRegisterViewModel: ObservableObject {
     @AppStorage("JWT_TOKEN") private var authToken: String?
     @Published var toastMessage = ""
     @Published var showToast = false
+    @Published var shouldNavigateToMain = false
    
     @Published var categories: [CodeVo] = []
 
@@ -76,6 +77,13 @@ class RecipeRegisterViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.toastMessage = message
                 self.showToast = true
+
+                if success {
+                    // 토스트를 잠깐 보여준 뒤 메인 화면으로 이동
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                        self.shouldNavigateToMain = true
+                    }
+                }
             }
         }
     }

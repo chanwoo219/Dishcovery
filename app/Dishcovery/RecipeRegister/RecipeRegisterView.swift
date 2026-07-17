@@ -2,8 +2,9 @@ import SwiftUI
 
 
 struct RecipeRegisterView: View {
-    
+
     @StateObject private var viewModel = RecipeRegisterViewModel()
+    @Binding var path: NavigationPath
 
     var body: some View {
         ZStack {
@@ -47,5 +48,10 @@ struct RecipeRegisterView: View {
             }
         }
         .toast(message: viewModel.toastMessage, isShowing: $viewModel.showToast) //전체 ZStack에 적용
+        .onChange(of: viewModel.shouldNavigateToMain) { navigate in
+            if navigate {
+                path.removeLast(path.count)
+            }
+        }
     }
 }
