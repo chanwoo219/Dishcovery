@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 @Controller
@@ -44,6 +46,8 @@ public class ShopController {
         }
 
         model.addAttribute("loginUserId", userId);
+        model.addAttribute("rcpClassNm", "seg-btn");
+        model.addAttribute("rankClassNm", "seg-btn active");
 
         // 3) 상품 조회 (절대 null/예외로 화면 죽지 않게)
         try {
@@ -124,10 +128,10 @@ public class ShopController {
             shopService.purchase(userId, productId, qty);
             return "redirect:/shop/product/" + productId + "?purchased=1";
         } catch (IllegalArgumentException e) {
-            return "redirect:/shop/product/" + productId + "?error=" + e.getMessage();
+            return "redirect:/shop/product/" + productId + "?error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/shop/product/" + productId + "?error=구매 처리 중 오류가 발생했습니다";
+            return "redirect:/shop/product/" + productId + "?error=" + URLEncoder.encode("구매 처리 중 오류가 발생했습니다", StandardCharsets.UTF_8);
         }
     }
 }

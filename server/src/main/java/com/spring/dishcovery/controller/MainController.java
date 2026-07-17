@@ -54,13 +54,14 @@ public class MainController {
     @GetMapping("/myPage")
     public String myPage(Model model, HttpServletRequest request) {
 
-        UserEntity user = new  UserEntity();
         // JWT 쿠키에서 토큰 가져오기
         String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = jwtUtil.getUserIdFromToken(token);
+        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        if (userId == null) {
+            return "redirect:/dishcovery_login";
+        }
 
-        user.setUserId(userId);
-        user = userService.findByUserId(userId);
+        UserEntity user = userService.findByUserId(userId);
 
         List<RecipeVo> myRecipes = new ArrayList<>();
         myRecipes = service.getMyRecipes(userId);
@@ -96,8 +97,8 @@ public class MainController {
             rcpClassNm = "seg-btn";
             rankClassNm = "seg-btn active";
 
-            // 상점 화면은 별도 컨트롤러에서 처리
-            url = "shop/ShopList";
+            // 상품 조회는 ShopController에서 처리
+            url = "redirect:/shop";
         }
 
         model.addAttribute("recipes", recipes);
