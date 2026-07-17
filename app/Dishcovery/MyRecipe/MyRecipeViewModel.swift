@@ -1,6 +1,6 @@
 //
 //  MyRecipeViewModel.swift
-//  New_Dishcovery
+//  Dishcovery
 //
 //  Created by 박진희 on 2025/12/18.
 //
