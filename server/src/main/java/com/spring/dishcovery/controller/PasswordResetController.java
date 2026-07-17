@@ -18,7 +18,7 @@ public class PasswordResetController {
     /** 1️⃣ 이메일 입력 */
     @GetMapping("/reset_password")
     public String resetPage() {
-        return "verify";
+        return "user/reset_request";
     }
 
     /** 2️⃣ 인증코드 발송 */

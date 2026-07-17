@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dishcovery | 비밀번호 재설정</title>
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
+<body>
+
+<main class="page">
+    <a class="brand" href="/MainPage">Dishcovery</a>
+    <p class="subtitle">가입한 이메일로 인증코드를 보내드려요</p>
+
+    <section class="auth-card" aria-label="비밀번호 재설정">
+        <form method="post" action="/reset_password">
+            <input type="email" name="userMail" placeholder="이메일" required />
+            <button type="submit" class="btn primary">인증코드 보내기</button>
+        </form>
+
+        <p th:if="${msg}" th:text="${msg}" class="error-msg"></p>
+
+        <div class="helper-row end">
+            <a th:href="@{/dishcovery_login(gubun='login')}">로그인으로</a>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
