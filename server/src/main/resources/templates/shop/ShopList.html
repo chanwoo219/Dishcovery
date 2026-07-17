@@ -28,26 +28,26 @@
     <section class="content container">
 
         <!-- ✅ 절대 안 터지는 디버그/상태 표시 -->
-        <div style="margin:10px 0; font-weight:700;"
+        <div class="shop-count"
              th:text="'상품 수: ' + ${products == null ? 0 : #lists.size(products)}"></div>
 
         <!-- 서버에서 에러 메시지 내려주면 표시 -->
         <div th:if="${errorMessage != null}"
-             style="margin:10px 0; padding:12px; border:1px solid #ffb4b4; background:#fff1f1; border-radius:10px; font-weight:600;"
+             class="shop-error"
              th:text="${errorMessage}">
             에러 메시지
         </div>
 
-        <div class="recipe-grid" id="productListContainer">
+        <div class="product-grid" id="productListContainer">
 
             <!-- products가 null이거나 비었으면 안내문 -->
             <div th:if="${products == null or #lists.isEmpty(products)}"
-                 style="padding:18px; border-radius:12px; background:#f7f7f7; font-weight:600;">
+                 class="shop-empty">
                 현재 표시할 상품이 없습니다.
             </div>
 
             <!-- products가 있을 때만 렌더 -->
-            <article class="recipe-card" th:if="${products != null}" th:each="p : ${products}">
+            <article class="product-card" th:if="${products != null}" th:each="p : ${products}">
                 <div class="product-info">
                     <div class="product-name" th:text="${p != null ? p.productName : '상품명'}">상품명</div>
                     <div class="product-price">

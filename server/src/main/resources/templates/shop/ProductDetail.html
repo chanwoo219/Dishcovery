@@ -2,24 +2,25 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
-    <title th:text="'Dishcovery | ' + ${product.name}">Dishcovery | 상품</title>
+    <title th:text="'Dishcovery | ' + ${product.productName}">Dishcovery | 상품</title>
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
     <link rel="stylesheet" href="/css/shop.css" />
 </head>
 <body>
+
+<div th:insert="fragments/header :: site-header"></div>
+
 <main class="wrap">
 
-    <header class="top">
-        <a class="back" href="/shop">← 상점</a>
-        <div class="my-point">
-            내 포인트 <b th:text="${myPoint}">0</b>P
-        </div>
-    </header>
+    <div class="my-point-bar">
+        내 포인트 <b th:text="${myPoint}">0</b>P
+    </div>
 
     <section class="pd">
         <!-- 좌측: 이미지 -->
         <div class="pd-left">
             <div class="img-box">
-                <img th:src="${product.imageUrl != null ? product.imageUrl : '/img/no-image.png'}"
+                <img th:src="${product.mainImage != null ? product.mainImage : '/img/no-image.png'}"
                      alt="상품 이미지" />
             </div>
             <div class="mini-badges">
@@ -30,15 +31,14 @@
 
         <!-- 우측: 정보 -->
         <div class="pd-right">
-            <div class="brand" th:text="${product.brand != null ? product.brand : 'Dishcovery'}">Brand</div>
-            <h1 class="name" th:text="${product.name}">상품명</h1>
+            <div class="pd-brand">Dishcovery</div>
+            <h1 class="name" th:text="${product.productName}">상품명</h1>
 
             <div class="price-box">
                 <div class="price">
                     <span class="label">포인트</span>
-                    <span class="value" th:text="${product.pricePoint}">0</span><span class="unit">P</span>
+                    <span class="value" th:text="${product.productPoint}">0</span><span class="unit">P</span>
                 </div>
-                <div class="stock" th:text="'재고 ' + ${product.stock} + '개'">재고</div>
             </div>
 
             <div class="meta">
@@ -76,26 +76,23 @@
         </div>
     </section>
 
-    <!-- 네이버 쇼핑 느낌: 탭 -->
     <section class="tabs">
-        <a href="#detail" class="tab active">상세정보</a>
-        <a href="#review" class="tab">리뷰</a>
-        <a href="#qna" class="tab">문의</a>
+        <button type="button" class="tab active" data-target="detail">상세정보</button>
+        <button type="button" class="tab" data-target="review">리뷰</button>
+        <button type="button" class="tab" data-target="qna">문의</button>
     </section>
 
     <section id="detail" class="panel">
         <h2>상세정보</h2>
-        <p class="desc" th:text="${product.description != null ? product.description : '상품 설명이 없습니다.'}">
-            설명
-        </p>
+        <p class="desc">상품 설명이 없습니다.</p>
     </section>
 
-    <section id="review" class="panel">
+    <section id="review" class="panel hidden">
         <h2>리뷰</h2>
         <p class="muted">리뷰 기능은 추후 추가할 수 있어요.</p>
     </section>
 
-    <section id="qna" class="panel">
+    <section id="qna" class="panel hidden">
         <h2>문의</h2>
         <p class="muted">문의 기능은 추후 추가할 수 있어요.</p>
     </section>
@@ -106,14 +103,25 @@
         <div class="reco-grid">
             <a class="reco-card" th:each="r : ${recommended}" th:href="@{|/shop/product/${r.productId}|}">
                 <div class="reco-img">
-                    <img th:src="${r.imageUrl != null ? r.imageUrl : '/img/no-image.png'}" alt="추천" />
+                    <img th:src="${r.mainImage != null ? r.mainImage : '/img/no-image.png'}" alt="추천" />
                 </div>
-                <div class="reco-name" th:text="${r.name}">상품명</div>
-                <div class="reco-price"><b th:text="${r.pricePoint}">0</b>P</div>
+                <div class="reco-name" th:text="${r.productName}">상품명</div>
+                <div class="reco-price"><b th:text="${r.productPoint}">0</b>P</div>
             </a>
         </div>
     </section>
 
 </main>
+
+<script>
+    document.querySelectorAll('.tabs .tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.tabs .tab').forEach(function (t) { t.classList.remove('active'); });
+            document.querySelectorAll('.panel').forEach(function (p) { p.classList.add('hidden'); });
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.target).classList.remove('hidden');
+        });
+    });
+</script>
 </body>
 </html>
