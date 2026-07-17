@@ -5,6 +5,7 @@ import com.spring.dishcovery.entity.DataRequest;
 import com.spring.dishcovery.entity.UserEntity;
 import com.spring.dishcovery.service.ApiService;
 import com.spring.dishcovery.service.CodeService;
+import com.spring.dishcovery.service.EmailVerificationService;
 import com.spring.dishcovery.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class ApiController {
 
     private final ApiService apiService;
     private final CodeService codeService;
+    private final UserService userService;
+    private final EmailVerificationService emailVerificationService;
 
     @GetMapping("/hello")
     public String hello() {
@@ -60,6 +63,50 @@ public class ApiController {
             //return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 실패!");
         }
 
+    }
+
+    /** 앱 회원가입 1단계: 계정 생성(미인증 상태) + 인증 메일 발송 */
+    @PostMapping("/send-verification")
+    public ResponseEntity<Map<String, String>> sendVerification(@RequestBody UserEntity userVo) {
+        Map<String, String> response = new HashMap<>();
+
+        if (apiService.isUserIdExist(userVo.getUserId()) > 0) {
+            response.put("message", "이미 존재하는 아이디입니다.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        }
+        if (userService.isEmailTaken(userVo.getUserMail())) {
+            response.put("message", "이미 가입된 이메일입니다.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        }
+
+        int result = userService.saveUserData(userVo);
+        if (result <= 0) {
+            response.put("message", "회원가입 처리 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        emailVerificationService.sendVerificationCode(userVo);
+        response.put("message", "인증 메일이 발송되었습니다.");
+        return ResponseEntity.ok(response);
+    }
+
+    /** 앱 회원가입 2단계: 인증 코드 확인 후 계정 활성화 */
+    @PostMapping("/verify-and-signup")
+    public ResponseEntity<Map<String, String>> verifyAndSignup(@RequestBody Map<String, String> body) {
+        Map<String, String> response = new HashMap<>();
+
+        String userId = body.get("userId");
+        String code = body.get("verificationCode");
+
+        boolean ok = emailVerificationService.verifyCode(userId, code);
+        if (!ok) {
+            response.put("message", "인증 코드가 올바르지 않거나 만료되었습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        userService.updateUserStatus(userId, "Y");
+        response.put("message", "회원가입이 완료되었습니다!");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/categoryList")
