@@ -1,5 +1,5 @@
 import Foundation
 
 struct API {
-    static let baseURL = "http://191.168.200.107:9191"
+    static let baseURL = "http://192.168.200.107:9191"
 }
