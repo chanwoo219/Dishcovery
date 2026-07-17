@@ -1,0 +1,33 @@
+import SwiftUI
+
+@available(iOS 16.0, *)
+struct MyRecipeView: View {
+    @StateObject private var viewModel = MyRecipeViewModel()
+    @Binding var path: NavigationPath   // ✅ 부모에서 받음
+
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 16) {
+
+                Text("나의 레시피")
+                    .font(.largeTitle)
+                    .bold()
+
+                ForEach(viewModel.myRecipes) { recipe in
+                    Button {
+                        // ✅ 기존 NavigationStack의 path 사용
+                        path.append(Page.recipeDetail(recipeId: recipe.recipeId))
+                    } label: {
+                        RecipeCardView(recipe: recipe)
+                            .padding(.horizontal)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .padding()
+        }
+        .task {
+            await viewModel.fetchMyRecipes()
+        }
+    }
+}

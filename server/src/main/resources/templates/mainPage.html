@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dishcovery</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
+</head>
+<body>
+    <form id="mainForm" name="mainForm" method="get" th:action="@{/searchRecipe}">
+        <div th:replace="~{fragments/header :: site-header}"></div>
+
+
+        <input type="hidden" id="recipeId" name="recipeId">
+
+        <main class="page">
+          <section class="controls container">
+            <div class="segmented" role="tablist" aria-label="콘텐츠 종류">
+                <button type="button"   th:class="${rcpClassNm}"
+                                        onclick="handleSegmentClick(this, '/pageGubun?gubun=recipe')"
+                                        role="tab" aria-selected="true">레시피</button>
+
+                <!-- 기존 "꿀팁" 카테고리를 "상점"으로 표시 -->
+                <button type="button"   th:class="${rankClassNm}"
+                                        onclick="handleSegmentClick(this, '/pageGubun?gubun=rank')"
+                                        role="tab" aria-selected="false">상점</button>
+            </div>
+
+            <div class="sorts" aria-label="정렬">
+              <button type="button" th:class="${sort}=='popular' ? 'sort active' : 'sort'" data-sort="popular">인기순</button>
+              <span class="dot">·</span>
+              <button type="button" th:class="${sort}=='recommend' ? 'sort active' : 'sort'" data-sort="recommend">추천순</button>
+              <span class="dot">·</span>
+              <button type="button" th:class="${sort}=='latest' ? 'sort active' : 'sort'" data-sort="latest">최신순</button>
+            </div>
+          </section>
+
+          <section class="content container">
+              <!-- 검색 결과 타이틀 -->
+              <h2 class="result-title" th:if="${searchName != null and !#strings.isEmpty(searchName)}">
+                  '<span th:text="${searchName}"></span>' 검색결과
+              </h2>
+
+              <div class="recipe-grid" id="recipeListContainer">
+              <!-- 반복 영역 -->
+                  <a class="recipe-card" th:each="recipe : ${recipes}"
+                     th:href="@{/recipe/detail(recipeId=${recipe.recipeId})}">
+                      <img th:src="${recipe.imgUrl}" alt="레시피 이미지">
+    <!--                  <div class="recipe-title" th:text="${recipe.title}"></div>-->
+                      <!-- 제목 + 조회수 -->
+                      <div class="recipe-info">
+                          <div class="recipe-title" th:text="${recipe.title}"></div>
+
+                          <!-- 조회수 표시 -->
+                          <div class="recipe-views">
+                              👁 <span th:text="${recipe.viewCount}"></span>
+                          </div>
+                      </div>
+                  </a>
+             </div>
+          </section>
+        </main>
+    </form>
+
+
+    <script th:src="@{/js/mainPage.js}"></script>
+</body>
+</html>

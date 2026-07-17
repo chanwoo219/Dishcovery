@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.dishcovery.mapper.ShopMapper">
+
+    <!-- PRODUCT 테이블 사용 (ShopProduct 엔티티 필드에 맞게 AS로 매핑) -->
+    <select id="listProductsOrderByPointDesc" resultType="com.spring.dishcovery.entity.ShopProduct">
+        SELECT
+        PRODUCT_ID    AS productId,
+        PRODUCT_NAME  AS productName,
+        PRODUCT_POINT AS productPoint
+        FROM PRODUCT
+        ORDER BY PRODUCT_POINT DESC
+    </select>
+
+    <select id="getProduct" resultType="com.spring.dishcovery.entity.ShopProduct">
+        SELECT
+        PRODUCT_ID    AS productId,
+        PRODUCT_NAME  AS productName,
+        PRODUCT_POINT AS productPoint
+        FROM PRODUCT
+        WHERE PRODUCT_ID = #{productId}
+    </select>
+
+    <select id="listRecommended" resultType="com.spring.dishcovery.entity.ShopProduct">
+        SELECT
+        PRODUCT_ID    AS productId,
+        PRODUCT_NAME  AS productName,
+        PRODUCT_POINT AS productPoint
+        FROM PRODUCT
+        WHERE PRODUCT_ID != #{excludeId}
+        ORDER BY RAND()
+        LIMIT 5
+    </select>
+
+    <update id="updateUserPoint">
+        UPDATE USER_MASTER
+        SET POINT_BALANCE = POINT_BALANCE + #{point}
+        WHERE USER_ID = #{userId}
+    </update>
+
+    <insert id="insertPurchaseHistory">
+        INSERT INTO PURCHASE_HISTORY (USER_ID, PRODUCT_ID, PURCHASE_DATE)
+        VALUES (#{userId}, #{productId}, NOW())
+    </insert>
+
+    <insert id="insertLedger">
+        INSERT INTO POINT_LEDGER (USER_ID, POINT_CHANGE, TRANSACTION_TYPE, DESCRIPTION, CREATED_AT)
+        VALUES (#{userId}, #{point}, #{transactionType}, #{description}, NOW())
+    </insert>
+
+</mapper>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dishcovery | 상점</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
+    <link rel="stylesheet" href="/css/shop.css" />
+</head>
+<body>
+
+<div th:insert="fragments/header :: site-header"></div>
+
+<main class="page">
+    <section class="controls container">
+        <div class="segmented" role="tablist" aria-label="콘텐츠 종류">
+            <button type="button" th:class="${rcpClassNm}"
+                    onclick="handleSegmentClick(this, '/pageGubun?gubun=recipe')"
+                    role="tab" aria-selected="true">레시피</button>
+
+            <button type="button" th:class="${rankClassNm}"
+                    onclick="handleSegmentClick(this, '/pageGubun?gubun=rank')"
+                    role="tab" aria-selected="false">상점</button>
+        </div>
+    </section>
+
+    <section class="content container">
+
+        <!-- ✅ 절대 안 터지는 디버그/상태 표시 -->
+        <div style="margin:10px 0; font-weight:700;"
+             th:text="'상품 수: ' + ${products == null ? 0 : #lists.size(products)}"></div>
+
+        <!-- 서버에서 에러 메시지 내려주면 표시 -->
+        <div th:if="${errorMessage != null}"
+             style="margin:10px 0; padding:12px; border:1px solid #ffb4b4; background:#fff1f1; border-radius:10px; font-weight:600;"
+             th:text="${errorMessage}">
+            에러 메시지
+        </div>
+
+        <div class="recipe-grid" id="productListContainer">
+
+            <!-- products가 null이거나 비었으면 안내문 -->
+            <div th:if="${products == null or #lists.isEmpty(products)}"
+                 style="padding:18px; border-radius:12px; background:#f7f7f7; font-weight:600;">
+                현재 표시할 상품이 없습니다.
+            </div>
+
+            <!-- products가 있을 때만 렌더 -->
+            <article class="recipe-card" th:if="${products != null}" th:each="p : ${products}">
+                <div class="product-info">
+                    <div class="product-name" th:text="${p != null ? p.productName : '상품명'}">상품명</div>
+                    <div class="product-price">
+                        <span th:text="${p != null ? p.productPoint : 0}">0</span>P
+                    </div>
+                </div>
+
+                <form th:action="@{/shop/purchase}" method="post" class="buy-form"
+                      onsubmit="return confirm('상품을 구매하시겠습니까?');">
+                    <input type="hidden" name="productId" th:value="${p != null ? p.productId : ''}">
+                    <button type="submit" class="buy-btn" th:disabled="${p == null}">구매</button>
+                </form>
+            </article>
+
+        </div>
+    </section>
+</main>
+
+<script th:src="@{/js/mainPage.js}"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+### OS ###
+.DS_Store
+
+### Xcode ###
+app/xcuserdata/
+app/**/xcuserdata/
+app/*.xcworkspace/xcuserdata/
+app/DerivedData/
+app/*.xcuserstate
+
+### Java / Gradle (server) ###
+server/*.class
+server/*.log
+server/.gradle/
+server/build/
+server/out/
+server/.idea/
+server/*.iml
+server/src/main/resources/application.properties
+server/src/main/java/com/spring/dishcovery/service/OpenAiService.java
+server/uploads/

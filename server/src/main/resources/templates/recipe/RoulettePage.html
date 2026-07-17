@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dishcovery</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
+    <link rel="stylesheet" th:href="@{/css/roulette.css}" />
+</head>
+<body>
+<form id="mainForm" name="mainForm" method="get">
+    <div th:insert="fragments/header :: site-header"></div>
+
+    <input type="hidden" id="recipeId" name="recipeId">
+
+    <main class="page">
+        <section class="controls container">
+            <div class="segmented" role="tablist" aria-label="콘텐츠 종류">
+                <button type="button"   th:class="${rcpClassNm}"
+                        onclick="handleSegmentClick(this, '/pageGubun?gubun=recipe')"
+                        role="tab" aria-selected="true">레시피</button>
+
+                <button type="button"   th:class="${rankClassNm}"
+                        onclick="handleSegmentClick(this, '/pageGubun?gubun=rank')"
+                        role="tab" aria-selected="false">랭킹</button>
+                <button type="button"   th:class="${lastClassNm}"
+                        onclick="handleSegmentClick(this, '/pageGubun?gubun=last')"
+                        role="tab" aria-selected="false">룰렛추천</button>
+            </div>
+            <!--              -->
+            <!--            <div class="sorts" aria-label="정렬">-->
+            <!--              <span class="dot">·</span>-->
+            <!--              <button class="sort active"   data-sort="popular">인기순</button>-->
+            <!--              <span class="dot">·</span>-->
+            <!--              <button class="sort"  data-sort="recommend">추천순</button>-->
+            <!--              <span class="dot">·</span>-->
+            <!--              <button class="sort" data-sort="latest">최신순</button>-->
+            <!--            </div>-->
+        </section>
+
+        <div class="roulette">
+            <div id="wheel" class="wheel">
+<!--                <div id="pointer">▼</div>-->
+                <div th:each="recipe, stat : ${recipes}"
+                     class="slice"
+                     th:style="'transform: rotate(' + ${stat.index * (360 / recipes.size())} + 'deg) translate(230px);'">
+                    <div class="slice-inner">
+                        <img th:src="${recipe.imgUrl}" class="recipe-img" alt="음식 이미지"/>
+                        <div class="recipe-title" th:text="${recipe.title}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" id="spin-btn" onclick="spin()">돌리기!</button>
+
+<!--        <div id="result">-->
+<!--            🎉 당첨 레시피: <span id="resultTitle"></span>-->
+<!--        </div>-->
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <h2>🎉 레시피!</h2>
+                <img id="modalImg">
+                <p id="modalTitle"></p>
+                <button type="button" onclick="closeModal()">상세보기</button>
+                <button type="button" onclick="closeModal()">닫기</button>
+
+            </div>
+        </div>
+    </main>
+</form>
+
+
+<script th:src="@{/js/mainPage.js}"></script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.dishcovery.mapper.RecipeAppMapper">
+
+
+    <select id="getAppRecipes" resultType="com.spring.dishcovery.entity.RecipeAppVo">
+        SELECT RECIPE_ID
+             ,USER_ID
+             ,CATEGORY_ID
+             ,TITLE
+             ,RCP_DISC
+             ,COOK_TIME
+             ,COOK_DFCT
+             ,RGT_DATE
+             ,UPD_DATE
+             ,IMG_URL
+             ,RECIPE_INGR
+             ,RECIPE_TIP
+             ,RECIPE_TAG
+             ,VIEW_COUNT
+        FROM RECIPE_MASTER
+
+    </select>
+
+    <select id="selectRecipeById" parameterType="string" resultType="com.spring.dishcovery.entity.RecipeAppVo">
+
+        SELECT RECIPE_ID
+              ,USER_ID
+              ,CATEGORY_ID
+              ,TITLE
+              ,RCP_DISC
+              ,COOK_TIME
+              ,COOK_DFCT
+              ,RGT_DATE
+              ,UPD_DATE
+              ,IMG_URL
+              ,RECIPE_INGR
+              ,RECIPE_TIP
+              ,RECIPE_TAG
+              ,VIEW_COUNT
+         FROM RECIPE_MASTER
+        WHERE RECIPE_ID = #{recipeId}
+
+    </select>
+
+    <select id="selectStepsByRecipeId" parameterType="string" resultType="com.spring.dishcovery.entity.RecipeAppVo">
+        SELECT STEP_ORDER, STEP_DESCRIPTION
+        FROM RECIPE_STEP
+        WHERE RECIPE_ID = #{recipeId}
+        ORDER BY STEP_ORDER ASC
+    </select>
+
+
+    <select id="getAllRecipes" resultType="com.spring.dishcovery.entity.RecipeVo">
+        SELECT RECIPE_ID
+             ,USER_ID
+             ,CATEGORY_ID
+             ,TITLE
+             ,RCP_DISC
+             ,COOK_TIME
+             ,COOK_DFCT
+             ,RGT_DATE
+             ,UPD_DATE
+             ,IMG_URL
+             ,RECIPE_INGR
+             ,RECIPE_TIP
+             ,RECIPE_TAG
+             ,VIEW_COUNT
+        FROM RECIPE_MASTER
+
+        ORDER BY RGT_DATE DESC
+
+    </select>
+
+    <select id="getAllRecipesSorted" resultType="com.spring.dishcovery.entity.RecipeVo">
+        SELECT RECIPE_ID
+             ,USER_ID
+             ,CATEGORY_ID
+             ,TITLE
+             ,RCP_DISC
+             ,COOK_TIME
+             ,COOK_DFCT
+             ,RGT_DATE
+             ,UPD_DATE
+             ,IMG_URL
+             ,RECIPE_INGR
+             ,RECIPE_TIP
+             ,RECIPE_TAG
+             ,VIEW_COUNT
+        FROM RECIPE_MASTER
+        <choose>
+            <when test="sort == 'views'">
+                ORDER BY VIEW_COUNT DESC, RGT_DATE DESC
+            </when>
+            <when test="sort == 'time'">
+                ORDER BY COOK_TIME ASC, RGT_DATE DESC
+            </when>
+            <when test="sort == 'difficulty'">
+                ORDER BY COOK_DFCT ASC, RGT_DATE DESC
+            </when>
+            <when test="sort == 'random'">
+                ORDER BY RAND()
+            </when>
+            <otherwise>
+                ORDER BY RGT_DATE DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getRoulleteData" resultType="com.spring.dishcovery.entity.RecipeVo">
+        SELECT RECIPE_ID
+             ,USER_ID
+             ,CATEGORY_ID
+             ,TITLE
+             ,RCP_DISC
+             ,COOK_TIME
+             ,COOK_DFCT
+             ,RGT_DATE
+             ,UPD_DATE
+             ,IMG_URL
+             ,RECIPE_INGR
+             ,RECIPE_TIP
+             ,RECIPE_TAG
+             ,VIEW_COUNT
+        FROM RECIPE_MASTER
+    ORDER BY RAND()
+       LIMIT 7
+    </select>
+
+    <select id="getSearchRecipes"  resultType="com.spring.dishcovery.entity.RecipeVo" >
+       SELECT RECIPE_ID
+             ,USER_ID
+             ,CATEGORY_ID
+             ,TITLE
+             ,RCP_DISC
+             ,COOK_TIME
+             ,COOK_DFCT
+             ,RGT_DATE
+             ,UPD_DATE
+             ,IMG_URL
+             ,RECIPE_INGR
+             ,RECIPE_TIP
+             ,RECIPE_TAG
+             ,VIEW_COUNT
+        FROM RECIPE_MASTER
+       WHERE TITLE LIKE CONCAT('%', #{searchName}, '%')
+       ORDER BY RGT_DATE DESC
+
+    </select>
+
+    <select id="getSearchRecipesSorted"  resultType="com.spring.dishcovery.entity.RecipeVo" >
+        SELECT RECIPE_ID
+             ,USER_ID
+             ,CATEGORY_ID
+             ,TITLE
+             ,RCP_DISC
+             ,COOK_TIME
+             ,COOK_DFCT
+             ,RGT_DATE
+             ,UPD_DATE
+             ,IMG_URL
+             ,RECIPE_INGR
+             ,RECIPE_TIP
+             ,RECIPE_TAG
+             ,VIEW_COUNT
+        FROM RECIPE_MASTER
+        WHERE TITLE LIKE CONCAT('%', #{searchName}, '%')
+        <choose>
+            <when test="sort == 'views'">
+                ORDER BY VIEW_COUNT DESC, RGT_DATE DESC
+            </when>
+            <when test="sort == 'time'">
+                ORDER BY COOK_TIME ASC, RGT_DATE DESC
+            </when>
+            <when test="sort == 'difficulty'">
+                ORDER BY COOK_DFCT ASC, RGT_DATE DESC
+            </when>
+            <when test="sort == 'random'">
+                ORDER BY RAND()
+            </when>
+            <otherwise>
+                ORDER BY RGT_DATE DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getMyRecipes" parameterType="string"    resultType="com.spring.dishcovery.entity.RecipeVo" >
+        SELECT RECIPE_ID
+             ,USER_ID
+             ,CATEGORY_ID
+             ,TITLE
+             ,RCP_DISC
+             ,COOK_TIME
+             ,COOK_DFCT
+             ,RGT_DATE
+             ,UPD_DATE
+             ,IMG_URL
+             ,RECIPE_INGR
+             ,RECIPE_TIP
+             ,RECIPE_TAG
+             ,VIEW_COUNT
+            FROM RECIPE_MASTER
+            WHERE USER_ID =  #{userId}
+
+    </select>
+
+
+    <insert id="SaveRecipeData" parameterType="com.spring.dishcovery.entity.RecipeVo">
+
+        INSERT INTO RECIPE_MASTER(
+                  RECIPE_ID
+                 ,USER_ID
+                 ,CATEGORY_ID
+                 ,TITLE
+                 ,RCP_DISC
+                 ,COOK_TIME
+                 ,COOK_DFCT
+                 ,RGT_DATE
+                 ,UPD_DATE
+                 ,IMG_URL
+                 ,recipe_ingr
+                 ,recipe_tip
+                 ,recipe_tag
+        )
+
+        VALUES (
+                #{recipeId},
+                #{userId},
+                #{categoryId},
+                #{title},
+                #{rcpDisc},
+                #{cookTime},
+                #{cookDfct},
+                NOW(),
+                NOW(),
+                #{imgUrl},
+                #{recipeIngr},
+                #{recipeTip},
+                #{recipeTag}
+              );
+    </insert>
+
+    <insert id="insertRecipeSteps"  parameterType="java.util.List">
+        INSERT INTO RECIPE_STEP
+                    (RECIPE_ID
+                    ,STEP_ORDER
+                    ,STEP_DESCRIPTION
+                    )
+        VALUES
+                <foreach collection="list" item="item" separator=",">
+                    (
+                    #{item.recipeId}
+                    ,#{item.stepOrder}
+                    ,#{item.stepDescription}
+                    )
+                </foreach>
+    </insert>
+
+    <select id="getRecipeDataDetail" parameterType="string"    resultType="com.spring.dishcovery.entity.RecipeVo" >
+        SELECT RECIPE_ID
+             ,USER_ID
+             ,CATEGORY_ID
+             ,TITLE
+             ,RCP_DISC
+             ,COOK_TIME
+             ,COOK_DFCT
+             ,RGT_DATE
+             ,UPD_DATE
+             ,IMG_URL
+             ,recipe_ingr
+             ,recipe_tip
+             ,recipe_tag
+        FROM RECIPE_MASTER
+       WHERE RECIPE_ID =  #{recipeId}
+
+    </select>
+
+    <select id="selectStepList" parameterType="string"    resultType="com.spring.dishcovery.entity.RecipeVo">
+
+        SELECT RECIPE_ID
+              ,STEP_ORDER
+              ,STEP_DESCRIPTION
+          FROM RECIPE_STEP
+         WHERE RECIPE_ID =  #{recipeId}
+         ORDER BY STEP_ORDER
+
+    </select>
+
+
+    <!-- 유저의 조회 여부 확인 (같은 유저도 하루 1회만 카운트) -->
+    <select id="checkUserView" resultType="int">
+        SELECT COUNT(*) CNT
+          FROM RECIPE_VIEW_LOG
+         WHERE RECIPE_ID = #{recipeId}
+           AND USER_ID = #{userId}
+           AND VIEW_DAY = CURDATE()
+    </select>
+
+    <!-- 조회 기록 저장 (VIEW_DAY는 오늘 날짜로 저장) -->
+    <insert id="insertUserView" parameterType="string">
+        INSERT INTO RECIPE_VIEW_LOG
+              ( RECIPE_ID
+              , USER_ID
+              , VIEWED_AT
+              , VIEW_DAY
+              )
+        VALUES( #{recipeId}
+              , #{userId}
+              , NOW()
+              , CURDATE()
+              )
+    </insert>
+
+    <!-- 레시피 조회수 증가 -->
+    <update id="updateViewCount"   parameterType="string">
+        UPDATE RECIPE_MASTER
+           SET VIEW_COUNT = VIEW_COUNT + 1
+         WHERE RECIPE_ID = #{recipeId}
+    </update>
+
+    <!-- 포인트 정산을 위한 현재 상태 조회 (조회수, 정산된 포인트, 작성자) -->
+    <select id="selectRecipePointState" resultType="map">
+        SELECT USER_ID AS userId,
+               VIEW_COUNT AS viewCount,
+               CLAIMED_POINT AS claimedPoint
+        FROM RECIPE_MASTER
+        WHERE RECIPE_ID = #{recipeId}
+        LIMIT 1
+    </select>
+
+    <update id="updateClaimedPoint">
+        UPDATE RECIPE_MASTER
+        SET CLAIMED_POINT = #{claimedPoint}
+        WHERE RECIPE_ID = #{recipeId}
+    </update>
+
+    <!--
+
+    <insert id="rgtSingUp" parameterType="com.example.demo.domain.UserVO">
+    </insert>
+-->
+
+</mapper>

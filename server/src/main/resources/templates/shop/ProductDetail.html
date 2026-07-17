@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title th:text="'Dishcovery | ' + ${product.name}">Dishcovery | 상품</title>
+    <link rel="stylesheet" href="/css/shop.css" />
+</head>
+<body>
+<main class="wrap">
+
+    <header class="top">
+        <a class="back" href="/shop">← 상점</a>
+        <div class="my-point">
+            내 포인트 <b th:text="${myPoint}">0</b>P
+        </div>
+    </header>
+
+    <section class="pd">
+        <!-- 좌측: 이미지 -->
+        <div class="pd-left">
+            <div class="img-box">
+                <img th:src="${product.imageUrl != null ? product.imageUrl : '/img/no-image.png'}"
+                     alt="상품 이미지" />
+            </div>
+            <div class="mini-badges">
+                <span class="badge">빠른구매</span>
+                <span class="badge">포인트결제</span>
+            </div>
+        </div>
+
+        <!-- 우측: 정보 -->
+        <div class="pd-right">
+            <div class="brand" th:text="${product.brand != null ? product.brand : 'Dishcovery'}">Brand</div>
+            <h1 class="name" th:text="${product.name}">상품명</h1>
+
+            <div class="price-box">
+                <div class="price">
+                    <span class="label">포인트</span>
+                    <span class="value" th:text="${product.pricePoint}">0</span><span class="unit">P</span>
+                </div>
+                <div class="stock" th:text="'재고 ' + ${product.stock} + '개'">재고</div>
+            </div>
+
+            <div class="meta">
+                <div class="meta-row">
+                    <span class="k">배송</span><span class="v">디지털 상품(즉시 지급)</span>
+                </div>
+                <div class="meta-row">
+                    <span class="k">혜택</span><span class="v">조회 포인트로 구매 가능</span>
+                </div>
+            </div>
+
+            <form class="buy" method="post" action="/shop/purchase">
+                <input type="hidden" name="productId" th:value="${product.productId}" />
+
+                <div class="qty">
+                    <span class="k">수량</span>
+                    <input type="number" name="qty" min="1" value="1" />
+                </div>
+
+                <div class="cta">
+                    <button type="submit" class="btn-buy">구매하기</button>
+                </div>
+
+                <div class="hint" th:if="${param.purchased}">
+                    ✅ 구매가 완료되었습니다.
+                </div>
+                <div class="err" th:if="${param.error}" th:text="'⚠️ ' + ${param.error}">
+                    ⚠️ 오류
+                </div>
+            </form>
+
+            <div class="safe">
+                <span>안전결제</span> · <span>고객센터</span> · <span>환불정책</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 네이버 쇼핑 느낌: 탭 -->
+    <section class="tabs">
+        <a href="#detail" class="tab active">상세정보</a>
+        <a href="#review" class="tab">리뷰</a>
+        <a href="#qna" class="tab">문의</a>
+    </section>
+
+    <section id="detail" class="panel">
+        <h2>상세정보</h2>
+        <p class="desc" th:text="${product.description != null ? product.description : '상품 설명이 없습니다.'}">
+            설명
+        </p>
+    </section>
+
+    <section id="review" class="panel">
+        <h2>리뷰</h2>
+        <p class="muted">리뷰 기능은 추후 추가할 수 있어요.</p>
+    </section>
+
+    <section id="qna" class="panel">
+        <h2>문의</h2>
+        <p class="muted">문의 기능은 추후 추가할 수 있어요.</p>
+    </section>
+
+    <!-- 추천 상품(선택) -->
+    <section class="reco" th:if="${recommended != null}">
+        <h3>추천 상품</h3>
+        <div class="reco-grid">
+            <a class="reco-card" th:each="r : ${recommended}" th:href="@{|/shop/product/${r.productId}|}">
+                <div class="reco-img">
+                    <img th:src="${r.imageUrl != null ? r.imageUrl : '/img/no-image.png'}" alt="추천" />
+                </div>
+                <div class="reco-name" th:text="${r.name}">상품명</div>
+                <div class="reco-price"><b th:text="${r.pricePoint}">0</b>P</div>
+            </a>
+        </div>
+    </section>
+
+</main>
+</body>
+</html>

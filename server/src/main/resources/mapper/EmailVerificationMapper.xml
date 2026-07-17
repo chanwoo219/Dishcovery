@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.dishcovery.mapper.EmailVerificationMapper">
+
+    <!--
+      필요 테이블 예시:
+
+      CREATE TABLE EMAIL_VERIFICATION (
+        USER_ID      VARCHAR(50) NOT NULL,
+        USER_MAIL    VARCHAR(255) NOT NULL,
+        CODE         VARCHAR(10) NOT NULL,
+        EXPIRES_AT   DATETIME NOT NULL,
+        VERIFIED_YN  CHAR(1) DEFAULT 'N',
+        CREATED_AT   DATETIME DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (USER_ID, CODE)
+      );
+    -->
+
+    <insert id="insertVerification" parameterType="com.spring.dishcovery.entity.EmailVerificationEntity">
+        INSERT INTO EMAIL_VERIFICATION (
+            USER_ID,
+            USER_MAIL,
+            CODE,
+            EXPIRES_AT,
+            VERIFIED_YN,
+            CREATED_AT
+        ) VALUES (
+            #{userId},
+            #{userMail},
+            #{code},
+            DATE_ADD(NOW(), INTERVAL 10 MINUTE),
+            'N',
+            NOW()
+        )
+    </insert>
+
+    <select id="countValidCode" resultType="int">
+        SELECT COUNT(*)
+        FROM EMAIL_VERIFICATION
+        WHERE USER_ID = #{userId}
+          AND CODE = #{code}
+          AND VERIFIED_YN = 'N'
+          AND EXPIRES_AT >= NOW()
+    </select>
+
+    <update id="markVerified">
+        UPDATE EMAIL_VERIFICATION
+        SET VERIFIED_YN = 'Y'
+        WHERE USER_ID = #{userId}
+          AND CODE = #{code}
+    </update>
+
+</mapper>

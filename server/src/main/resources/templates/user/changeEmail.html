@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>이메일 변경 | Dishcovery</title>
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}">
+</head>
+<body>
+
+<div th:insert="fragments/header :: site-header"></div>
+
+<main class="page">
+    <section class="content container" style="max-width:720px;">
+        <h2 style="margin: 6px 0 16px;">이메일 변경</h2>
+
+        <div th:if="${msg != null}"
+             style="margin-bottom: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(0,0,0,0.05);"
+             th:text="${msg}"></div>
+
+        <form th:action="@{/user/email}" method="post"
+              style="padding: 14px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.08);">
+            <label style="display:block; font-size: 13px; opacity:.7; margin-bottom: 6px;">새 이메일</label>
+            <input name="newEmail" type="email" required placeholder="변경할 이메일"
+                   style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.15); margin-bottom: 12px;">
+
+            <button type="submit" class="sort" style="padding: 10px 14px; border-radius: 12px;">저장</button>
+            <button type="button" class="sort" style="padding: 10px 14px; border-radius: 12px; margin-left: 10px;"
+                    onclick="location.href='/myPage'">취소</button>
+        </form>
+    </section>
+</main>
+
+</body>
+</html>

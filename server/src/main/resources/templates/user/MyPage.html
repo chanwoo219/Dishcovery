@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지 | Dishcovery</title>
+    <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
+</head>
+<body>
+<form id="profileFrom" name="profileFrom" method="get">
+    <header class="topbar">
+        <div th:insert="fragments/header :: site-header"></div>
+    </header>
+    <main class="mypage-layout container">
+        <!-- 왼쪽 프로필 영역 -->
+        <aside class="profile-section">
+            <div class="profile-card">
+                <img src="/images/temp/temp_profile.jpeg" alt="프로필 이미지" class="profile-img">
+                <div class="profile-info">
+                    <h2 th:text="${user.userId}"></h2>
+                    <p th:text="${user.userMail}"></p>
+
+                    <button type="button" class="edit-btn" onclick="location.href='/verify'">프로필 수정</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 오른쪽 레시피 영역 -->
+        <div class="test">
+            <section class="mypage-content">
+                <div class="my-recipes-container">
+                    <h2>내가 등록한 레시피</h2>
+                    <a th:href="@{/recipeWrite}" class="add-btn">+ 새 레시피 작성</a>
+                </div>
+                <div class="myRecipesComents-container">
+                    <p>내가 등록한 레시피를 확인해보세요.</p>
+                </div>
+                <div class="slider-wrapper">
+                    <button class="slide-btn left" onclick="slideLeft()">&#10094;</button>
+                    <div class="recipe-scroll" id="recipeScroll">
+                        <div class="recipe-card-mypage" th:each="recipe : ${myRecipes}">
+                            <img th:src="${recipe.imgUrl}" alt="레시피 이미지" th:attr="data-recipe-id=${recipe.recipeId}" onclick="selectDetail(this.dataset.recipeId)">
+                            <div class="recipe-info-mypage">
+                                <p th:text="${recipe.title}">레시피 제목</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="slide-btn right" onclick="slideRight()">&#10095;</button>
+                </div>
+            </section>
+            <section class="favorite-content">
+                <div class="my-recipes-container">
+                    <h2>추천 유저 소개</h2>
+                    <a th:href="@{/myPage}" class="add-btn">새로고침</a>
+                </div>
+                <div class="myRecipesComents-container">
+                    <p>무작위로 5명의 유저를 소개합니다.</p>
+                </div>
+                <div class="slider-wrapper">
+                    <button class="slide-btn left" onclick="slideLeft()">&#10094;</button>
+                    <div class="user-scroll" id="favoriteScroll">
+                        <div class="user-card-page" th:each="user : ${userList}" th:onclick="openUserModal([[${user.userName}]],
+                                                                                                           [[${user.userImgPath}]],
+                                                                                                            [[${user.userId}]],
+                                                                                                            [[${user.userMail}]]
+                                                                                                         )">
+                            <img th:src="${user.userImgPath}" alt="레시피 이미지">
+                            <div class="user-info-mypage">
+                                <p th:text="${user.userName}"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="slide-btn right" onclick="slideRight()">&#10095;</button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="userModal" class="modal-overlay" onclick="closeUserModal(event)">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeUserModal()">&times;</span>
+
+            <img id="modalUserImg" class="modal-user-img">
+            <h3 id="modalUserName"></h3>
+            <p id="modalUserId"></p>
+            <p id="modalUserMail"></p>
+
+            <button type="button" class="profile-btn" onclick="alert('준비중입니다.')">프로필 보기</button>
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+    const scrollContainer = document.getElementById('recipeScroll');
+
+    function slideLeft() {
+        scrollContainer.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+
+    function slideRight() {
+        scrollContainer.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+
+    const scrollContainerSnd = document.getElementById('favoriteScroll');
+
+    function slideLeftSnd() {
+        scrollContainerSnd.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+
+    function slideRightSnd() {
+        scrollContainerSnd.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+
+    function confirmLogout(){
+        if(confirm("정말 로그아웃 하시겠습니까 ?")){
+            window.location.href = "/logout";
+        }
+    }
+
+    function openUserModal(name, img, userId,userMail) {
+        document.getElementById('modalUserName').innerText = name;
+        document.getElementById('modalUserImg').src = img;
+        document.getElementById('modalUserId').innerText = 'ID: ' + userId;
+        document.getElementById('modalUserMail').innerText = 'e-mail: ' + userMail;
+
+        document.getElementById('userModal').style.display = 'flex';
+    }
+
+    function closeUserModal(e) {
+        if (!e || e.target.id === 'userModal') {
+            document.getElementById('userModal').style.display = 'none';
+        }
+    }
+
+</script>
+</body>
+</html>

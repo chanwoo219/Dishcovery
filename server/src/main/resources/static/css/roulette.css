@@ -1,0 +1,153 @@
+body { text-align: center; font-family: sans-serif; }
+
+.roulette {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.wheel {
+    position: relative;
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+    border: 16px solid #d75a34;
+    background: radial-gradient(circle, #ffffff 60%, #d3ac12);
+    transition: transform 4s cubic-bezier(0.25, 0.1, 0.15, 1);
+    overflow: visible;
+}
+
+/* 슬롯 위치 */
+.slice {
+    position: absolute;
+    top: 38%;
+    left: 40%;
+    transform-origin: center;
+    display: flex;
+    align-items: center;
+}
+
+/* 내부 정렬 */
+.slice-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 이미지 스타일 */
+.recipe-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+/* 텍스트 */
+.recipe-title {
+    margin-top: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    color: #333;
+}
+
+/* 슬롯 구분선 */
+.wheel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+            from 0deg,
+            transparent 0deg 59deg,
+            rgba(0,0,0,0.12) 60deg 61deg
+    );
+}
+
+/* 포인터 */
+#pointer {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 38px;
+    font-weight: bold;
+    color: #ff8a00;
+}
+
+/* 버튼 */
+#spin-btn {
+    margin-top: 30px;
+    background: #E48E3D;
+    color: white;
+    border: none;
+    font-size: 22px;
+    padding: 16px 50px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+#spin-btn:hover {
+    background: #FF9D3E;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* 결과 */
+#result {
+    margin-top: 25px;
+    font-size: 22px;
+    font-weight: bold;
+    display: none;
+}
+
+/* 모달 팝업 */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 28px;
+    border-radius: 14px;
+    text-align: center;
+    width: 320px;
+}
+
+.modal-content img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin: 15px 0;
+}
+
+.modal-content button {
+    background: #E48E3D;
+    border: none;
+    padding: 12px 26px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+}
+
+.modal-content button:hover {
+    background: #FF9D3E;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.modal-content button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}

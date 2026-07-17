@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.dishcovery.mapper.ApiMapper">
+
+    <!-- 아이디 중복체크 -->
+    <select id="countByUserId" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM USER_MASTER WHERE USER_ID = #{userId}
+    </select>
+
+    <insert id="saveSignupApi" parameterType="com.spring.dishcovery.entity.UserEntity">
+        INSERT INTO USER_MASTER (
+                                 USER_ID,
+                                 USER_NAME,
+                                 USER_PSWD,
+                                 USER_MAIL,
+                                 JOIN_DATE,
+                                 USER_ROLE,
+                                 USER_STATUS
+
+        ) VALUES (#{userId},
+                  #{userName},
+                  #{userPswd},
+                  #{userMail},
+                  NOW(),
+                  'U',
+                  'Y'
+                )
+    </insert>
+
+</mapper>
