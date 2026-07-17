@@ -154,13 +154,13 @@ body {
     font: inherit;
 }
 
-.auth-card form {
+.stacked-form {
     display: grid;
     gap: 10px;
 }
 
-.auth-card form input,
-.auth-card form button {
+.stacked-form input,
+.stacked-form button {
     width: 100%;
 }
 
