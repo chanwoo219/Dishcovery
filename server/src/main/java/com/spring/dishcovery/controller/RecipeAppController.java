@@ -11,6 +11,7 @@ import com.spring.dishcovery.service.RecipeAppService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,24 @@ public class RecipeAppController {
         }
 
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping(value = "/myRecipe", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RecipeVo>> getMyRecipes(
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String token = authHeader.substring(7);
+        String userId = jwtUtil.getUserIdFromToken(token);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<RecipeVo> myRecipes = recipeAppService.getMyRecipes(userId);
+        return ResponseEntity.ok(myRecipes == null ? Collections.emptyList() : myRecipes);
     }
 
     @GetMapping("/{id}")
