@@ -9,8 +9,9 @@ app/DerivedData/
 app/*.xcuserstate
 
 ### Java / Gradle (server) ###
-server/*.class
-server/*.log
+server/**/*.class
+server/**/*.log
+server/**/*.log.*.gz
 server/.gradle/
 server/build/
 server/out/
