@@ -63,6 +63,21 @@ CREATE TABLE IF NOT EXISTS CODE_MANAGE (
     PRIMARY KEY (CODE_HEAD, CODE)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- CTG = 레시피 카테고리, LV = 난이도 (LV의 CODE는 표시 라벨과 동일하게 맞춰서
+-- RECIPE_MASTER.COOK_DFCT에 저장된 값과 코드 조회 없이 바로 일치하도록 함).
+INSERT IGNORE INTO CODE_MANAGE (CODE_HEAD, CODE, CODE_NAME, PARENT_CODE, USE_YN, CODE_SORT) VALUES
+('CTG', 'CTG01', '한식', NULL, 'Y', 1),
+('CTG', 'CTG02', '양식', NULL, 'Y', 2),
+('CTG', 'CTG03', '중식', NULL, 'Y', 3),
+('CTG', 'CTG04', '일식', NULL, 'Y', 4),
+('CTG', 'CTG05', '분식', NULL, 'Y', 5),
+('CTG', 'CTG06', '디저트/베이킹', NULL, 'Y', 6),
+('CTG', 'CTG07', '안주', NULL, 'Y', 7),
+('CTG', 'CTG08', '다이어트/샐러드', NULL, 'Y', 8),
+('LV', '쉬움', '쉬움', NULL, 'Y', 1),
+('LV', '중간', '중간', NULL, 'Y', 2),
+('LV', '어려움', '어려움', NULL, 'Y', 3);
+
 -- Schema for this table was already documented in EmailVerificationMapper.xml; used as-is.
 CREATE TABLE IF NOT EXISTS EMAIL_VERIFICATION (
     USER_ID     VARCHAR(50)  NOT NULL,
