@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입 인증 | Dishcovery</title>
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
+<body>
+
+<main class="page">
+    <a class="brand" href="/MainPage">Dishcovery</a>
+    <p class="subtitle">이메일로 받은 인증 코드를 입력해주세요</p>
+
+    <section class="auth-card" aria-label="이메일 인증">
+        <div th:if="${msg != null}" class="hint-row" th:text="${msg}"></div>
+
+        <p class="subtext">
+            <span th:text="${userMail}"></span> 주소로 인증 코드를 보냈습니다.
+        </p>
+
+        <form method="post" th:action="@{/verify_email}">
+            <input type="hidden" name="userId" th:value="${userId}">
+
+            <label class="field-label" for="code">인증 코드</label>
+            <input id="code" name="code" type="text" class="input" placeholder="6자리 코드" maxlength="6" required />
+
+            <button type="submit" class="btn primary">인증 완료</button>
+        </form>
+
+        <form method="post" th:action="@{/resend_code}">
+            <input type="hidden" name="userId" th:value="${userId}">
+            <div class="hint-row">
+                <button type="submit" class="hint hint-btn">인증 코드 다시 보내기</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+</body>
+</html>

@@ -29,6 +29,15 @@ window.addEventListener('DOMContentLoaded', function(){
     tabLogin.addEventListener('click', () => activate(tabLogin));
     tabSignup.addEventListener('click', () => activate(tabSignup));
 
+    panelSignup.addEventListener('submit', (e) => {
+        const pswd = $('#userPswd').value;
+        const confirm = $('#userPswdConfirm').value;
+        if (pswd !== confirm) {
+            e.preventDefault();
+            alert('비밀번호가 일치하지 않습니다.');
+        }
+    });
+
     // Persist email when the checkbox is used
     const saveEmail = $('#save-email');
     const loginEmail = $('#login-email');

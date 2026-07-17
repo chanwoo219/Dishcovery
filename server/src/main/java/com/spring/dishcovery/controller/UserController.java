@@ -26,7 +26,7 @@ public class UserController {
 
     // 로그인/회원가입 페이지
     @GetMapping("/dishcovery_login")
-    public String dishcoveryLogin(@RequestParam String gubun, Model model) {
+    public String dishcoveryLogin(@RequestParam(required = false, defaultValue = "login") String gubun, Model model) {
 
         String loginTab = "";
         String signUpTab = "";
@@ -139,7 +139,7 @@ public class UserController {
         if (user != null) {
             model.addAttribute("userMail", user.getUserMail());
         }
-        return "user/verify";
+        return "user/verifySignup";
     }
 
     @PostMapping("/verify_email")
