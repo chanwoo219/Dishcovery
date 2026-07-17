@@ -7,11 +7,7 @@ struct MyRecipeView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 16) {
-
-                Text("나의 레시피")
-                    .font(.largeTitle)
-                    .bold()
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
 
                 ForEach(viewModel.myRecipes) { recipe in
                     Button {
@@ -19,7 +15,6 @@ struct MyRecipeView: View {
                         path.append(Page.recipeDetail(recipeId: recipe.recipeId))
                     } label: {
                         RecipeCardView(recipe: recipe)
-                            .padding(.horizontal)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }

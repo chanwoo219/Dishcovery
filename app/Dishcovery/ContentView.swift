@@ -108,17 +108,17 @@ struct ContentView: View {
                     
                     // 레시피 리스트
                     ScrollView {
-                        LazyVStack(spacing: 16) {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                             ForEach(viewModel.recipes) { recipe in
                                 Button {
                                     path.append(Page.recipeDetail(recipeId: recipe.recipeId))
                                 } label: {
                                     RecipeCardView(recipe: recipe)
-                                        .padding(.horizontal)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
                         }
+                        .padding(.horizontal)
                         .padding(.top)
                     }
                 }
