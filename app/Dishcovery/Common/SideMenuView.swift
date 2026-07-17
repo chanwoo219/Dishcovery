@@ -27,12 +27,6 @@ struct SideMenuView: View {
                         withAnimation { showMenu = false }
                     }
                     
-                    MenuItem(label: "회원가입", system: "person.badge.plus") {
-                        withAnimation {
-                            showMenu = false
-                            path.append(Page.signup)
-                        }
-                    }
                     if appState.isLoggedIn {
                         
                         MenuItem(label: "레시피 등록", system: "pencil") {

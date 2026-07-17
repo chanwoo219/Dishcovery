@@ -17,7 +17,7 @@ struct RecipeCardView: View {
                                 .scaledToFill()
                         } placeholder: {
                             Rectangle()
-                                .fill(Color.gray.opacity(0.2))
+                                .fill(Color(.secondarySystemBackground))
                         }
                         .onAppear {
                             print("🟢 이미지 URL:",  (API.baseURL) + path)
@@ -28,7 +28,7 @@ struct RecipeCardView: View {
                         .cornerRadius(12)
                     } else {
                         Rectangle()
-                            .fill(Color.gray.opacity(0.2))
+                            .fill(Color(.secondarySystemBackground))
                             .frame(height: 180)
                             .cornerRadius(12)
                     }
@@ -42,11 +42,11 @@ struct RecipeCardView: View {
                 // 설명
                 Text(recipe.rcpDisc ?? "")
                     .font(.subheadline)
-                    .foregroundColor(.black)
+                    .foregroundColor(.secondary)
                     .lineLimit(2)
             }
             .padding()
-            .background(Color.white)
+            .background(Color(.secondarySystemBackground))
             .cornerRadius(15)
             .shadow(radius: 3)
         }
