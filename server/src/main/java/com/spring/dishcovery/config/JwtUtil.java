@@ -2,11 +2,14 @@ package com.spring.dishcovery.config;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 @Component
@@ -20,15 +23,21 @@ public class JwtUtil {
     @Value("${jwt.expirationMs}")
     private long expirationMs;
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    /*
-        private final Key key;
+    private Key key;
 
-        public JwtUtil(@Value("${jwt.secret}") String secret) {
-            // 외부에서 읽은 문자열 secret → Key 객체로 변환
-            this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    @PostConstruct
+    private void init() {
+        try {
+            // HS512 needs a >=64 byte key; hashing the configured secret guarantees that
+            // regardless of its length, and keeps the key stable across restarts
+            // (a randomly generated key would invalidate every existing session on each restart).
+            byte[] hashed = MessageDigest.getInstance("SHA-512").digest(secretKey.getBytes(StandardCharsets.UTF_8));
+            this.key = Keys.hmacShaKeyFor(hashed);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
         }
-    */
+    }
+
     public String generateToken(String userId, String userName) {
 
         return Jwts.builder()
@@ -36,43 +45,36 @@ public class JwtUtil {
                 .claim("userName", userName)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                //.signWith(SignatureAlgorithm.HS512, secretKey)
-                .signWith(key, SignatureAlgorithm.HS512) //서명을 만듬
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
     // userId 추출
     public String getUserIdFromToken(String token) {
-
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
+        Claims claims = parse(token);
+        return claims == null ? null : claims.getSubject();
     }
 
     // userName 추출
     public String getUserNameFromToken(String token) {
-
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.get("userName", String.class);
+        Claims claims = parse(token);
+        return claims == null ? null : claims.get("userName", String.class);
     }
 
     public boolean validateToken(String token) {
+        return parse(token) != null;
+    }
 
+    private Claims parse(String token) {
+        if (token == null || token.isBlank()) return null;
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key) // JWT 생성할 때 사용한 비밀키
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(token); // 여기서 서명 검증 + 만료 확인
-            return true;
-        } catch (JwtException e) {
-            return false;
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException | IllegalArgumentException e) {
+            return null;
         }
     }
 }

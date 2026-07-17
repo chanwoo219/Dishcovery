@@ -78,14 +78,14 @@ public class RecipeController {
     @PostMapping("/SaveRecipeData")
     public String saveRecipeData(@ModelAttribute RecipeVo recipeVo, HttpServletRequest request) {
 
-        int result = 0;
-
         String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = jwtUtil.getUserIdFromToken(token);
+        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        if (userId == null) {
+            return "redirect:/dishcovery_login";
+        }
 
         recipeVo.setUserId(userId);
-
-        result = service.SaveRecipeData(recipeVo);
+        service.SaveRecipeData(recipeVo);
 
         return "redirect:/MainPage";
     }

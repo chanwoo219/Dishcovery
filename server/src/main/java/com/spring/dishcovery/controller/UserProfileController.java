@@ -1,6 +1,9 @@
 package com.spring.dishcovery.controller;
 
+import com.spring.dishcovery.config.CookieUtil;
+import com.spring.dishcovery.config.JwtUtil;
 import com.spring.dishcovery.service.ProfileService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,22 +16,37 @@ import org.springframework.web.bind.annotation.*;
 public class UserProfileController {
 
     private final ProfileService profileService;
+    private final CookieUtil cookieUtil;
+    private final JwtUtil jwtUtil;
 
     private static final String VERIFIED_KEY = "PROFILE_VERIFIED";
     private static final String VERIFIED_EMAIL_KEY = "PROFILE_VERIFIED_EMAIL";
 
+    private String currentUserId(HttpServletRequest request) {
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        return token != null ? jwtUtil.getUserIdFromToken(token) : null;
+    }
+
+    /** 인증 페이지 */
     @GetMapping("/verify")
-    public String verifyPage(HttpSession session, Model model) {
+    public String verifyPage(HttpServletRequest request, HttpSession session, Model model) {
+        if (currentUserId(request) == null) return "redirect:/dishcovery_login";
+
         model.addAttribute("verified", Boolean.TRUE.equals(session.getAttribute(VERIFIED_KEY)));
         model.addAttribute("targetEmail", session.getAttribute(VERIFIED_EMAIL_KEY));
         return "user/verify";
     }
 
+    /** 인증 코드 보내기 */
     @PostMapping("/send-code")
     public String sendCode(@RequestParam("targetEmail") String targetEmail,
+                           HttpServletRequest request,
                            HttpSession session,
                            Model model) {
-        profileService.sendVerificationCode(targetEmail);
+        String userId = currentUserId(request);
+        if (userId == null) return "redirect:/dishcovery_login";
+
+        profileService.sendVerificationCode(userId, targetEmail);
         session.setAttribute(VERIFIED_EMAIL_KEY, targetEmail);
 
         model.addAttribute("msg", "인증 코드가 전송되었습니다.");
@@ -37,11 +55,16 @@ public class UserProfileController {
         return "user/verify";
     }
 
+    /** 인증 코드 검증 */
     @PostMapping("/verify-code")
     public String verifyCode(@RequestParam("targetEmail") String targetEmail,
                              @RequestParam("code") String code,
+                             HttpServletRequest request,
                              HttpSession session,
                              Model model) {
+        String userId = currentUserId(request);
+        if (userId == null) return "redirect:/dishcovery_login";
+
         String savedEmail = (String) session.getAttribute(VERIFIED_EMAIL_KEY);
         if (savedEmail == null || !savedEmail.equals(targetEmail)) {
             session.removeAttribute(VERIFIED_KEY);
@@ -51,7 +74,7 @@ public class UserProfileController {
             return "user/verify";
         }
 
-        boolean ok = profileService.verifyCode(targetEmail, code);
+        boolean ok = profileService.verifyCode(userId, code);
         if (!ok) {
             session.removeAttribute(VERIFIED_KEY);
             model.addAttribute("msg", "인증 코드가 올바르지 않습니다.");
@@ -67,25 +90,30 @@ public class UserProfileController {
         return "user/verify";
     }
 
+    /** 이메일 변경 페이지 (인증 필수) */
     @GetMapping("/email")
-    public String emailChangePage(HttpSession session) {
+    public String emailChangePage(HttpServletRequest request, HttpSession session) {
+        if (currentUserId(request) == null) return "redirect:/dishcovery_login";
         if (!Boolean.TRUE.equals(session.getAttribute(VERIFIED_KEY))) {
             return "redirect:/user/verify";
         }
         return "user/changeEmail";
     }
 
+    /** 이메일 변경 저장 */
     @PostMapping("/email")
     public String changeEmail(@RequestParam("newEmail") String newEmail,
+                              HttpServletRequest request,
                               HttpSession session,
                               Model model) {
+        String userId = currentUserId(request);
+        if (userId == null) return "redirect:/dishcovery_login";
         if (!Boolean.TRUE.equals(session.getAttribute(VERIFIED_KEY))) {
             return "redirect:/user/verify";
         }
 
-        profileService.changeEmail(newEmail);
+        profileService.changeEmail(userId, newEmail);
 
-        // 1회 변경 후 인증 초기화(보안)
         session.removeAttribute(VERIFIED_KEY);
         session.removeAttribute(VERIFIED_EMAIL_KEY);
 
@@ -93,19 +121,25 @@ public class UserProfileController {
         return "user/changeEmail";
     }
 
+    /** 비밀번호 변경 페이지 (인증 필수) */
     @GetMapping("/password")
-    public String passwordChangePage(HttpSession session) {
+    public String passwordChangePage(HttpServletRequest request, HttpSession session) {
+        if (currentUserId(request) == null) return "redirect:/dishcovery_login";
         if (!Boolean.TRUE.equals(session.getAttribute(VERIFIED_KEY))) {
             return "redirect:/user/verify";
         }
         return "user/changePassword";
     }
 
+    /** 비밀번호 변경 저장 */
     @PostMapping("/password")
     public String changePassword(@RequestParam("newPassword") String newPassword,
                                  @RequestParam("newPasswordConfirm") String newPasswordConfirm,
+                                 HttpServletRequest request,
                                  HttpSession session,
                                  Model model) {
+        String userId = currentUserId(request);
+        if (userId == null) return "redirect:/dishcovery_login";
         if (!Boolean.TRUE.equals(session.getAttribute(VERIFIED_KEY))) {
             return "redirect:/user/verify";
         }
@@ -115,7 +149,7 @@ public class UserProfileController {
             return "user/changePassword";
         }
 
-        profileService.changePassword(newPassword);
+        profileService.changePassword(userId, newPassword);
 
         session.removeAttribute(VERIFIED_KEY);
         session.removeAttribute(VERIFIED_EMAIL_KEY);

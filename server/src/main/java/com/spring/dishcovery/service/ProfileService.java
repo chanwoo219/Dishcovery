@@ -1,28 +1,63 @@
 package com.spring.dishcovery.service;
 
+import com.spring.dishcovery.entity.EmailVerificationEntity;
+import com.spring.dishcovery.mapper.EmailVerificationMapper;
+import com.spring.dishcovery.mapper.UserMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+
 @Service
+@RequiredArgsConstructor
 public class ProfileService {
 
-    public void sendVerificationCode(String email) {
-        // TODO: 너가 쓰는 이메일 발송 로직 호출
-        // 예) emailService.sendCode(email);
+    private static final SecureRandom RANDOM = new SecureRandom();
+
+    private final EmailVerificationMapper emailVerificationMapper;
+    private final UserMapper userMapper;
+    private final JavaMailSender mailSender;
+    private final PasswordEncoder passwordEncoder;
+
+    public void sendVerificationCode(String userId, String targetEmail) {
+        String code = generateCode();
+
+        EmailVerificationEntity entity = new EmailVerificationEntity();
+        entity.setUserId(userId);
+        entity.setUserMail(targetEmail);
+        entity.setCode(code);
+        emailVerificationMapper.insertVerification(entity);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(targetEmail);
+        message.setSubject("[Dishcovery] 인증 코드");
+        message.setText("인증 코드: " + code + "\n\n10분 이내에 인증을 완료해주세요.");
+        mailSender.send(message);
     }
 
-    public boolean verifyCode(String email, String code) {
-        // TODO: 너가 쓰는 인증코드 검증 로직 호출
-        // 예) return emailService.verify(email, code);
-        return true;
+    public boolean verifyCode(String userId, String code) {
+        Integer cnt = emailVerificationMapper.countValidCode(userId, code);
+        if (cnt != null && cnt > 0) {
+            emailVerificationMapper.markVerified(userId, code);
+            return true;
+        }
+        return false;
     }
 
-    public void changeEmail(String newEmail) {
-        // TODO: 로그인 유저 기준으로 DB 업데이트
-        // 예) userMapper.updateEmail(userId, newEmail);
+    public void changeEmail(String userId, String newEmail) {
+        userMapper.updateUserEmail(userId, newEmail);
     }
 
-    public void changePassword(String newPassword) {
-        // TODO: 비밀번호 암호화 후 업데이트
-        // 예) userMapper.updatePassword(userId, passwordEncoder.encode(newPassword));
+    public void changePassword(String userId, String newPassword) {
+        userMapper.updateUserPassword(userId, passwordEncoder.encode(newPassword));
+    }
+
+    private String generateCode() {
+        StringBuilder sb = new StringBuilder(6);
+        for (int i = 0; i < 6; i++) sb.append(RANDOM.nextInt(10));
+        return sb.toString();
     }
 }

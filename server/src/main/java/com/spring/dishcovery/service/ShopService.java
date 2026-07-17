@@ -1,11 +1,12 @@
 package com.spring.dishcovery.service;
 
+import com.spring.dishcovery.config.CookieUtil;
+import com.spring.dishcovery.config.JwtUtil;
 import com.spring.dishcovery.entity.ShopProduct;
 import com.spring.dishcovery.entity.UserEntity;
 import com.spring.dishcovery.mapper.ShopMapper;
 import com.spring.dishcovery.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +20,14 @@ public class ShopService {
 
     private final ShopMapper shopMapper;
     private final UserMapper userMapper;
+    private final CookieUtil cookieUtil;
+    private final JwtUtil jwtUtil;
 
-    public ShopService(ShopMapper shopMapper, UserMapper userMapper) {
+    public ShopService(ShopMapper shopMapper, UserMapper userMapper, CookieUtil cookieUtil, JwtUtil jwtUtil) {
         this.shopMapper = shopMapper;
         this.userMapper = userMapper;
+        this.cookieUtil = cookieUtil;
+        this.jwtUtil = jwtUtil;
     }
 
     public List<ShopProduct> getProductsOrderByPointDesc() {
@@ -57,12 +62,8 @@ public class ShopService {
 
     public String getLoginUserId(HttpServletRequest request) {
         if (request == null) return null;
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            Object v = session.getAttribute("userId");
-            return v == null ? null : String.valueOf(v);
-        }
-        return null;
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        return token != null ? jwtUtil.getUserIdFromToken(token) : null;
     }
 
     public int getUserPoint(String userId) {
