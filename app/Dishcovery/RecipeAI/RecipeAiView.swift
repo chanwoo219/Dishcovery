@@ -20,8 +20,8 @@ struct RecipeAiView: View {
                 Text("레시피 받아오기")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color("main"))
-                    .foregroundColor(.primary)
+                    .background(Color.orange)
+                    .foregroundColor(.white)
                     .cornerRadius(12)
             }
             .disabled(vm.ingredients.isEmpty)

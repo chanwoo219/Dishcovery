@@ -89,6 +89,7 @@ final class SignupViewModel: ObservableObject {
     // MARK: - Input
     @Published var userId = ""
     @Published var userPswd = ""
+    @Published var userPswdConfirm = ""
     @Published var userName = ""
     @Published var userMail = ""
     @Published var verificationCode = ""
@@ -225,6 +226,12 @@ final class SignupViewModel: ObservableObject {
     private func validateBasicFields() -> Bool {
         guard !userMail.isEmpty, !userId.isEmpty, !userName.isEmpty, !userPswd.isEmpty else {
             message = "모든 필드를 입력해주세요."
+            showAlert = true
+            signupSuccess = false
+            return false
+        }
+        guard userPswd == userPswdConfirm else {
+            message = "비밀번호가 일치하지 않습니다."
             showAlert = true
             signupSuccess = false
             return false

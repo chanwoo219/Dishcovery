@@ -172,6 +172,11 @@ struct SignupView: View {
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
+
+                SecureField("비밀번호 확인", text: $viewModel.userPswdConfirm)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
             }
             .padding(.horizontal)
             
@@ -203,10 +208,10 @@ struct SignupView: View {
                 } else {
                     Text("다음")
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.main))
+                        .background(Color.orange)
                         .cornerRadius(14)
                         .padding(.horizontal)
                 }
@@ -280,10 +285,10 @@ struct SignupView: View {
                 } else {
                     Text("인증 완료")
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.main))
+                        .background(Color.orange)
                         .cornerRadius(14)
                         .padding(.horizontal)
                 }

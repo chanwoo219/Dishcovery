@@ -57,10 +57,10 @@ struct LoginView: View {
            }) {
                Text("로그인")
                    .font(.headline)
-                   .foregroundColor(.primary)
+                   .foregroundColor(.white)
                    .frame(maxWidth: .infinity)
                    .padding()
-                   .background(Color(.main))
+                   .background(Color.orange)
                    .cornerRadius(10)
            }
            .padding(.top, 10)
