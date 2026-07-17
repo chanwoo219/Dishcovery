@@ -1,28 +1,37 @@
 import SwiftUI
 
+struct RecipeStep: Codable {
+    let stepOrder: Int?
+    let stepDescription: String?
+}
+
 struct RecipeDetailView: View {
     let recipe: Recipe
+
+    @State private var steps: [RecipeStep] = []
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
 
                 // 이미지
-                        
+
                 if let path = recipe.imgUrl {
-                    AsyncImage(
-                        url: URL(string: (API.baseURL) + path)
-                    ) { image in
-                        image.resizable().scaledToFill()
-                    } placeholder: {
-                        Color.gray.opacity(0.2)
-                    }
-                    .onAppear {
-                        print("🟢 상세 이미지 URL:", (API.baseURL) + path)
-                    }
-                    .frame(height: 250)
-                    .clipped()
-                    .cornerRadius(12)
+                    Rectangle()
+                        .fill(Color(.secondarySystemBackground))
+                        .frame(height: 250)
+                        .frame(maxWidth: .infinity)
+                        .overlay(
+                            AsyncImage(
+                                url: URL(string: (API.baseURL) + path)
+                            ) { image in
+                                image.resizable().scaledToFill()
+                            } placeholder: {
+                                Color.clear
+                            }
+                        )
+                        .clipped()
+                        .cornerRadius(12)
                 }
 
 
@@ -36,6 +45,20 @@ struct RecipeDetailView: View {
                     Text(desc)
                         .font(.body)
                         .foregroundColor(.gray)
+                }
+
+                // 조리시간 / 난이도 / 해시태그
+                HStack(spacing: 16) {
+                    Label(recipe.cookTime, systemImage: "clock")
+                    Label(recipe.cookDfct, systemImage: "gauge")
+                }
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+                if let tag = recipe.recipeTag, !tag.isEmpty {
+                    Text(tag)
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
                 }
 
                 Divider()
@@ -58,9 +81,9 @@ struct RecipeDetailView: View {
                         .font(.body)
                 }
                 Divider()
-                
+
                 // 조리 단계
-                if let steps = recipe.stepList, !steps.isEmpty {
+                if !steps.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("🍽 조리 순서")
                             .font(.headline)
@@ -71,40 +94,38 @@ struct RecipeDetailView: View {
                                     .font(.subheadline)
                                     .fontWeight(.bold)
 
-                                Text(steps[index])
+                                Text(steps[index].stepDescription ?? "")
                                     .font(.body)
                                     .foregroundColor(.secondary)
                             }
                             .padding()
-                            .background(Color.gray.opacity(0.05))
+                            .background(Color(.secondarySystemBackground))
                             .cornerRadius(12)
                         }
                     }
-                } else if let singleStep = recipe.stepDescription, !singleStep.isEmpty {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("🍽 조리 순서")
-                            .font(.headline)
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("Step 1")
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                            Text(singleStep)
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.05))
-                        .cornerRadius(12)
-                    }
+
+                    Divider()
                 }
 
-                Divider()
-                
                 Spacer()
             }
             .padding()
         }
         .navigationTitle("레시피 상세")
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await loadSteps()
+        }
+    }
+
+    private func loadSteps() async {
+        guard let url = URL(string: "\(API.baseURL)/api/recipes/\(recipe.recipeId)/steps") else { return }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoded = try JSONDecoder().decode([RecipeStep].self, from: data)
+            steps = decoded.sorted { ($0.stepOrder ?? 0) < ($1.stepOrder ?? 0) }
+        } catch {
+            print("🔴 조리 단계 불러오기 실패:", error.localizedDescription)
+        }
     }
 }
