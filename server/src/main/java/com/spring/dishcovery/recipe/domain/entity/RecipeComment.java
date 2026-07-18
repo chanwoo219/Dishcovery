@@ -9,6 +9,7 @@ public class RecipeComment {
     private Long commentId;
     private String recipeId;
     private String userId;
+    private String userName;
     private String content;
     private LocalDateTime createdAt;
 }

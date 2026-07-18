@@ -115,7 +115,7 @@
           <p class="muted" th:if="${#lists.isEmpty(comments)}">아직 등록된 댓글이 없어요.</p>
           <ul class="comment-list">
               <li th:each="c : ${comments}">
-                  <div class="comment-meta" th:text="${c.userId}"></div>
+                  <div class="comment-meta" th:text="${c.userName}"></div>
                   <p th:text="${c.content}"></p>
               </li>
           </ul>

@@ -130,7 +130,8 @@ a{text-decoration:none; color:inherit}
 
 .comment-form{
     display:flex;
-    flex-direction:column;
+    flex-direction:row;
+    align-items:flex-start;
     gap:8px;
     margin-bottom:16px;
     padding-bottom:16px;
@@ -138,15 +139,17 @@ a{text-decoration:none; color:inherit}
 }
 
 .comment-form textarea{
+    flex:1;
+    height:60px;
     padding:10px;
     border-radius:8px;
     border:1.5px solid var(--line);
-    resize:vertical;
+    resize:none;
     font-family:inherit;
 }
 
 .comment-form button{
-    align-self:flex-end;
+    flex-shrink:0;
     padding:8px 16px;
     border:none;
     border-radius:8px;

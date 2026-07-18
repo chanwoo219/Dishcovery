@@ -319,14 +319,16 @@
 
     <select id="listComments" resultType="com.spring.dishcovery.recipe.domain.entity.RecipeComment">
         SELECT
-            COMMENT_ID AS commentId,
-            RECIPE_ID  AS recipeId,
-            USER_ID    AS userId,
-            CONTENT    AS content,
-            CREATED_AT AS createdAt
-        FROM RECIPE_COMMENT
-        WHERE RECIPE_ID = #{recipeId}
-        ORDER BY CREATED_AT DESC
+            rc.COMMENT_ID AS commentId,
+            rc.RECIPE_ID  AS recipeId,
+            rc.USER_ID    AS userId,
+            um.USER_NAME  AS userName,
+            rc.CONTENT    AS content,
+            rc.CREATED_AT AS createdAt
+        FROM RECIPE_COMMENT rc
+        JOIN USER_MASTER um ON um.USER_ID = rc.USER_ID
+        WHERE rc.RECIPE_ID = #{recipeId}
+        ORDER BY rc.CREATED_AT DESC
     </select>
 
     <insert id="insertComment">
