@@ -7,9 +7,13 @@ enum Page: Hashable {
     case aiRecipe
     case recipeWrite
     case myRecipe
-    case recipeDetail(recipeId: String)
+    case recipeDetail(recipe: Recipe)
     case shop
     case shopDetail(productId: String)
+    case myPage
+    case changeNickname
+    case withdraw
+    case publicProfile(userId: String)
 }
 
 @available(iOS 16.0, *)
@@ -66,15 +70,21 @@ struct ContentView: View {
                         
                         if appState.isLoggedIn {
                             HStack(spacing: 4) {
-                                Image("profile_icon")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .clipShape(Circle())
-                                
-                                Text(" \(appState.username)님")
-                                    .font(.body)
-                                    .foregroundColor(.orange)
-                                
+                                Button {
+                                    path.append(Page.myPage)
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Image("profile_icon")
+                                            .resizable()
+                                            .frame(width: 24, height: 24)
+                                            .clipShape(Circle())
+
+                                        Text(" \(appState.username)님")
+                                            .font(.body)
+                                            .foregroundColor(.orange)
+                                    }
+                                }
+
                                 Button(action: {
                                     appState.isLoggedIn = false
                                     appState.username = ""
@@ -113,7 +123,7 @@ struct ContentView: View {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                             ForEach(viewModel.recipes) { recipe in
                                 Button {
-                                    path.append(Page.recipeDetail(recipeId: recipe.recipeId))
+                                    path.append(Page.recipeDetail(recipe: recipe))
                                 } label: {
                                     RecipeCardView(recipe: recipe)
                                 }
@@ -163,17 +173,29 @@ struct ContentView: View {
                         .navigationBarTitleDisplayMode(.inline)
                 case .shopDetail(let productId):
                     ShopDetailView(productId: productId)
+                case .myPage:
+                    MyPageView(path: $path)
+                        .navigationTitle("마이페이지")
+                        .navigationBarTitleDisplayMode(.inline)
+                case .changeNickname:
+                    ChangeNicknameView(path: $path)
+                        .navigationTitle("닉네임 변경")
+                        .navigationBarTitleDisplayMode(.inline)
+                case .withdraw:
+                    WithdrawView(path: $path)
+                        .navigationTitle("회원 탈퇴")
+                        .navigationBarTitleDisplayMode(.inline)
+                case .publicProfile(let userId):
+                    PublicProfileView(userId: userId, path: $path)
+                        .navigationTitle("프로필")
+                        .navigationBarTitleDisplayMode(.inline)
                 case .main:
                     EmptyView()
                         .onAppear { path.removeLast(path.count) }
                         .navigationTitle("메인")
                         .navigationBarTitleDisplayMode(.inline)
-                case .recipeDetail(let recipeId):
-                    if let recipe = viewModel.recipes.first(where: { $0.recipeId == recipeId }) {
-                        RecipeDetailView(recipe: recipe)
-                    } else {
-                        Text("레시피를 찾을 수 없습니다.")
-                    }
+                case .recipeDetail(let recipe):
+                    RecipeDetailView(recipe: recipe)
                 }
             }
         }

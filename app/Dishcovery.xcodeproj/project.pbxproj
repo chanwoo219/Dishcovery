@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32AE3D72554C4AC8AC869D5D /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00A6881150B48BA993AEEBE /* UserProfile.swift */; };
+		97539F601AD24E81B9054E69 /* PublicUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EABC59343EDE4D089CD28A2D /* PublicUser.swift */; };
+		DB9919F392F547D19BC16734 /* UserApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236D5D8DAB6E4445BFF7ABF3 /* UserApiService.swift */; };
+		643C5DC9B7ED41A39459A286 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF72730FB0CB4339A152553E /* MyPageViewModel.swift */; };
+		26E798331ACE4D0FADA75B16 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF09EF2A7C34D5AAA234EAA /* MyPageView.swift */; };
+		15697641BFBB48BFBD82E0A4 /* ChangeNicknameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1540F6D1C49545A8918B8415 /* ChangeNicknameViewModel.swift */; };
+		9E48883A428743E38914E8CC /* ChangeNicknameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E12A511E4D640318D1E591B /* ChangeNicknameView.swift */; };
+		9F6E6EB07CBC42D4B7EB2838 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B1FDCA19F5412EA8C9ECB7 /* WithdrawViewModel.swift */; };
+		2B81BC866A894056925BDDC3 /* WithdrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1503503D4F5544739E58BC1C /* WithdrawView.swift */; };
+		BD44DEA4935545FB96C889A3 /* PublicProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F057A4461864EA0A89F7ACE /* PublicProfileViewModel.swift */; };
+		8CAD10F04A5043EE9127B490 /* PublicProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CF653CB6F24AD197C10ED7 /* PublicProfileView.swift */; };
 		502974E789334B59BAF3C703 /* ShopProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D5CECA118E4092AC2E3BC7 /* ShopProduct.swift */; };
 		D6DD6748155043C9B83F1448 /* ShopReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0B20DDE814457B1CAA397 /* ShopReview.swift */; };
 		5EFD198173594091822E34DD /* ShopInquiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BE9B1E3D654AEFB3292C24 /* ShopInquiry.swift */; };
@@ -56,6 +67,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D00A6881150B48BA993AEEBE /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		EABC59343EDE4D089CD28A2D /* PublicUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUser.swift; sourceTree = "<group>"; };
+		236D5D8DAB6E4445BFF7ABF3 /* UserApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserApiService.swift; sourceTree = "<group>"; };
+		CF72730FB0CB4339A152553E /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
+		4EF09EF2A7C34D5AAA234EAA /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		1540F6D1C49545A8918B8415 /* ChangeNicknameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNicknameViewModel.swift; sourceTree = "<group>"; };
+		5E12A511E4D640318D1E591B /* ChangeNicknameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNicknameView.swift; sourceTree = "<group>"; };
+		89B1FDCA19F5412EA8C9ECB7 /* WithdrawViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewModel.swift; sourceTree = "<group>"; };
+		1503503D4F5544739E58BC1C /* WithdrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawView.swift; sourceTree = "<group>"; };
+		0F057A4461864EA0A89F7ACE /* PublicProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicProfileViewModel.swift; sourceTree = "<group>"; };
+		C6CF653CB6F24AD197C10ED7 /* PublicProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicProfileView.swift; sourceTree = "<group>"; };
 		E8D5CECA118E4092AC2E3BC7 /* ShopProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopProduct.swift; sourceTree = "<group>"; };
 		B8D0B20DDE814457B1CAA397 /* ShopReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReview.swift; sourceTree = "<group>"; };
 		20BE9B1E3D654AEFB3292C24 /* ShopInquiry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInquiry.swift; sourceTree = "<group>"; };
@@ -153,6 +175,7 @@
 				B6D9BDE96CCD414DBA5EC113 /* RecipeRegister */,
 				3107A3BCC6F54375B1D3A78C /* RecipeAI */,
 				FA13927249704F2FBBD1FC58 /* MyRecipe */,
+				9F9344C0A0684B1B91C066EE /* MyPage */,
 				35B791DF75454FA8AAC27FEB /* Shop */,
 				3B737A6E2ED88ED2005E880E /* DishcoveryApp.swift */,
 				3B737A702ED88ED2005E880E /* ContentView.swift */,
@@ -236,6 +259,24 @@
 				14D20B699EBE48588DA3F6BE /* ShopDetailView.swift */,
 			);
 			path = Shop;
+			sourceTree = "<group>";
+		};
+		9F9344C0A0684B1B91C066EE /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				D00A6881150B48BA993AEEBE /* UserProfile.swift */,
+				EABC59343EDE4D089CD28A2D /* PublicUser.swift */,
+				236D5D8DAB6E4445BFF7ABF3 /* UserApiService.swift */,
+				CF72730FB0CB4339A152553E /* MyPageViewModel.swift */,
+				4EF09EF2A7C34D5AAA234EAA /* MyPageView.swift */,
+				1540F6D1C49545A8918B8415 /* ChangeNicknameViewModel.swift */,
+				5E12A511E4D640318D1E591B /* ChangeNicknameView.swift */,
+				89B1FDCA19F5412EA8C9ECB7 /* WithdrawViewModel.swift */,
+				1503503D4F5544739E58BC1C /* WithdrawView.swift */,
+				0F057A4461864EA0A89F7ACE /* PublicProfileViewModel.swift */,
+				C6CF653CB6F24AD197C10ED7 /* PublicProfileView.swift */,
+			);
+			path = MyPage;
 			sourceTree = "<group>";
 		};
 		FA13927249704F2FBBD1FC58 /* MyRecipe */ = {
@@ -362,6 +403,17 @@
 				3B737A6F2ED88ED2005E880E /* DishcoveryApp.swift in Sources */,
 				9AB556122EF4EA0A0073AB0A /* MyRecipeViewModel.swift in Sources */,
 				3B41E1212ED893E800E84BB1 /* CodeVo.swift in Sources */,
+				32AE3D72554C4AC8AC869D5D /* UserProfile.swift in Sources */,
+				97539F601AD24E81B9054E69 /* PublicUser.swift in Sources */,
+				DB9919F392F547D19BC16734 /* UserApiService.swift in Sources */,
+				643C5DC9B7ED41A39459A286 /* MyPageViewModel.swift in Sources */,
+				26E798331ACE4D0FADA75B16 /* MyPageView.swift in Sources */,
+				15697641BFBB48BFBD82E0A4 /* ChangeNicknameViewModel.swift in Sources */,
+				9E48883A428743E38914E8CC /* ChangeNicknameView.swift in Sources */,
+				9F6E6EB07CBC42D4B7EB2838 /* WithdrawViewModel.swift in Sources */,
+				2B81BC866A894056925BDDC3 /* WithdrawView.swift in Sources */,
+				BD44DEA4935545FB96C889A3 /* PublicProfileViewModel.swift in Sources */,
+				8CAD10F04A5043EE9127B490 /* PublicProfileView.swift in Sources */,
 				502974E789334B59BAF3C703 /* ShopProduct.swift in Sources */,
 				D6DD6748155043C9B83F1448 /* ShopReview.swift in Sources */,
 				5EFD198173594091822E34DD /* ShopInquiry.swift in Sources */,

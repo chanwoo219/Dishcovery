@@ -12,7 +12,7 @@ struct MyRecipeView: View {
                 ForEach(viewModel.myRecipes) { recipe in
                     Button {
                         // ✅ 기존 NavigationStack의 path 사용
-                        path.append(Page.recipeDetail(recipeId: recipe.recipeId))
+                        path.append(Page.recipeDetail(recipe: recipe))
                     } label: {
                         RecipeCardView(recipe: recipe)
                     }
