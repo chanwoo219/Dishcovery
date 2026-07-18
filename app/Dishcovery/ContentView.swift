@@ -22,9 +22,15 @@ struct ContentView: View {
     
     @State private var showMenu = false
     @State private var path = NavigationPath()
-    
+    @State private var searchText = ""
+
     @EnvironmentObject var appState: AppState
-    
+
+    private var filteredRecipes: [Recipe] {
+        guard !searchText.isEmpty else { return viewModel.recipes }
+        return viewModel.recipes.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+    }
+
     var body: some View {
         NavigationStack(path: $path) {
             
@@ -94,20 +100,27 @@ struct ContentView: View {
                     
                     // 레시피 리스트
                     ScrollView {
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                            ForEach(viewModel.recipes) { recipe in
-                                Button {
-                                    path.append(Page.recipeDetail(recipe: recipe))
-                                } label: {
-                                    RecipeCardView(recipe: recipe)
+                        if searchText.isEmpty == false && filteredRecipes.isEmpty {
+                            Text("'\(searchText)' 검색 결과가 없어요.")
+                                .foregroundColor(.secondary)
+                                .padding(.top, 40)
+                        } else {
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                                ForEach(filteredRecipes) { recipe in
+                                    Button {
+                                        path.append(Page.recipeDetail(recipe: recipe))
+                                    } label: {
+                                        RecipeCardView(recipe: recipe)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
                                 }
-                                .buttonStyle(PlainButtonStyle())
                             }
+                            .padding(.horizontal)
+                            .padding(.top)
                         }
-                        .padding(.horizontal)
-                        .padding(.top)
                     }
                 }
+                .searchable(text: $searchText, prompt: "레시피 검색")
                 .task {
                     await viewModel.fetchRecipes()
                     await loadMyAvatarIfNeeded()
