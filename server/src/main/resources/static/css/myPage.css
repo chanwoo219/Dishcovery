@@ -77,6 +77,18 @@ body {
     background-color: #ff4e00;
 }
 
+.withdraw-btn {
+    background-color: transparent;
+    color: #999;
+    margin-left: 8px;
+}
+
+.withdraw-btn:hover {
+    background-color: transparent;
+    color: #666;
+    text-decoration: underline;
+}
+
 .test{
     max-width: 1300px;
     height: 80%;

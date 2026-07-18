@@ -104,7 +104,14 @@ public class UserController {
             return "redirect:/dishcovery_login";
         }
 
-        // 2) 이메일 인증 여부
+        // 2) 탈퇴한 계정인지 확인
+        if ("W".equalsIgnoreCase(exist.getUserStatus())) {
+            redirectAttributes.addAttribute("gubun", "login");
+            redirectAttributes.addFlashAttribute("msg", "탈퇴한 계정입니다.");
+            return "redirect:/dishcovery_login";
+        }
+
+        // 3) 이메일 인증 여부
         if (exist.getUserStatus() != null && !"Y".equalsIgnoreCase(exist.getUserStatus())) {
             redirectAttributes.addAttribute("userId", userId);
             redirectAttributes.addFlashAttribute("msg", "이메일 인증 후 로그인할 수 있습니다.");

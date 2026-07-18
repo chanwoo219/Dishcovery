@@ -15,7 +15,7 @@ public class UserEntity {
 
     private String userPswd;
 
-    // USER_MASTER.USER_STATUS (Y: 활성/인증완료, N: 이메일 인증 대기)
+    // USER_MASTER.USER_STATUS (Y: 활성/인증완료, N: 이메일 인증 대기, W: 탈퇴)
     private String userStatus;
 
     private String userImgPath;

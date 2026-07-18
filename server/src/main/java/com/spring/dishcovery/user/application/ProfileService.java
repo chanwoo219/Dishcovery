@@ -1,6 +1,7 @@
 package com.spring.dishcovery.user.application;
 
 import com.spring.dishcovery.user.domain.entity.EmailVerificationEntity;
+import com.spring.dishcovery.user.domain.entity.UserEntity;
 import com.spring.dishcovery.user.domain.mapper.EmailVerificationMapper;
 import com.spring.dishcovery.user.domain.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,16 @@ public class ProfileService {
 
     public void changePassword(String userId, String newPassword) {
         userMapper.updateUserPassword(userId, passwordEncoder.encode(newPassword));
+    }
+
+    /** 비밀번호 확인 후 회원 탈퇴 처리(소프트 삭제). 비밀번호가 틀리면 false. */
+    public boolean withdraw(String userId, String password) {
+        UserEntity user = userMapper.findByUserId(userId);
+        if (user == null || !passwordEncoder.matches(password, user.getUserPswd())) {
+            return false;
+        }
+        userMapper.updateUserStatus(userId, "W");
+        return true;
     }
 
     private String generateCode() {

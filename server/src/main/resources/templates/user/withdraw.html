@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원 탈퇴 | Dishcovery</title>
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}">
+</head>
+<body>
+
+<div th:insert="fragments/header :: site-header"></div>
+
+<main class="page">
+    <section class="content container narrow-content">
+        <h2 class="page-title">회원 탈퇴</h2>
+
+        <p class="msg-box">탈퇴 시 로그인이 더 이상 불가능합니다. 계속하려면 비밀번호를 입력해주세요.</p>
+
+        <div th:if="${msg != null}" class="msg-box" th:text="${msg}"></div>
+
+        <form th:action="@{/user/withdraw}" method="post" class="form-card"
+              onsubmit="return confirm('정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.');">
+            <label class="field-label">비밀번호</label>
+            <input name="password" type="password" required placeholder="비밀번호"
+                   class="field-input">
+
+            <button type="submit" class="btn-action">탈퇴하기</button>
+            <button type="button" class="btn-action" onclick="location.href='/myPage'">취소</button>
+        </form>
+    </section>
+</main>
+
+</body>
+</html>

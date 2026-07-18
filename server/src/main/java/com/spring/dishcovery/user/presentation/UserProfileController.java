@@ -6,7 +6,9 @@ import com.spring.dishcovery.recipe.application.RecipeAppService;
 import com.spring.dishcovery.user.application.ProfileService;
 import com.spring.dishcovery.user.application.UserService;
 import com.spring.dishcovery.user.domain.entity.UserEntity;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -176,5 +178,36 @@ public class UserProfileController {
 
         model.addAttribute("msg", "비밀번호가 변경되었습니다.");
         return "user/changePassword";
+    }
+
+    /** 회원 탈퇴 페이지 */
+    @GetMapping("/withdraw")
+    public String withdrawPage(HttpServletRequest request) {
+        if (currentUserId(request) == null) return "redirect:/dishcovery_login";
+        return "user/withdraw";
+    }
+
+    /** 회원 탈퇴 처리 (비밀번호 확인 필수) */
+    @PostMapping("/withdraw")
+    public String withdraw(@RequestParam("password") String password,
+                           HttpServletRequest request,
+                           HttpServletResponse response,
+                           Model model) {
+        String userId = currentUserId(request);
+        if (userId == null) return "redirect:/dishcovery_login";
+
+        boolean ok = profileService.withdraw(userId, password);
+        if (!ok) {
+            model.addAttribute("msg", "비밀번호가 일치하지 않습니다.");
+            return "user/withdraw";
+        }
+
+        Cookie jwtCookie = new Cookie("JWT_TOKEN", null);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(0);
+        response.addCookie(jwtCookie);
+
+        return "redirect:/MainPage?withdrawn=1";
     }
 }
