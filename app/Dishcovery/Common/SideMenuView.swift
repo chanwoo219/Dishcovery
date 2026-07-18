@@ -56,10 +56,10 @@ struct SideMenuView: View {
                     Spacer()
                 }
                 .padding(.top, 60)
-                .padding(.horizontal, 20)
-                .frame(maxWidth: 260, maxHeight: .infinity)
+                .padding(.horizontal, 18)
+                .frame(maxWidth: 210, maxHeight: .infinity)
                 .background(.ultraThinMaterial)
-                .offset(x: showMenu ? 0 : -300)
+                .offset(x: showMenu ? 0 : -250)
                 .animation(.easeInOut(duration: 0.25), value: showMenu)
                 
                 Spacer()
