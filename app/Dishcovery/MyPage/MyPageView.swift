@@ -144,6 +144,7 @@ struct MyPageView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .frame(maxWidth: .infinity)
             }
             .padding()
         }
