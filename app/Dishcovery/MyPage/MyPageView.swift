@@ -47,39 +47,16 @@ struct MyPageView: View {
                             .foregroundColor(.orange)
                     }
 
-                    HStack(spacing: 12) {
-                        Button {
-                            path.append(Page.changeNickname)
-                        } label: {
-                            Text("닉네임 변경")
-                                .font(.subheadline)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 8)
-                                .background(Color.orange)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                        }
-
-                        Button {
-                            appState.isLoggedIn = false
-                            appState.username = ""
-                            appState.userImgPath = nil
-                            UserDefaults.standard.removeObject(forKey: "JWT_TOKEN")
-                            UserDefaults.standard.removeObject(forKey: "USERNAME")
-                            path.removeLast(path.count)
-                        } label: {
-                            Text("로그아웃")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Button {
-                            path.append(Page.withdraw)
-                        } label: {
-                            Text("회원 탈퇴")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
+                    Button {
+                        path.append(Page.changeNickname)
+                    } label: {
+                        Text("닉네임 변경")
+                            .font(.subheadline)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(Color.orange)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                     }
                     .padding(.top, 4)
                 }
@@ -141,6 +118,30 @@ struct MyPageView: View {
                                 }
                             }
                         }
+                    }
+                }
+
+                // 계정 관리
+                HStack(spacing: 12) {
+                    Button {
+                        appState.isLoggedIn = false
+                        appState.username = ""
+                        appState.userImgPath = nil
+                        UserDefaults.standard.removeObject(forKey: "JWT_TOKEN")
+                        UserDefaults.standard.removeObject(forKey: "USERNAME")
+                        path.removeLast(path.count)
+                    } label: {
+                        Text("로그아웃")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Button {
+                        path.append(Page.withdraw)
+                    } label: {
+                        Text("회원 탈퇴")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
                 }
             }
