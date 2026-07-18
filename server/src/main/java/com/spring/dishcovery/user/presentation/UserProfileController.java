@@ -65,20 +65,15 @@ public class UserProfileController {
         String userId = currentUserId(request);
         if (userId == null) return "redirect:/dishcovery_login";
 
-        if (userName == null || userName.isBlank()) {
-            model.addAttribute("msg", "닉네임을 입력해주세요.");
+        String trimmed;
+        try {
+            profileService.changeNickname(userId, userName);
+            trimmed = userName.trim();
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("msg", e.getMessage());
             model.addAttribute("currentName", userName);
             return "user/changeNickname";
         }
-
-        String trimmed = userName.trim();
-        if (trimmed.length() > 6) {
-            model.addAttribute("msg", "닉네임은 최대 6자까지 입력할 수 있습니다.");
-            model.addAttribute("currentName", trimmed);
-            return "user/changeNickname";
-        }
-
-        profileService.changeNickname(userId, trimmed);
 
         // 헤더에 표시되는 닉네임은 JWT 토큰의 claim이라 바로 반영되도록 토큰을 재발급
         String token = jwtUtil.generateToken(userId, trimmed);

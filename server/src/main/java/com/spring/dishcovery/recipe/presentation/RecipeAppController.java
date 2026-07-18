@@ -67,6 +67,11 @@ public class RecipeAppController {
         return ResponseEntity.ok(myRecipes == null ? Collections.emptyList() : myRecipes);
     }
 
+    @GetMapping("/byUser/{userId}")
+    public List<RecipeVo> getRecipesByUser(@PathVariable String userId) {
+        return recipeAppService.getMyRecipes(userId);
+    }
+
     @GetMapping("/{id}")
     public RecipeAppVo selectRecipeById(@PathVariable("id") String id) {
         return recipeAppService.selectRecipeById(id);
