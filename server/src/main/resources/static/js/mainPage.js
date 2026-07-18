@@ -32,6 +32,15 @@ function selectDetail(recipeId) {
     form.submit();
 }
 
+function goToShop(button) {
+    var loggedIn = document.querySelector('.topbar')?.dataset.loggedIn === 'true';
+    if (!loggedIn) {
+        alert('로그인이 필요한 서비스입니다.');
+        return;
+    }
+    handleSegmentClick(button, '/pageGubun?gubun=rank');
+}
+
 function handleSegmentClick(button, url) {
     // 활성화 클래스 토글
     const wrap = button.parentElement;
