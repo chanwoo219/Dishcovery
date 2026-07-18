@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spring.dishcovery.mapper.EmailVerificationMapper">
+<mapper namespace="com.spring.dishcovery.user.domain.mapper.EmailVerificationMapper">
 
     <!--
       필요 테이블 예시:
@@ -16,7 +16,7 @@
       );
     -->
 
-    <insert id="insertVerification" parameterType="com.spring.dishcovery.entity.EmailVerificationEntity">
+    <insert id="insertVerification" parameterType="com.spring.dishcovery.user.domain.entity.EmailVerificationEntity">
         INSERT INTO EMAIL_VERIFICATION (
             USER_ID,
             USER_MAIL,

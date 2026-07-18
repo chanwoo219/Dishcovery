@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spring.dishcovery.mapper.UserMapper">
+<mapper namespace="com.spring.dishcovery.user.domain.mapper.UserMapper">
 
-    <insert id="saveUserData" parameterType="com.spring.dishcovery.entity.UserEntity">
+    <insert id="saveUserData" parameterType="com.spring.dishcovery.user.domain.entity.UserEntity">
         INSERT INTO USER_MASTER (
                                  USER_ID,
                                  USER_NAME,
@@ -22,7 +22,7 @@
                 )
     </insert>
 
-    <select id="findByUserId" parameterType="string" resultType="com.spring.dishcovery.entity.UserEntity">
+    <select id="findByUserId" parameterType="string" resultType="com.spring.dishcovery.user.domain.entity.UserEntity">
         SELECT USER_ID, USER_NAME, USER_PSWD, USER_MAIL, JOIN_DATE, USER_STATUS, POINT_BALANCE
         FROM USER_MASTER
         WHERE USER_ID = #{userId}
@@ -34,7 +34,7 @@
         WHERE USER_ID = #{userId}
     </update>
 
-    <select id="findByUserMail" parameterType="string" resultType="com.spring.dishcovery.entity.UserEntity">
+    <select id="findByUserMail" parameterType="string" resultType="com.spring.dishcovery.user.domain.entity.UserEntity">
         SELECT USER_ID, USER_NAME, USER_PSWD, USER_MAIL, JOIN_DATE, USER_STATUS, POINT_BALANCE
         FROM USER_MASTER
         WHERE USER_MAIL = #{userMail}
@@ -72,7 +72,7 @@
         WHERE USER_MAIL = #{userMail}
     </select>
 
-    <select id="findRecommUser" resultType="com.spring.dishcovery.entity.UserEntity">
+    <select id="findRecommUser" resultType="com.spring.dishcovery.user.domain.entity.UserEntity">
         SELECT USER_ID,
                USER_NAME,
                USER_PSWD,

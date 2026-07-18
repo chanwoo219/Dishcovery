@@ -18,5 +18,5 @@ server/out/
 server/.idea/
 server/*.iml
 server/src/main/resources/application.properties
-server/src/main/java/com/spring/dishcovery/service/OpenAiService.java
+server/src/main/java/com/spring/dishcovery/recipe/application/OpenAiService.java
 server/uploads/

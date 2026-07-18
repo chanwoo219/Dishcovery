@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spring.dishcovery.mapper.ShopMapper">
+<mapper namespace="com.spring.dishcovery.shop.domain.mapper.ShopMapper">
 
     <!-- PRODUCT 테이블 사용 (ShopProduct 엔티티 필드에 맞게 AS로 매핑) -->
-    <select id="listProductsOrderByPointDesc" resultType="com.spring.dishcovery.entity.ShopProduct">
+    <select id="listProductsOrderByPointDesc" resultType="com.spring.dishcovery.shop.domain.entity.ShopProduct">
         SELECT
         PRODUCT_ID    AS productId,
         PRODUCT_NAME  AS productName,
@@ -13,7 +13,7 @@
         ORDER BY PRODUCT_POINT DESC
     </select>
 
-    <select id="getProduct" resultType="com.spring.dishcovery.entity.ShopProduct">
+    <select id="getProduct" resultType="com.spring.dishcovery.shop.domain.entity.ShopProduct">
         SELECT
         PRODUCT_ID    AS productId,
         PRODUCT_NAME  AS productName,
@@ -22,7 +22,7 @@
         WHERE PRODUCT_ID = #{productId}
     </select>
 
-    <select id="listRecommended" resultType="com.spring.dishcovery.entity.ShopProduct">
+    <select id="listRecommended" resultType="com.spring.dishcovery.shop.domain.entity.ShopProduct">
         SELECT
         PRODUCT_ID    AS productId,
         PRODUCT_NAME  AS productName,
