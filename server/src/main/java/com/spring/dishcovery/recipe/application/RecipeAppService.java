@@ -1,6 +1,7 @@
 package com.spring.dishcovery.recipe.application;
 
 import com.spring.dishcovery.recipe.domain.entity.RecipeAppVo;
+import com.spring.dishcovery.recipe.domain.entity.RecipeComment;
 import com.spring.dishcovery.recipe.domain.entity.RecipeVo;
 import com.spring.dishcovery.recipe.domain.mapper.RecipeAppMapper;
 import com.spring.dishcovery.shop.domain.mapper.ShopMapper;
@@ -13,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -195,5 +198,40 @@ public class RecipeAppService {
         }
 
         return recipeVo;
+    }
+
+    public List<RecipeComment> listComments(String recipeId) {
+        try {
+            return Optional.ofNullable(recipeAppMapper.listComments(recipeId)).orElse(Collections.emptyList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public void addComment(String userId, String recipeId, String content) {
+        if (userId == null || userId.isBlank()) throw new IllegalArgumentException("로그인이 필요합니다");
+        if (content == null || content.isBlank()) throw new IllegalArgumentException("댓글 내용을 입력해주세요");
+
+        recipeAppMapper.insertComment(recipeId, userId, content.trim());
+    }
+
+    public int getLikeCount(String recipeId) {
+        return recipeAppMapper.countLikes(recipeId);
+    }
+
+    public boolean isLiked(String userId, String recipeId) {
+        if (userId == null || userId.isBlank()) return false;
+        return recipeAppMapper.existsLike(recipeId, userId) > 0;
+    }
+
+    public void toggleLike(String userId, String recipeId) {
+        if (userId == null || userId.isBlank()) throw new IllegalArgumentException("로그인이 필요합니다");
+
+        if (recipeAppMapper.existsLike(recipeId, userId) > 0) {
+            recipeAppMapper.deleteLike(recipeId, userId);
+        } else {
+            recipeAppMapper.insertLike(recipeId, userId);
+        }
     }
 }

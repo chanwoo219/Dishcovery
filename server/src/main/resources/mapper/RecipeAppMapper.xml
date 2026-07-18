@@ -317,6 +317,40 @@
         WHERE RECIPE_ID = #{recipeId}
     </update>
 
+    <select id="listComments" resultType="com.spring.dishcovery.recipe.domain.entity.RecipeComment">
+        SELECT
+            COMMENT_ID AS commentId,
+            RECIPE_ID  AS recipeId,
+            USER_ID    AS userId,
+            CONTENT    AS content,
+            CREATED_AT AS createdAt
+        FROM RECIPE_COMMENT
+        WHERE RECIPE_ID = #{recipeId}
+        ORDER BY CREATED_AT DESC
+    </select>
+
+    <insert id="insertComment">
+        INSERT INTO RECIPE_COMMENT (RECIPE_ID, USER_ID, CONTENT, CREATED_AT)
+        VALUES (#{recipeId}, #{userId}, #{content}, NOW())
+    </insert>
+
+    <select id="countLikes" resultType="int">
+        SELECT COUNT(*) FROM RECIPE_LIKE WHERE RECIPE_ID = #{recipeId}
+    </select>
+
+    <select id="existsLike" resultType="int">
+        SELECT COUNT(*) FROM RECIPE_LIKE WHERE RECIPE_ID = #{recipeId} AND USER_ID = #{userId}
+    </select>
+
+    <insert id="insertLike">
+        INSERT INTO RECIPE_LIKE (RECIPE_ID, USER_ID, CREATED_AT)
+        VALUES (#{recipeId}, #{userId}, NOW())
+    </insert>
+
+    <delete id="deleteLike">
+        DELETE FROM RECIPE_LIKE WHERE RECIPE_ID = #{recipeId} AND USER_ID = #{userId}
+    </delete>
+
     <!--
 
     <insert id="rgtSingUp" parameterType="com.example.demo.domain.UserVO">

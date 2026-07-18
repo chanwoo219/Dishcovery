@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dishcovery | 레시피 등록</title>
+  <title>Dishcovery | 레시피 상세</title>
   <link rel="stylesheet" th:href="@{/css/register.css}">
   <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
 </head>
@@ -16,6 +16,7 @@
 <main class="page">
 
   <section class="form-section container">
+    <div class="detail-wrap">
     <form class="recipe-form" th:object="${recipe}" method="post" enctype="multipart/form-data">
 
       <div class="form-card">
@@ -89,6 +90,38 @@
       </div>
 
     </form>
+
+      <div class="form-card like-card">
+          <form method="post" th:action="@{/recipe/like}">
+              <input type="hidden" name="recipeId" th:value="${recipe.recipeId}">
+              <button type="submit" th:class="${liked} ? 'like-btn liked' : 'like-btn'">
+                  <span th:text="${liked} ? '♥' : '♡'"></span>
+                  좋아요 <span th:text="${likeCount}">0</span>
+              </button>
+          </form>
+      </div>
+
+      <div class="form-card comment-card">
+          <h2>댓글 <span th:text="${#lists.size(comments)}">0</span></h2>
+
+          <p class="error-msg" th:if="${param.error}" th:text="${param.error}"></p>
+
+          <form method="post" th:action="@{/recipe/comment}" class="comment-form">
+              <input type="hidden" name="recipeId" th:value="${recipe.recipeId}">
+              <textarea name="content" rows="2" placeholder="댓글을 남겨보세요" required></textarea>
+              <button type="submit">댓글 등록</button>
+          </form>
+
+          <p class="muted" th:if="${#lists.isEmpty(comments)}">아직 등록된 댓글이 없어요.</p>
+          <ul class="comment-list">
+              <li th:each="c : ${comments}">
+                  <div class="comment-meta" th:text="${c.userId}"></div>
+                  <p th:text="${c.content}"></p>
+              </li>
+          </ul>
+      </div>
+
+    </div>
   </section>
 </main>
 

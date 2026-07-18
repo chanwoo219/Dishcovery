@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,9 +112,52 @@ public class RecipeController {
         model.addAttribute("recipe", recipe);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("stepList", stepList);
+        model.addAttribute("loginUserId", userId);
+        model.addAttribute("comments", service.listComments(recipeId));
+        model.addAttribute("likeCount", service.getLikeCount(recipeId));
+        model.addAttribute("liked", service.isLiked(userId, recipeId));
 
         return "recipe/RecipeDetail";
 
+    }
+
+    @PostMapping("/recipe/comment")
+    public String addComment(@RequestParam String recipeId,
+                             @RequestParam String content,
+                             HttpServletRequest request,
+                             RedirectAttributes redirectAttributes) {
+
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
+            return "redirect:/dishcovery_login";
+        }
+
+        try {
+            service.addComment(userId, recipeId, content);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/recipe/detail?recipeId=" + recipeId + "&error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+        }
+
+        return "redirect:/recipe/detail?recipeId=" + recipeId;
+    }
+
+    @PostMapping("/recipe/like")
+    public String toggleLike(@RequestParam String recipeId,
+                             HttpServletRequest request,
+                             RedirectAttributes redirectAttributes) {
+
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
+            return "redirect:/dishcovery_login";
+        }
+
+        service.toggleLike(userId, recipeId);
+
+        return "redirect:/recipe/detail?recipeId=" + recipeId;
     }
 
 }

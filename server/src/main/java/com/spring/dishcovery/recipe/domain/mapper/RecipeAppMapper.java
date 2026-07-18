@@ -1,6 +1,7 @@
 package com.spring.dishcovery.recipe.domain.mapper;
 
 import com.spring.dishcovery.recipe.domain.entity.RecipeAppVo;
+import com.spring.dishcovery.recipe.domain.entity.RecipeComment;
 import com.spring.dishcovery.recipe.domain.entity.RecipeVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -47,5 +48,19 @@ public interface RecipeAppMapper {
 
     int updateClaimedPoint(@Param("recipeId") String recipeId,
                            @Param("claimedPoint") int claimedPoint);
+
+    List<RecipeComment> listComments(@Param("recipeId") String recipeId);
+
+    void insertComment(@Param("recipeId") String recipeId,
+                       @Param("userId") String userId,
+                       @Param("content") String content);
+
+    int countLikes(@Param("recipeId") String recipeId);
+
+    int existsLike(@Param("recipeId") String recipeId, @Param("userId") String userId);
+
+    void insertLike(@Param("recipeId") String recipeId, @Param("userId") String userId);
+
+    void deleteLike(@Param("recipeId") String recipeId, @Param("userId") String userId);
 
 }
