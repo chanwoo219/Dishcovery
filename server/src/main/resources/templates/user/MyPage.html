@@ -61,15 +61,13 @@
                 <div class="slider-wrapper">
                     <button class="slide-btn left" onclick="slideLeft()">&#10094;</button>
                     <div class="user-scroll" id="favoriteScroll">
-                        <div class="user-card-page" th:each="user : ${userList}" th:onclick="openUserModal([[${user.userName}]],
-                                                                                                           [[${user.userImgPath}]],
-                                                                                                            [[${user.userId}]]
-                                                                                                         )">
+                        <a class="user-card-page" th:each="user : ${userList}"
+                           th:href="@{|/user/${user.userId}/profile|}">
                             <img th:src="${user.userImgPath}" alt="레시피 이미지">
                             <div class="user-info-mypage">
                                 <p th:text="${user.userName}"></p>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
                     <button class="slide-btn right" onclick="slideRight()">&#10095;</button>
@@ -78,18 +76,6 @@
 
         </div>
     </main>
-
-    <div id="userModal" class="modal-overlay" onclick="closeUserModal(event)">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeUserModal()">&times;</span>
-
-            <img id="modalUserImg" class="modal-user-img">
-            <h3 id="modalUserName"></h3>
-            <p id="modalUserId"></p>
-
-            <a id="profileLink" href="#" class="profile-btn">프로필 보기</a>
-        </div>
-    </div>
 
 </div>
 
@@ -118,21 +104,6 @@
     function confirmLogout(){
         if(confirm("정말 로그아웃 하시겠습니까 ?")){
             window.location.href = "/logout";
-        }
-    }
-
-    function openUserModal(name, img, userId) {
-        document.getElementById('modalUserName').innerText = name;
-        document.getElementById('modalUserImg').src = img;
-        document.getElementById('modalUserId').innerText = 'ID: ' + userId;
-        document.getElementById('profileLink').href = '/user/' + encodeURIComponent(userId) + '/profile';
-
-        document.getElementById('userModal').style.display = 'flex';
-    }
-
-    function closeUserModal(e) {
-        if (!e || e.target.id === 'userModal') {
-            document.getElementById('userModal').style.display = 'none';
         }
     }
 
