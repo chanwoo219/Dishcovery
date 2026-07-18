@@ -99,7 +99,18 @@ struct ContentView: View {
                     .padding(.horizontal)
                     .padding(.top, 16)
                     .padding(.bottom, 15)
-                    
+
+                    // 레시피 검색
+                    HStack {
+                        TextField("레시피 검색", text: $searchText)
+                            .textFieldStyle(.roundedBorder)
+
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.orange)
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+
                     // 레시피 리스트
                     ScrollView {
                         if searchText.isEmpty == false && filteredRecipes.isEmpty {
@@ -122,7 +133,6 @@ struct ContentView: View {
                         }
                     }
                 }
-                .searchable(text: $searchText, prompt: "레시피 검색")
                 .task {
                     await viewModel.fetchRecipes()
                     await loadMyAvatarIfNeeded()
