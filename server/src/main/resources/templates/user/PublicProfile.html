@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${profileUser.userName} + ' | Dishcovery'">프로필 | Dishcovery</title>
+    <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
+</head>
+<body>
+<header class="topbar">
+    <div th:insert="fragments/header :: site-header"></div>
+</header>
+
+<main class="mypage-layout container">
+    <aside class="profile-section">
+        <div class="profile-card">
+            <img src="/images/temp/temp_profile.jpeg" alt="프로필 이미지" class="profile-img">
+            <div class="profile-info">
+                <h2 th:text="${profileUser.userName}"></h2>
+                <p th:text="${profileUser.userId}"></p>
+                <p th:text="${profileUser.userMail}"></p>
+            </div>
+        </div>
+    </aside>
+
+    <div class="test">
+        <section class="mypage-content">
+            <div class="my-recipes-container">
+                <h2 th:text="${profileUser.userName} + '님이 등록한 레시피'"></h2>
+            </div>
+            <div class="myRecipesComents-container" th:if="${recipes == null or #lists.isEmpty(recipes)}">
+                <p>아직 등록한 레시피가 없어요.</p>
+            </div>
+            <div class="slider-wrapper" th:if="${recipes != null and !#lists.isEmpty(recipes)}">
+                <button class="slide-btn left" onclick="slideLeft()">&#10094;</button>
+                <div class="recipe-scroll" id="recipeScroll">
+                    <a class="recipe-card-mypage" th:each="recipe : ${recipes}"
+                       th:href="@{/recipe/detail(recipeId=${recipe.recipeId})}">
+                        <img th:src="${recipe.imgUrl}" alt="레시피 이미지">
+                        <div class="recipe-info-mypage">
+                            <p th:text="${recipe.title}">레시피 제목</p>
+                        </div>
+                    </a>
+                </div>
+                <button class="slide-btn right" onclick="slideRight()">&#10095;</button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+    const scrollContainer = document.getElementById('recipeScroll');
+
+    function slideLeft() {
+        scrollContainer.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+
+    function slideRight() {
+        scrollContainer.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+
+    function confirmLogout(){
+        if(confirm("정말 로그아웃 하시겠습니까 ?")){
+            window.location.href = "/logout";
+        }
+    }
+</script>
+</body>
+</html>
