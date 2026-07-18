@@ -95,10 +95,21 @@ body {
     background-color: #ff4e00;
 }
 
+.account-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
 .withdraw-btn {
     background-color: transparent;
     color: #999;
     margin-left: 8px;
+}
+
+.account-actions .withdraw-btn {
+    margin-left: 0;
 }
 
 .withdraw-btn:hover {

@@ -1,5 +1,7 @@
 package com.spring.dishcovery.global.config;
 
+import com.spring.dishcovery.user.domain.entity.UserEntity;
+import com.spring.dishcovery.user.domain.mapper.UserMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ public class GlobalModelAdvice {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @ModelAttribute
     public void addUserInfoToModel(HttpServletRequest request, Model model) {
@@ -37,6 +42,9 @@ public class GlobalModelAdvice {
             model.addAttribute("isLoggedIn", true);
             model.addAttribute("userId", userId);
             model.addAttribute("userName", userName);
+
+            UserEntity user = userMapper.findByUserId(userId);
+            model.addAttribute("userImgPath", user != null ? user.getUserImgPath() : null);
         } else {
             model.addAttribute("isLoggedIn", false);
         }

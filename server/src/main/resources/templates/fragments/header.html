@@ -18,12 +18,8 @@
 
       <div th:if="${isLoggedIn}" class="auth">
           <a href="/myPage" class="auth">
-            <img src="/images/comm/profile_icon.png" class="auth_icon" alt="" />
+            <img th:src="${userImgPath != null ? userImgPath : '/images/temp/temp_profile.jpeg'}" class="auth_icon" alt="" />
             <span class="user-icon" aria-hidden="true"  th:text="${userName} + '님'"></span>
-          </a>
-
-          <a href="#" onclick="confirmLogout()" class="auth">
-            <span class="user-icon" aria-hidden="true">로그아웃</span>
           </a>
       </div>
 
