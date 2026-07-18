@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>비밀번호 변경 | Dishcovery</title>
+    <title>닉네임 변경 | Dishcovery</title>
     <link rel="stylesheet" th:href="@{/css/mainPage.css}">
 </head>
 <body>
@@ -12,17 +12,13 @@
 
 <main class="page">
     <section class="content container narrow-content">
-        <h2 class="page-title">비밀번호 변경</h2>
+        <h2 class="page-title">닉네임 변경</h2>
 
         <div th:if="${msg != null}" class="msg-box" th:text="${msg}"></div>
 
-        <form th:action="@{/user/password}" method="post" class="form-card">
-            <label class="field-label">새 비밀번호</label>
-            <input name="newPassword" type="password" required placeholder="새 비밀번호"
-                   class="field-input">
-
-            <label class="field-label">새 비밀번호 확인</label>
-            <input name="newPasswordConfirm" type="password" required placeholder="새 비밀번호 확인"
+        <form th:action="@{/user/nickname}" method="post" class="form-card">
+            <label class="field-label">닉네임</label>
+            <input name="userName" type="text" required th:value="${currentName}" placeholder="닉네임"
                    class="field-input">
 
             <button type="submit" class="btn-action">저장</button>

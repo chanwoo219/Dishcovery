@@ -47,9 +47,9 @@
         WHERE USER_ID = #{userId}
     </update>
 
-    <update id="updateUserEmail">
+    <update id="updateUserName">
         UPDATE USER_MASTER
-        SET USER_MAIL = #{userMail}
+        SET USER_NAME = #{userName}
         WHERE USER_ID = #{userId}
     </update>
 

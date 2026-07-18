@@ -67,10 +67,6 @@ public class UserService {
         return userMapper.countByUserMail(userMail) > 0;
     }
 
-    public int updateUserEmail(String userId, String userMail) {
-        return userMapper.updateUserEmail(userId, userMail);
-    }
-
     public int updateUserPassword(String userId, String newRawPassword) {
         String encoded = passwordEncoder.encode(newRawPassword);
         return userMapper.updateUserPassword(userId, encoded);

@@ -20,8 +20,8 @@ public interface UserMapper {
     int updateUserPassword(@Param("userId") String userId,
                            @Param("userPswd") String userPswd);
 
-    int updateUserEmail(@Param("userId") String userId,
-                        @Param("userMail") String userMail);
+    int updateUserName(@Param("userId") String userId,
+                       @Param("userName") String userName);
 
     int addUserPoints(@Param("userId") String userId,
                       @Param("amount") int amount);
