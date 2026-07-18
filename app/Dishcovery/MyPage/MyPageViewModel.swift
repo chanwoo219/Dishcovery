@@ -1,10 +1,12 @@
 import Foundation
+import UIKit
 
 @MainActor
 class MyPageViewModel: ObservableObject {
     @Published var profile: UserProfile?
     @Published var myRecipes: [Recipe] = []
     @Published var recommendedUsers: [PublicUser] = []
+    @Published var isUploadingImage = false
 
     func load() async {
         async let profileTask: () = loadProfile()
@@ -39,6 +41,20 @@ class MyPageViewModel: ObservableObject {
             recommendedUsers = try await UserApiService.shared.fetchRecommendedUsers()
         } catch {
             print("🔴 [MyPage] 추천 유저 불러오기 실패:", error.localizedDescription)
+        }
+    }
+
+    func uploadProfileImage(_ image: UIImage) {
+        guard let data = image.jpegData(compressionQuality: 0.8) else { return }
+        Task {
+            isUploadingImage = true
+            do {
+                _ = try await UserApiService.shared.uploadProfileImage(imageData: data)
+                await loadProfile()
+            } catch {
+                print("🔴 [MyPage] 프로필 사진 업로드 실패:", error.localizedDescription)
+            }
+            isUploadingImage = false
         }
     }
 }

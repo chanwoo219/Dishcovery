@@ -10,10 +10,7 @@ struct PublicProfileView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(spacing: 8) {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .frame(width: 80, height: 80)
-                        .foregroundColor(.orange)
+                    AvatarView(imgPath: viewModel.user?.userImgPath, size: 80)
 
                     if let user = viewModel.user {
                         Text(user.userName)

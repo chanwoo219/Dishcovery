@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9CF5468832940138EEAD869 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2A4C15FC55438998BE1B63 /* AvatarView.swift */; };
 		32AE3D72554C4AC8AC869D5D /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00A6881150B48BA993AEEBE /* UserProfile.swift */; };
 		97539F601AD24E81B9054E69 /* PublicUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EABC59343EDE4D089CD28A2D /* PublicUser.swift */; };
 		DB9919F392F547D19BC16734 /* UserApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236D5D8DAB6E4445BFF7ABF3 /* UserApiService.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A2A4C15FC55438998BE1B63 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		D00A6881150B48BA993AEEBE /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		EABC59343EDE4D089CD28A2D /* PublicUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUser.swift; sourceTree = "<group>"; };
 		236D5D8DAB6E4445BFF7ABF3 /* UserApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserApiService.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 				3B41E1342ED8978B00E84BB1 /* ToastModifier.swift */,
 				3BF89C9A2EE7AA5600AF09B3 /* SideMenuView.swift */,
 				3B41E12D2ED894DD00E84BB1 /* RecipeCardView.swift */,
+				5A2A4C15FC55438998BE1B63 /* AvatarView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -403,6 +406,7 @@
 				3B737A6F2ED88ED2005E880E /* DishcoveryApp.swift in Sources */,
 				9AB556122EF4EA0A0073AB0A /* MyRecipeViewModel.swift in Sources */,
 				3B41E1212ED893E800E84BB1 /* CodeVo.swift in Sources */,
+				A9CF5468832940138EEAD869 /* AvatarView.swift in Sources */,
 				32AE3D72554C4AC8AC869D5D /* UserProfile.swift in Sources */,
 				97539F601AD24E81B9054E69 /* PublicUser.swift in Sources */,
 				DB9919F392F547D19BC16734 /* UserApiService.swift in Sources */,

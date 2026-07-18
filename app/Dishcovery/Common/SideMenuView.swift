@@ -36,13 +36,6 @@ struct SideMenuView: View {
                             }
                         }
                         
-                        MenuItem(label: "나의 레시피", system: "book.closed") {
-                           withAnimation {
-                               showMenu = false
-                               path.append(Page.myRecipe)
-                           }
-                       }
-
                         MenuItem(label: "상점", system: "cart") {
                             withAnimation {
                                 showMenu = false

@@ -1,9 +1,12 @@
 import SwiftUI
+import UIKit
 
 @available(iOS 16.0, *)
 struct MyPageView: View {
     @StateObject private var viewModel = MyPageViewModel()
     @Binding var path: NavigationPath
+    @State private var showImagePicker = false
+    @State private var pickedImage: UIImage?
 
     var body: some View {
         ScrollView {
@@ -11,10 +14,26 @@ struct MyPageView: View {
 
                 // 프로필 카드
                 VStack(spacing: 10) {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .frame(width: 80, height: 80)
-                        .foregroundColor(.orange)
+                    Button {
+                        showImagePicker = true
+                    } label: {
+                        ZStack(alignment: .bottomTrailing) {
+                            AvatarView(imgPath: viewModel.profile?.userImgPath, size: 80)
+
+                            Image(systemName: "camera.circle.fill")
+                                .font(.system(size: 24))
+                                .foregroundColor(.orange)
+                                .background(Circle().fill(.white))
+                        }
+                    }
+                    .sheet(isPresented: $showImagePicker) {
+                        LegacyImagePicker(image: $pickedImage)
+                    }
+                    .onChange(of: pickedImage) { newValue in
+                        if let image = newValue {
+                            viewModel.uploadProfileImage(image)
+                        }
+                    }
 
                     if let profile = viewModel.profile {
                         Text(profile.userId)
@@ -96,10 +115,7 @@ struct MyPageView: View {
                                         path.append(Page.publicProfile(userId: user.userId))
                                     } label: {
                                         VStack(spacing: 6) {
-                                            Image(systemName: "person.circle.fill")
-                                                .resizable()
-                                                .frame(width: 56, height: 56)
-                                                .foregroundColor(.orange)
+                                            AvatarView(imgPath: user.userImgPath, size: 56)
                                             Text(user.userName)
                                                 .font(.caption)
                                                 .foregroundColor(.primary)
