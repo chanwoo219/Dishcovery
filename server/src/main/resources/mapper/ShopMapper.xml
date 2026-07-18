@@ -8,7 +8,8 @@
         SELECT
         PRODUCT_ID    AS productId,
         PRODUCT_NAME  AS productName,
-        PRODUCT_POINT AS productPoint
+        PRODUCT_POINT AS productPoint,
+        MAIN_IMAGE    AS mainImage
         FROM PRODUCT
         ORDER BY PRODUCT_POINT DESC
     </select>
@@ -26,7 +27,8 @@
         SELECT
         PRODUCT_ID    AS productId,
         PRODUCT_NAME  AS productName,
-        PRODUCT_POINT AS productPoint
+        PRODUCT_POINT AS productPoint,
+        MAIN_IMAGE    AS mainImage
         FROM PRODUCT
         WHERE PRODUCT_NAME LIKE CONCAT('%', #{searchName}, '%')
         ORDER BY PRODUCT_POINT DESC
