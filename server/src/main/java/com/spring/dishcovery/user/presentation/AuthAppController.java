@@ -1,6 +1,7 @@
 package com.spring.dishcovery.user.presentation;
 
 import com.spring.dishcovery.global.config.JwtUtil;
+import com.spring.dishcovery.user.application.PasswordResetService;
 import com.spring.dishcovery.user.domain.entity.UserEntity;
 import com.spring.dishcovery.user.application.UserService;
 import jakarta.servlet.http.Cookie;
@@ -20,6 +21,7 @@ public class AuthAppController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetService resetService;
 
     // CORS 허용 (필요 시)
     @CrossOrigin(origins = "*")
@@ -55,5 +57,27 @@ public class AuthAppController {
         return ResponseEntity.ok(Map.of("username", username, "message", "프로필 조회 성공"));
     }
 
+    @PostMapping("/reset/request")
+    public ResponseEntity<?> requestReset(@RequestBody Map<String, String> body) {
+        resetService.sendResetCode(body.get("userMail"));
+        return ResponseEntity.ok(Map.of("message", "인증코드를 이메일로 보냈습니다."));
+    }
+
+    @PostMapping("/reset/verify")
+    public ResponseEntity<?> verifyReset(@RequestBody Map<String, String> body) {
+        String newPassword = body.get("newPassword");
+        String confirmPassword = body.get("confirmPassword");
+
+        if (newPassword == null || !newPassword.equals(confirmPassword)) {
+            return ResponseEntity.badRequest().body(Map.of("message", "비밀번호가 일치하지 않습니다."));
+        }
+
+        boolean ok = resetService.resetPasswordByMail(body.get("userMail"), body.get("code"), newPassword);
+        if (!ok) {
+            return ResponseEntity.badRequest().body(Map.of("message", "인증코드가 올바르지 않거나 만료되었습니다."));
+        }
+
+        return ResponseEntity.ok(Map.of("message", "비밀번호가 변경되었습니다."));
+    }
 
 }

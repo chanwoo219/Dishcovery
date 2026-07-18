@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1149BD55C5C0494AAE1A8563 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204F2AAB61164BFFB62C3C0E /* ForgotPasswordView.swift */; };
+		90612E468C9D457992EB6643 /* ForgotPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE76682CC7EE4082AC45C44E /* ForgotPasswordViewModel.swift */; };
+		CA261C7156E4488D8451A28C /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05193544C29C41A4A276F687 /* ResetPasswordView.swift */; };
+		DFD7407EACD64F8BB3E7F934 /* ResetPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A872A10F3CC447AB8185CCC /* ResetPasswordViewModel.swift */; };
 		A9CF5468832940138EEAD869 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2A4C15FC55438998BE1B63 /* AvatarView.swift */; };
 		32AE3D72554C4AC8AC869D5D /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00A6881150B48BA993AEEBE /* UserProfile.swift */; };
 		97539F601AD24E81B9054E69 /* PublicUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EABC59343EDE4D089CD28A2D /* PublicUser.swift */; };
@@ -68,6 +72,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		204F2AAB61164BFFB62C3C0E /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		BE76682CC7EE4082AC45C44E /* ForgotPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewModel.swift; sourceTree = "<group>"; };
+		05193544C29C41A4A276F687 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		2A872A10F3CC447AB8185CCC /* ResetPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewModel.swift; sourceTree = "<group>"; };
 		5A2A4C15FC55438998BE1B63 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		D00A6881150B48BA993AEEBE /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		EABC59343EDE4D089CD28A2D /* PublicUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUser.swift; sourceTree = "<group>"; };
@@ -201,6 +209,10 @@
 				3B41E1142ED892DB00E84BB1 /* LoginView.swift */,
 				3B41E1082ED8915200E84BB1 /* LoginViewModel.swift */,
 				3B41E1262ED8943C00E84BB1 /* UserVo.swift */,
+				204F2AAB61164BFFB62C3C0E /* ForgotPasswordView.swift */,
+				BE76682CC7EE4082AC45C44E /* ForgotPasswordViewModel.swift */,
+				05193544C29C41A4A276F687 /* ResetPasswordView.swift */,
+				2A872A10F3CC447AB8185CCC /* ResetPasswordViewModel.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -397,6 +409,10 @@
 				3B41E1392ED897BC00E84BB1 /* ImagePicker.swift in Sources */,
 				3B41E11B2ED8936500E84BB1 /* StepsView.swift in Sources */,
 				3B41E1152ED892DB00E84BB1 /* LoginView.swift in Sources */,
+				1149BD55C5C0494AAE1A8563 /* ForgotPasswordView.swift in Sources */,
+				90612E468C9D457992EB6643 /* ForgotPasswordViewModel.swift in Sources */,
+				CA261C7156E4488D8451A28C /* ResetPasswordView.swift in Sources */,
+				DFD7407EACD64F8BB3E7F934 /* ResetPasswordViewModel.swift in Sources */,
 				3B41E1132ED8929200E84BB1 /* RecipeRegisterView.swift in Sources */,
 				3B41E1072ED8912E00E84BB1 /* RecipeRegisterViewModel.swift in Sources */,
 				3B41E10B2ED891A900E84BB1 /* Constants.swift in Sources */,

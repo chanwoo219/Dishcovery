@@ -14,6 +14,8 @@ enum Page: Hashable {
     case changeNickname
     case withdraw
     case publicProfile(userId: String)
+    case forgotPassword
+    case resetPassword(userMail: String)
 }
 
 @available(iOS 16.0, *)
@@ -183,6 +185,14 @@ struct ContentView: View {
                 case .publicProfile(let userId):
                     PublicProfileView(userId: userId, path: $path)
                         .navigationTitle("프로필")
+                        .navigationBarTitleDisplayMode(.inline)
+                case .forgotPassword:
+                    ForgotPasswordView(path: $path)
+                        .navigationTitle("비밀번호 찾기")
+                        .navigationBarTitleDisplayMode(.inline)
+                case .resetPassword(let userMail):
+                    ResetPasswordView(userMail: userMail, path: $path)
+                        .navigationTitle("비밀번호 변경")
                         .navigationBarTitleDisplayMode(.inline)
                 case .main:
                     EmptyView()

@@ -46,7 +46,15 @@ struct LoginView: View {
             NavigationLink(destination: SignupView(), isActive: $goToSignUp) {
                 EmptyView()
             }
-            
+
+            Button(action: {
+                route = Page.forgotPassword
+            }) {
+                Text("비밀번호를 잊으셨나요?")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
+
             Button(action: {
                Task {
                    await viewModel.login()
