@@ -82,9 +82,7 @@ public class UserProfileController {
         jwtCookie.setMaxAge(3600);
         response.addCookie(jwtCookie);
 
-        model.addAttribute("msg", "닉네임이 변경되었습니다.");
-        model.addAttribute("currentName", trimmed);
-        return "user/changeNickname";
+        return "redirect:/myPage";
     }
 
     /** 회원 탈퇴 페이지 */
