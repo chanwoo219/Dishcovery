@@ -22,7 +22,7 @@ struct BasicInfoView: View {
             }
             
             HStack {
-                Text("구분")
+                Text("카테고리")
                     .font(.headline)
                 
                 Picker("카테고리 선택", selection: $viewModel.categoryId) {
