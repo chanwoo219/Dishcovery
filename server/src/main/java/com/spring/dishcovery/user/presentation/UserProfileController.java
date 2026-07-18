@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,6 +45,23 @@ public class UserProfileController {
         model.addAttribute("profileUser", profileUser);
         model.addAttribute("recipes", recipeAppService.getMyRecipes(userId));
         return "user/PublicProfile";
+    }
+
+    /** 프로필 사진 변경 */
+    @PostMapping("/profile-image")
+    public String uploadProfileImage(@RequestParam("image") MultipartFile image,
+                                     HttpServletRequest request,
+                                     RedirectAttributes redirectAttributes) {
+        String userId = currentUserId(request);
+        if (userId == null) return "redirect:/dishcovery_login";
+
+        try {
+            profileService.changeProfileImage(userId, image);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+        }
+
+        return "redirect:/myPage";
     }
 
     /** 닉네임 변경 페이지 */

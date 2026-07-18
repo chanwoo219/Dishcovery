@@ -75,4 +75,42 @@ public class FileUploadUtil {
 
         return filePaths;
     }
+
+    /**
+     * 프로필 사진 저장 (uploads/profile/ 아래)
+     *
+     * @param file 업로드할 이미지 파일
+     * @param baseUploadDir 프로젝트 내부 절대경로
+     * @param userId 유저 ID (파일명 접두어로 사용)
+     * @return 웹 접근 가능한 상대경로 (실패 시 null)
+     */
+    public static String saveProfileImage(MultipartFile file, String baseUploadDir, String userId) {
+        if (file == null || file.isEmpty()) return null;
+        if (file.getSize() > MAX_FILE_SIZE) {
+            System.err.println("[FileUploadUtil] 파일 크기 초과: " + file.getOriginalFilename());
+            return null;
+        }
+
+        File baseDir = new File(baseUploadDir);
+        if (!baseDir.isAbsolute()) {
+            baseUploadDir = baseDir.getAbsolutePath();
+        }
+
+        try {
+            Path uploadPath = Paths.get(baseUploadDir, "profile");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String fileName = userId + "_" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path filePath = uploadPath.resolve(fileName);
+            file.transferTo(filePath.toFile());
+
+            return "/uploads/profile/" + fileName;
+        } catch (IOException e) {
+            System.err.println("[FileUploadUtil] 프로필 사진 업로드 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

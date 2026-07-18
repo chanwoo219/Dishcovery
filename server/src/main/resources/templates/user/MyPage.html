@@ -15,7 +15,18 @@
         <!-- 왼쪽 프로필 영역 -->
         <aside class="profile-section">
             <div class="profile-card">
-                <img src="/images/temp/temp_profile.jpeg" alt="프로필 이미지" class="profile-img">
+                <div th:if="${msg != null}" class="msg-box" th:text="${msg}"></div>
+
+                <form id="profileImageForm" th:action="@{/user/profile-image}" method="post" enctype="multipart/form-data">
+                    <label for="profileImageInput" class="profile-img-wrap">
+                        <img th:src="${user.userImgPath != null ? user.userImgPath : '/images/temp/temp_profile.jpeg'}"
+                             alt="프로필 이미지" class="profile-img">
+                        <span class="profile-img-edit">사진 변경</span>
+                    </label>
+                    <input type="file" id="profileImageInput" name="image" accept="image/*" hidden
+                           onchange="document.getElementById('profileImageForm').submit()">
+                </form>
+
                 <div class="profile-info">
                     <h2 th:text="${user.userId}"></h2>
                     <p th:text="${user.userMail}"></p>

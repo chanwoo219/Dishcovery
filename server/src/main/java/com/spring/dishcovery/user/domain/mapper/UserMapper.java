@@ -23,6 +23,9 @@ public interface UserMapper {
     int updateUserName(@Param("userId") String userId,
                        @Param("userName") String userName);
 
+    int updateUserImgPath(@Param("userId") String userId,
+                          @Param("userImgPath") String userImgPath);
+
     int addUserPoints(@Param("userId") String userId,
                       @Param("amount") int amount);
 

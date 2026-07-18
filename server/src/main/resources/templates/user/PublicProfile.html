@@ -14,7 +14,8 @@
 <main class="mypage-layout container">
     <aside class="profile-section">
         <div class="profile-card">
-            <img src="/images/temp/temp_profile.jpeg" alt="프로필 이미지" class="profile-img">
+            <img th:src="${profileUser.userImgPath != null ? profileUser.userImgPath : '/images/temp/temp_profile.jpeg'}"
+                 alt="프로필 이미지" class="profile-img">
             <div class="profile-info">
                 <h2 th:text="${profileUser.userName}"></h2>
                 <p th:text="${profileUser.userId}"></p>

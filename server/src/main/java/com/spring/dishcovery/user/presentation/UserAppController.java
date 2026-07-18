@@ -6,8 +6,10 @@ import com.spring.dishcovery.user.application.UserService;
 import com.spring.dishcovery.user.domain.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,6 +37,7 @@ public class UserAppController {
         map.put("userId", u.getUserId());
         map.put("userName", u.getUserName());
         map.put("userMail", u.getUserMail());
+        map.put("userImgPath", u.getUserImgPath());
         map.put("pointBalance", u.getPointBalance());
         return map;
     }
@@ -44,6 +47,7 @@ public class UserAppController {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("userId", u.getUserId());
         map.put("userName", u.getUserName());
+        map.put("userImgPath", u.getUserImgPath());
         return map;
     }
 
@@ -75,6 +79,23 @@ public class UserAppController {
         UserEntity user = userService.findByUserId(userId);
         if (user == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(toPublicMap(user));
+    }
+
+    @PostMapping(value = "/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> uploadProfileImage(
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
+            @RequestParam("image") MultipartFile image) {
+        String userId = extractUserId(authHeader);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요합니다."));
+        }
+
+        try {
+            String path = profileService.changeProfileImage(userId, image);
+            return ResponseEntity.ok(Map.of("message", "프로필 사진이 변경되었습니다.", "imgUrl", path));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @PostMapping("/nickname")
