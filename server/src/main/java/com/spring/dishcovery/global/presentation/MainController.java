@@ -78,35 +78,16 @@ public class MainController {
     }
 
     @GetMapping("/pageGubun")
-    public String pageGubun(@RequestParam String gubun, Model model, HttpServletRequest request) {
+    public String pageGubun(@RequestParam String gubun,
+                            @RequestParam(required = false, defaultValue = "latest") String sort) {
 
-        List<RecipeVo> recipes = new ArrayList<>();
-
-        String rcpClassNm = "";
-        String rankClassNm = "";
-        String url = "";
-
-        if("recipe".equals(gubun)) {
-            rcpClassNm = "seg-btn active";
-            rankClassNm = "seg-btn";
-
-            recipes = service.getAllRecipes();
-            url = "/mainPage";
-
-        }else{
-            rcpClassNm = "seg-btn";
-            rankClassNm = "seg-btn active";
-
-            // 상품 조회는 ShopController에서 처리
-            url = "redirect:/shop";
+        if ("recipe".equals(gubun)) {
+            // 레시피 목록/정렬은 MainPage 쪽 로직이 유일한 기준이 되도록 위임
+            return "redirect:/MainPage?sort=" + sort;
         }
 
-        model.addAttribute("recipes", recipes);
-        model.addAttribute("gubun", gubun);
-        model.addAttribute("rcpClassNm", rcpClassNm);
-        model.addAttribute("rankClassNm", rankClassNm);
-
-        return url;
+        // 상품 조회는 ShopController에서 처리
+        return "redirect:/shop";
     }
 
 
