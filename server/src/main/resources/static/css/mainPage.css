@@ -74,7 +74,9 @@ margin-left:auto; display:flex; align-items:center; gap:8px; color:var(--brand);
 .auth .auth_icon{
     display:flex;
     width:30px;
-    height:29px;
+    height:30px;
+    border-radius:50%;
+    object-fit:cover;
 }
 
 .divider{border:none; height:1px; background:var(--line); margin:0}
