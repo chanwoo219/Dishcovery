@@ -69,38 +69,12 @@ struct ContentView: View {
                         Spacer()
                         
                         if appState.isLoggedIn {
-                            HStack(spacing: 4) {
-                                Button {
-                                    path.append(Page.myPage)
-                                } label: {
-                                    HStack(spacing: 4) {
-                                        Image("profile_icon")
-                                            .resizable()
-                                            .frame(width: 24, height: 24)
-                                            .clipShape(Circle())
-
-                                        Text(" \(appState.username)님")
-                                            .font(.body)
-                                            .foregroundColor(.orange)
-                                    }
-                                }
-
-                                Button(action: {
-                                    appState.isLoggedIn = false
-                                    appState.username = ""
-                                    UserDefaults.standard.removeObject(forKey: "JWT_TOKEN")
-                                    UserDefaults.standard.removeObject(forKey: "USERNAME")
-                                }) {
-                                    Text("로그아웃")
-                                        .font(.subheadline)
-                                        .foregroundColor(.white)
-                                        .padding(.vertical, 6)
-                                        .padding(.horizontal, 6)
-                                        .background(Color.orange)
-                                        .cornerRadius(8)
-                                }
+                            Button {
+                                path.append(Page.myPage)
+                            } label: {
+                                AvatarView(imgPath: appState.userImgPath, size: 36)
                             }
-                            
+
                         } else {
                             NavigationLink(value: Page.login) {
                                 Text("로그인")
@@ -136,8 +110,16 @@ struct ContentView: View {
                 }
                 .task {
                     await viewModel.fetchRecipes()
+                    await loadMyAvatarIfNeeded()
                 }
-                
+                .onChange(of: appState.isLoggedIn) { isLoggedIn in
+                    if isLoggedIn {
+                        Task { await loadMyAvatarIfNeeded() }
+                    } else {
+                        appState.userImgPath = nil
+                    }
+                }
+
                 //사이드메뉴 수정
                 SideMenuView(showMenu: $showMenu, path: $path)
             }
@@ -198,6 +180,16 @@ struct ContentView: View {
                     RecipeDetailView(recipe: recipe)
                 }
             }
+        }
+    }
+
+    private func loadMyAvatarIfNeeded() async {
+        guard appState.isLoggedIn else { return }
+        do {
+            let profile = try await UserApiService.shared.fetchMyProfile()
+            appState.userImgPath = profile.userImgPath
+        } catch {
+            print("🔴 [ContentView] 프로필 사진 불러오기 실패:", error.localizedDescription)
         }
     }
 }

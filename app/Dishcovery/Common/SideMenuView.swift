@@ -43,13 +43,6 @@ struct SideMenuView: View {
                             }
                         }
 
-                        MenuItem(label: "마이페이지", system: "person.circle") {
-                            withAnimation {
-                                showMenu = false
-                                path.append(Page.myPage)
-                            }
-                        }
-
                     }
                     
 

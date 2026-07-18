@@ -5,6 +5,7 @@ import UIKit
 struct MyPageView: View {
     @StateObject private var viewModel = MyPageViewModel()
     @Binding var path: NavigationPath
+    @EnvironmentObject var appState: AppState
     @State private var showImagePicker = false
     @State private var pickedImage: UIImage?
 
@@ -57,6 +58,19 @@ struct MyPageView: View {
                                 .background(Color.orange)
                                 .foregroundColor(.white)
                                 .cornerRadius(8)
+                        }
+
+                        Button {
+                            appState.isLoggedIn = false
+                            appState.username = ""
+                            appState.userImgPath = nil
+                            UserDefaults.standard.removeObject(forKey: "JWT_TOKEN")
+                            UserDefaults.standard.removeObject(forKey: "USERNAME")
+                            path.removeLast(path.count)
+                        } label: {
+                            Text("로그아웃")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
                         }
 
                         Button {
@@ -134,6 +148,9 @@ struct MyPageView: View {
         }
         .task {
             await viewModel.load()
+        }
+        .onChange(of: viewModel.profile?.userImgPath) { newValue in
+            appState.userImgPath = newValue
         }
     }
 }

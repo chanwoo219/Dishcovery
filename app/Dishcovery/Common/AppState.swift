@@ -3,6 +3,7 @@ import SwiftUI
 class AppState: ObservableObject {
     @Published var isLoggedIn: Bool = false
     @Published var username: String = ""
+    @Published var userImgPath: String? = nil
     
     init() {
         // 앱 실행 시 저장된 JWT 여부 확인
