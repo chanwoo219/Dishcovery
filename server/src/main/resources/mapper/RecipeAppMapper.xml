@@ -110,26 +110,6 @@
         </choose>
     </select>
 
-    <select id="getRoulleteData" resultType="com.spring.dishcovery.recipe.domain.entity.RecipeVo">
-        SELECT RECIPE_ID
-             ,USER_ID
-             ,CATEGORY_ID
-             ,TITLE
-             ,RCP_DISC
-             ,COOK_TIME
-             ,COOK_DFCT
-             ,RGT_DATE
-             ,UPD_DATE
-             ,IMG_URL
-             ,RECIPE_INGR
-             ,RECIPE_TIP
-             ,RECIPE_TAG
-             ,VIEW_COUNT
-        FROM RECIPE_MASTER
-    ORDER BY RAND()
-       LIMIT 7
-    </select>
-
     <select id="getSearchRecipes"  resultType="com.spring.dishcovery.recipe.domain.entity.RecipeVo" >
        SELECT RECIPE_ID
              ,USER_ID

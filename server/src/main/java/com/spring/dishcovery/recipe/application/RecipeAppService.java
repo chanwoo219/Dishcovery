@@ -52,10 +52,6 @@ public class RecipeAppService {
         return recipeAppMapper.getAllRecipesSorted(sort);
     }
 
-    public List<RecipeVo> getRoulleteData() {
-        return recipeAppMapper.getRoulleteData();
-    }
-
     public List<RecipeVo> getSearchRecipes(String searchName) {
         return recipeAppMapper.getSearchRecipes(searchName);
     }

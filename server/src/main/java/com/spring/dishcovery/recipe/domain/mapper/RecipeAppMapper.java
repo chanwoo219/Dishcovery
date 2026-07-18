@@ -20,8 +20,6 @@ public interface RecipeAppMapper {
 
     List<RecipeVo> getAllRecipesSorted(@Param("sort") String sort);
 
-    List<RecipeVo> getRoulleteData();
-
     List<RecipeVo> getSearchRecipes(String searchName);
 
     List<RecipeVo> getSearchRecipesSorted(@Param("searchName") String searchName,
