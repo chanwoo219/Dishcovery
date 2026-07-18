@@ -2,7 +2,9 @@ package com.spring.dishcovery.shop.application;
 
 import com.spring.dishcovery.global.config.CookieUtil;
 import com.spring.dishcovery.global.config.JwtUtil;
+import com.spring.dishcovery.shop.domain.entity.ShopInquiry;
 import com.spring.dishcovery.shop.domain.entity.ShopProduct;
+import com.spring.dishcovery.shop.domain.entity.ShopReview;
 import com.spring.dishcovery.user.domain.entity.UserEntity;
 import com.spring.dishcovery.shop.domain.mapper.ShopMapper;
 import com.spring.dishcovery.user.domain.mapper.UserMapper;
@@ -115,5 +117,47 @@ public class ShopService {
         } catch (Exception ignored) {
             // ledger 없어도 구매는 진행
         }
+    }
+
+    public List<ShopReview> listReviews(String productId) {
+        try {
+            return Optional.ofNullable(shopMapper.listReviews(productId))
+                    .orElse(Collections.emptyList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public double getAverageRating(List<ShopReview> reviews) {
+        if (reviews == null || reviews.isEmpty()) return 0;
+        return reviews.stream().mapToInt(ShopReview::getRating).average().orElse(0);
+    }
+
+    public void addReview(String userId, String productId, int rating, String content) {
+        if (userId == null || userId.isBlank()) throw new IllegalArgumentException("로그인이 필요합니다");
+        if (productId == null || productId.isBlank()) throw new IllegalArgumentException("상품 ID가 올바르지 않습니다");
+        if (content == null || content.isBlank()) throw new IllegalArgumentException("리뷰 내용을 입력해주세요");
+        if (rating < 1 || rating > 5) throw new IllegalArgumentException("별점은 1~5 사이여야 합니다");
+
+        shopMapper.insertReview(productId, userId, rating, content);
+    }
+
+    public List<ShopInquiry> listInquiries(String productId) {
+        try {
+            return Optional.ofNullable(shopMapper.listInquiries(productId))
+                    .orElse(Collections.emptyList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public void addInquiry(String userId, String productId, String content) {
+        if (userId == null || userId.isBlank()) throw new IllegalArgumentException("로그인이 필요합니다");
+        if (productId == null || productId.isBlank()) throw new IllegalArgumentException("상품 ID가 올바르지 않습니다");
+        if (content == null || content.isBlank()) throw new IllegalArgumentException("문의 내용을 입력해주세요");
+
+        shopMapper.insertInquiry(productId, userId, content);
     }
 }

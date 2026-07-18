@@ -1,6 +1,8 @@
 package com.spring.dishcovery.shop.domain.mapper;
 
+import com.spring.dishcovery.shop.domain.entity.ShopInquiry;
 import com.spring.dishcovery.shop.domain.entity.ShopProduct;
+import com.spring.dishcovery.shop.domain.entity.ShopReview;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +27,17 @@ public interface ShopMapper {
                       @Param("point") int point,
                       @Param("transactionType") String transactionType,
                       @Param("description") String description);
+
+    List<ShopReview> listReviews(@Param("productId") String productId);
+
+    void insertReview(@Param("productId") String productId,
+                      @Param("userId") String userId,
+                      @Param("rating") int rating,
+                      @Param("content") String content);
+
+    List<ShopInquiry> listInquiries(@Param("productId") String productId);
+
+    void insertInquiry(@Param("productId") String productId,
+                       @Param("userId") String userId,
+                       @Param("content") String content);
 }

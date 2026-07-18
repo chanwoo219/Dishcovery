@@ -108,7 +108,55 @@ public class ShopController {
             e.printStackTrace();
         }
 
+        var reviews = shopService.listReviews(productId);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("avgRating", shopService.getAverageRating(reviews));
+        model.addAttribute("inquiries", shopService.listInquiries(productId));
+
         return "shop/productDetail";
+    }
+
+    @PostMapping("/shop/product/{productId}/review")
+    public String addReview(@PathVariable String productId,
+                            @RequestParam int rating,
+                            @RequestParam String content,
+                            HttpServletRequest request,
+                            RedirectAttributes redirectAttributes) {
+
+        String userId = shopService.getLoginUserId(request);
+        if (userId == null || userId.isBlank()) {
+            redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
+            return "redirect:/dishcovery_login";
+        }
+
+        try {
+            shopService.addReview(userId, productId, rating, content);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/shop/product/" + productId + "?error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+        }
+
+        return "redirect:/shop/product/" + productId;
+    }
+
+    @PostMapping("/shop/product/{productId}/inquiry")
+    public String addInquiry(@PathVariable String productId,
+                             @RequestParam String content,
+                             HttpServletRequest request,
+                             RedirectAttributes redirectAttributes) {
+
+        String userId = shopService.getLoginUserId(request);
+        if (userId == null || userId.isBlank()) {
+            redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
+            return "redirect:/dishcovery_login";
+        }
+
+        try {
+            shopService.addInquiry(userId, productId, content);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/shop/product/" + productId + "?error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+        }
+
+        return "redirect:/shop/product/" + productId;
     }
 
     @PostMapping("/shop/purchase")

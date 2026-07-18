@@ -115,6 +115,25 @@
 .desc{ margin:0; color:#222; line-height:1.6; }
 .muted{ margin:0; color:var(--shop-muted); }
 
+.avg-rating{ margin:0 0 12px; color:var(--shop-accent); font-weight:600; }
+
+.review-form{
+    display:flex; flex-direction:column; gap:8px;
+    margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid #eee;
+}
+.review-form select{ align-self:flex-start; padding:6px 10px; border-radius:8px; border:1px solid #ddd; }
+.review-form textarea{ padding:10px; border-radius:8px; border:1px solid #ddd; resize:vertical; font-family:inherit; }
+.review-form button{
+    align-self:flex-end; padding:8px 16px; border:none; border-radius:8px;
+    background:var(--shop-accent); color:#fff; font-weight:700; cursor:pointer;
+}
+
+.review-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+.review-list li{ padding-bottom:12px; border-bottom:1px solid #f2f2f2; }
+.review-list li:last-child{ border-bottom:none; padding-bottom:0; }
+.review-meta{ display:flex; gap:8px; align-items:center; color:var(--shop-accent); font-size:13px; margin-bottom:4px; }
+.review-list p{ margin:0; color:#222; line-height:1.5; }
+
 .reco{
     margin-top:14px; background:var(--shop-card); border-radius:14px; box-shadow:var(--shop-shadow);
     padding:16px;

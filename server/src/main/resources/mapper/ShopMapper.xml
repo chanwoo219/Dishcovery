@@ -59,4 +59,39 @@
         VALUES (#{userId}, #{point}, #{transactionType}, #{description}, NOW())
     </insert>
 
+    <select id="listReviews" resultType="com.spring.dishcovery.shop.domain.entity.ShopReview">
+        SELECT
+        REVIEW_ID  AS reviewId,
+        PRODUCT_ID AS productId,
+        USER_ID    AS userId,
+        RATING     AS rating,
+        CONTENT    AS content,
+        CREATED_AT AS createdAt
+        FROM SHOP_REVIEW
+        WHERE PRODUCT_ID = #{productId}
+        ORDER BY CREATED_AT DESC
+    </select>
+
+    <insert id="insertReview">
+        INSERT INTO SHOP_REVIEW (PRODUCT_ID, USER_ID, RATING, CONTENT, CREATED_AT)
+        VALUES (#{productId}, #{userId}, #{rating}, #{content}, NOW())
+    </insert>
+
+    <select id="listInquiries" resultType="com.spring.dishcovery.shop.domain.entity.ShopInquiry">
+        SELECT
+        INQUIRY_ID AS inquiryId,
+        PRODUCT_ID AS productId,
+        USER_ID    AS userId,
+        CONTENT    AS content,
+        CREATED_AT AS createdAt
+        FROM SHOP_INQUIRY
+        WHERE PRODUCT_ID = #{productId}
+        ORDER BY CREATED_AT DESC
+    </select>
+
+    <insert id="insertInquiry">
+        INSERT INTO SHOP_INQUIRY (PRODUCT_ID, USER_ID, CONTENT, CREATED_AT)
+        VALUES (#{productId}, #{userId}, #{content}, NOW())
+    </insert>
+
 </mapper>
