@@ -11,6 +11,8 @@ public interface ShopMapper {
 
     List<ShopProduct> listProductsOrderByPointDesc();
 
+    List<ShopProduct> searchProductsOrderByPointDesc(@Param("searchName") String searchName);
+
     ShopProduct getProduct(@Param("productId") String productId);
 
     void updateUserPoint(@Param("userId") String userId, @Param("point") int point);

@@ -40,6 +40,16 @@ public class ShopService {
         }
     }
 
+    public List<ShopProduct> searchProducts(String searchName) {
+        try {
+            return Optional.ofNullable(shopMapper.searchProductsOrderByPointDesc(searchName))
+                    .orElse(Collections.emptyList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
     public ShopProduct getProduct(String productId) {
         if (productId == null || productId.isBlank()) return null;
         try {

@@ -22,6 +22,16 @@
         WHERE PRODUCT_ID = #{productId}
     </select>
 
+    <select id="searchProductsOrderByPointDesc" resultType="com.spring.dishcovery.shop.domain.entity.ShopProduct">
+        SELECT
+        PRODUCT_ID    AS productId,
+        PRODUCT_NAME  AS productName,
+        PRODUCT_POINT AS productPoint
+        FROM PRODUCT
+        WHERE PRODUCT_NAME LIKE CONCAT('%', #{searchName}, '%')
+        ORDER BY PRODUCT_POINT DESC
+    </select>
+
     <select id="listRecommended" resultType="com.spring.dishcovery.shop.domain.entity.ShopProduct">
         SELECT
         PRODUCT_ID    AS productId,

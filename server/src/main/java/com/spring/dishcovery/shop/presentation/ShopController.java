@@ -23,7 +23,8 @@ public class ShopController {
     private final CookieUtil cookieUtil;
 
     @GetMapping("/shop")
-    public String shopList(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String shopList(@RequestParam(required = false) String searchName,
+                           Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
         // 1) 토큰 체크
         String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
@@ -48,10 +49,14 @@ public class ShopController {
         model.addAttribute("loginUserId", userId);
         model.addAttribute("rcpClassNm", "seg-btn");
         model.addAttribute("rankClassNm", "seg-btn active");
+        model.addAttribute("searchName", searchName);
 
         // 3) 상품 조회 (절대 null/예외로 화면 죽지 않게)
         try {
-            var products = shopService.getProductsOrderByPointDesc();
+            boolean hasSearch = searchName != null && !searchName.isBlank();
+            var products = hasSearch
+                    ? shopService.searchProducts(searchName)
+                    : shopService.getProductsOrderByPointDesc();
             if (products == null) products = Collections.emptyList();
             model.addAttribute("products", products);
         } catch (Exception e) {

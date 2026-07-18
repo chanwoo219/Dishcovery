@@ -16,49 +16,6 @@ document.addEventListener('click', (e) => {
     window.location.href = url.toString();
 });
 
-let wheel = document.getElementById("wheel");
-let spinning = false;
-let currentRotation = 0;
-
-function spin() {
-    if (spinning) return;
-    spinning = true;
-
-    const count = document.querySelectorAll(".slice").length;
-    const sliceDeg = 360 / count;
-
-    // 회전 각도 계산
-    const targetIndex = Math.floor(Math.random() * count);
-    const targetRotation = 360 * 5 + (360 - sliceDeg * targetIndex - sliceDeg / 2);
-
-    currentRotation = targetRotation;
-    wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-    setTimeout(() => {
-        showResult(targetIndex);
-        spinning = false;
-    }, 5000);
-}
-
-function showResult(index) {
-    const slice = document.querySelectorAll(".slice")[index];
-    const title = slice.querySelector(".recipe-title").innerText;
-    const img = slice.querySelector("img").src;
-
-    document.getElementById("modalTitle").innerText = title;
-    document.getElementById("modalImg").src = img;
-    document.getElementById("modal").style.display = "flex";
-
-    document.getElementById("recipeId").value = index;
-}
-
-function closeModal() {
-    document.getElementById("modal").style.display = "none";
-}
-
-
-
-
 function selectDetail(recipeId) {
     const form = document.createElement("form");
     form.method = "GET";

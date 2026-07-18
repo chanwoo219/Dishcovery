@@ -5,7 +5,7 @@
 
         <a class="brand" href="/MainPage">Dishcovery</a>
 
-        <div class="search-wrap">
+        <form id="headerSearchForm" class="search-wrap" method="get">
             <input type="text" id="searchName" name="searchName" th:value="${searchName}" placeholder="찾고싶은 레시피 또는 상점 검색하세요" aria-label="검색" />
             <button type="submit"class="icon-btn" aria-label="검색">
                 <!-- search icon -->
@@ -14,7 +14,7 @@
                     <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
-        </div>
+        </form>
 
       <div th:if="${isLoggedIn}" class="auth">
           <a href="/myPage" class="auth">
@@ -42,6 +42,12 @@
     </div>
     <hr class="divider" />
 
-
+    <script th:inline="none">
+        (function () {
+            var form = document.getElementById('headerSearchForm');
+            if (!form) return;
+            form.action = window.location.pathname.startsWith('/shop') ? '/shop' : '/searchRecipe';
+        })();
+    </script>
 
 </header>

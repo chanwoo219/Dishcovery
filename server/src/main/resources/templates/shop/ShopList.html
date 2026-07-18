@@ -27,6 +27,10 @@
 
     <section class="content container">
 
+        <h2 class="result-title" th:if="${searchName != null and !#strings.isEmpty(searchName)}">
+            '<span th:text="${searchName}"></span>' 검색결과
+        </h2>
+
         <!-- ✅ 절대 안 터지는 디버그/상태 표시 -->
         <div class="shop-count"
              th:text="'상품 수: ' + ${products == null ? 0 : #lists.size(products)}"></div>

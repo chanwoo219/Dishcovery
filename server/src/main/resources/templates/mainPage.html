@@ -8,11 +8,8 @@
     <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
 </head>
 <body>
-    <form id="mainForm" name="mainForm" method="get" th:action="@{/searchRecipe}">
+    <div>
         <div th:replace="~{fragments/header :: site-header}"></div>
-
-
-        <input type="hidden" id="recipeId" name="recipeId">
 
         <main class="page">
           <section class="controls container">
@@ -61,7 +58,7 @@
              </div>
           </section>
         </main>
-    </form>
+    </div>
 
 
     <script th:src="@{/js/mainPage.js}"></script>
