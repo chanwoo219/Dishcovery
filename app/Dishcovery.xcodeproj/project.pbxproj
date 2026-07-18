@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		502974E789334B59BAF3C703 /* ShopProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D5CECA118E4092AC2E3BC7 /* ShopProduct.swift */; };
+		D6DD6748155043C9B83F1448 /* ShopReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0B20DDE814457B1CAA397 /* ShopReview.swift */; };
+		5EFD198173594091822E34DD /* ShopInquiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BE9B1E3D654AEFB3292C24 /* ShopInquiry.swift */; };
+		7C91F52D01124B50A1D31909 /* ShopApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139FEC8C41D74A6DBEAE8863 /* ShopApiService.swift */; };
+		BAFE53A33FD34B638DE00A4D /* ShopProductCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF57FAFAD834338962F7B9C /* ShopProductCardView.swift */; };
+		96D9DA566BF1439D98E81508 /* ShopListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80267A534F0D48769C00CB1C /* ShopListViewModel.swift */; };
+		6170EF8712CB459B80C78C32 /* ShopListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F913EB3B4D3D4B2EB95D4E8B /* ShopListView.swift */; };
+		87E10F75E8114B78BF2A72A0 /* ShopDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5919E7F46D24C2F80106FF0 /* ShopDetailViewModel.swift */; };
+		BBA3C0F86AE1406F88FB6D2F /* ShopDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D20B699EBE48588DA3F6BE /* ShopDetailView.swift */; };
 		3B2751232EE314020003A0AF /* RecipeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2751222EE314020003A0AF /* RecipeResponse.swift */; };
 		3B2751252EE3142A0003A0AF /* RecipeAiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2751242EE3142A0003A0AF /* RecipeAiService.swift */; };
 		3B2751272EE3144C0003A0AF /* RecipeAiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2751262EE3144C0003A0AF /* RecipeAiViewModel.swift */; };
@@ -47,6 +56,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E8D5CECA118E4092AC2E3BC7 /* ShopProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopProduct.swift; sourceTree = "<group>"; };
+		B8D0B20DDE814457B1CAA397 /* ShopReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReview.swift; sourceTree = "<group>"; };
+		20BE9B1E3D654AEFB3292C24 /* ShopInquiry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInquiry.swift; sourceTree = "<group>"; };
+		139FEC8C41D74A6DBEAE8863 /* ShopApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopApiService.swift; sourceTree = "<group>"; };
+		3DF57FAFAD834338962F7B9C /* ShopProductCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopProductCardView.swift; sourceTree = "<group>"; };
+		80267A534F0D48769C00CB1C /* ShopListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopListViewModel.swift; sourceTree = "<group>"; };
+		F913EB3B4D3D4B2EB95D4E8B /* ShopListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopListView.swift; sourceTree = "<group>"; };
+		C5919E7F46D24C2F80106FF0 /* ShopDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewModel.swift; sourceTree = "<group>"; };
+		14D20B699EBE48588DA3F6BE /* ShopDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailView.swift; sourceTree = "<group>"; };
 		3B2751222EE314020003A0AF /* RecipeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeResponse.swift; sourceTree = "<group>"; };
 		3B2751242EE3142A0003A0AF /* RecipeAiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeAiService.swift; sourceTree = "<group>"; };
 		3B2751262EE3144C0003A0AF /* RecipeAiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeAiViewModel.swift; sourceTree = "<group>"; };
@@ -135,6 +153,7 @@
 				B6D9BDE96CCD414DBA5EC113 /* RecipeRegister */,
 				3107A3BCC6F54375B1D3A78C /* RecipeAI */,
 				FA13927249704F2FBBD1FC58 /* MyRecipe */,
+				35B791DF75454FA8AAC27FEB /* Shop */,
 				3B737A6E2ED88ED2005E880E /* DishcoveryApp.swift */,
 				3B737A702ED88ED2005E880E /* ContentView.swift */,
 				3B737A722ED88ED4005E880E /* Assets.xcassets */,
@@ -201,6 +220,22 @@
 				3B41E1042ED8910300E84BB1 /* SignupViewModel.swift */,
 			);
 			path = Signup;
+			sourceTree = "<group>";
+		};
+		35B791DF75454FA8AAC27FEB /* Shop */ = {
+			isa = PBXGroup;
+			children = (
+				E8D5CECA118E4092AC2E3BC7 /* ShopProduct.swift */,
+				B8D0B20DDE814457B1CAA397 /* ShopReview.swift */,
+				20BE9B1E3D654AEFB3292C24 /* ShopInquiry.swift */,
+				139FEC8C41D74A6DBEAE8863 /* ShopApiService.swift */,
+				3DF57FAFAD834338962F7B9C /* ShopProductCardView.swift */,
+				80267A534F0D48769C00CB1C /* ShopListViewModel.swift */,
+				F913EB3B4D3D4B2EB95D4E8B /* ShopListView.swift */,
+				C5919E7F46D24C2F80106FF0 /* ShopDetailViewModel.swift */,
+				14D20B699EBE48588DA3F6BE /* ShopDetailView.swift */,
+			);
+			path = Shop;
 			sourceTree = "<group>";
 		};
 		FA13927249704F2FBBD1FC58 /* MyRecipe */ = {
@@ -327,6 +362,15 @@
 				3B737A6F2ED88ED2005E880E /* DishcoveryApp.swift in Sources */,
 				9AB556122EF4EA0A0073AB0A /* MyRecipeViewModel.swift in Sources */,
 				3B41E1212ED893E800E84BB1 /* CodeVo.swift in Sources */,
+				502974E789334B59BAF3C703 /* ShopProduct.swift in Sources */,
+				D6DD6748155043C9B83F1448 /* ShopReview.swift in Sources */,
+				5EFD198173594091822E34DD /* ShopInquiry.swift in Sources */,
+				7C91F52D01124B50A1D31909 /* ShopApiService.swift in Sources */,
+				BAFE53A33FD34B638DE00A4D /* ShopProductCardView.swift in Sources */,
+				96D9DA566BF1439D98E81508 /* ShopListViewModel.swift in Sources */,
+				6170EF8712CB459B80C78C32 /* ShopListView.swift in Sources */,
+				87E10F75E8114B78BF2A72A0 /* ShopDetailViewModel.swift in Sources */,
+				BBA3C0F86AE1406F88FB6D2F /* ShopDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

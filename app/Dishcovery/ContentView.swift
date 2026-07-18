@@ -8,6 +8,8 @@ enum Page: Hashable {
     case recipeWrite
     case myRecipe
     case recipeDetail(recipeId: String)
+    case shop
+    case shopDetail(productId: String)
 }
 
 @available(iOS 16.0, *)
@@ -155,6 +157,12 @@ struct ContentView: View {
                     MyRecipeView(path: $path)
                         .navigationTitle("나의 레시피")
                         .navigationBarTitleDisplayMode(.inline)
+                case .shop:
+                    ShopListView(path: $path)
+                        .navigationTitle("상점")
+                        .navigationBarTitleDisplayMode(.inline)
+                case .shopDetail(let productId):
+                    ShopDetailView(productId: productId)
                 case .main:
                     EmptyView()
                         .onAppear { path.removeLast(path.count) }

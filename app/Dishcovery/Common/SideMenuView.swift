@@ -42,8 +42,15 @@ struct SideMenuView: View {
                                path.append(Page.myRecipe)
                            }
                        }
-                        
-                        
+
+                        MenuItem(label: "상점", system: "cart") {
+                            withAnimation {
+                                showMenu = false
+                                path.append(Page.shop)
+                            }
+                        }
+
+
                     }
                     
 
