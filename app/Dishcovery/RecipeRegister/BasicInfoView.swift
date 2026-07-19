@@ -25,7 +25,7 @@ struct BasicInfoView: View {
                 Text("카테고리")
                     .font(.headline)
                 
-                Picker("카테고리 선택", selection: $viewModel.categoryId) {
+                Picker("카테고리 선택", selection: $categoryId) {
                     Text("선택").tag("")
                     ForEach(viewModel.categories, id: \.code) { cat in
                         Text(cat.codeName).tag(cat.code)

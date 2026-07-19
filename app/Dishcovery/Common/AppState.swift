@@ -4,6 +4,7 @@ class AppState: ObservableObject {
     @Published var isLoggedIn: Bool = false
     @Published var username: String = ""
     @Published var userImgPath: String? = nil
+    @Published var userId: String = ""
     
     init() {
         // 앱 실행 시 저장된 JWT 여부 확인
