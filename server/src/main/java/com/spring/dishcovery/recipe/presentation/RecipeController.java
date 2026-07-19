@@ -114,8 +114,15 @@ public class RecipeController {
         }
         stepList = recipe.getStepList();
 
+        String categoryId = recipe.getCategoryId();
+        String categoryName = categoryList.stream()
+                .filter(c -> c.getCode().equals(categoryId))
+                .map(CodeVO::getCodeName)
+                .findFirst()
+                .orElse(categoryId);
+
         model.addAttribute("recipe", recipe);
-        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("categoryName", categoryName);
         model.addAttribute("stepList", stepList);
         model.addAttribute("loginUserId", userId);
         model.addAttribute("comments", service.listComments(recipeId));

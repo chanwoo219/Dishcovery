@@ -28,10 +28,7 @@
           </div>
           <div class="form-row">
               <label for="categoryId">카테고리</label>
-              <select id="categoryId" name="categoryId" disabled>
-                  <option value="">선택</option>
-                  <option th:each="cat : ${categoryList}" th:value="${cat.code}" th:text="${cat.codeName}" th:selected="${cat.code == recipe.categoryId}"></option>
-              </select>
+              <input type="text" id="categoryId" name="categoryId" th:value="${categoryName}" readonly="readonly">
           </div>
           <div class="form-row">
             <label for="cookTime">조리 시간</label>
