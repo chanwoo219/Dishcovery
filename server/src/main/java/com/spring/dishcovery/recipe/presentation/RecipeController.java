@@ -94,7 +94,8 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/detail")
-    public String recipeDetail(@RequestParam String recipeId, Model model,HttpServletRequest request) {
+    public String recipeDetail(@RequestParam String recipeId, Model model, HttpServletRequest request,
+                               RedirectAttributes redirectAttributes) {
 
         RecipeVo recipe = new RecipeVo();
         String userId ="";
@@ -107,6 +108,10 @@ public class RecipeController {
 
         List<CodeVO> categoryList = codeService.codeList("CTG");
         recipe = service.getRecipeDataDetail(recipeId,userId);
+        if (recipe == null) {
+            redirectAttributes.addFlashAttribute("loginMessage", "레시피를 찾을 수 없습니다.");
+            return "redirect:/MainPage";
+        }
         stepList = recipe.getStepList();
 
         model.addAttribute("recipe", recipe);
