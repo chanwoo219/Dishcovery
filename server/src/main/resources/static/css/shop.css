@@ -92,7 +92,12 @@
 .qty input{ width:110px; padding:10px 12px; border:1px solid var(--shop-line); border-radius:10px; font-size:14px; }
 
 .cta{ display:flex; gap:10px; }
-.cta .btn-buy{ flex:1; padding:14px 14px; border-radius:12px; font-size:15px; }
+.cta .btn-buy{
+    flex:1; padding:14px 14px; border-radius:12px; font-size:15px;
+    border:none; cursor:pointer; font-weight:700;
+    background:#e2e4e8; color:#8a8f98;
+}
+.cta .btn-buy.enough{ background:var(--shop-accent); color:#fff; }
 
 .hint{ margin-top:10px; color:#0b7a2e; font-size:13px; }
 .err{ margin-top:10px; color:#d12d2d; font-size:13px; }

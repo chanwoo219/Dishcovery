@@ -50,16 +50,18 @@
                 </div>
             </div>
 
-            <form class="buy" method="post" action="/shop/purchase">
+            <form class="buy" method="post" action="/shop/purchase" onsubmit="return confirm('정말로 구매하시겠습니까?')">
                 <input type="hidden" name="productId" th:value="${product.productId}" />
 
                 <div class="qty">
                     <span class="k">수량</span>
-                    <input type="number" name="qty" min="1" value="1" />
+                    <input type="number" id="qtyInput" name="qty" min="1" value="1"
+                           th:attr="data-unit-point=${product.productPoint},data-my-point=${myPoint}"
+                           oninput="updateBuyButton()" />
                 </div>
 
                 <div class="cta">
-                    <button type="submit" class="btn-buy">구매하기</button>
+                    <button type="submit" id="buyBtn" class="btn-buy">구매하기</button>
                 </div>
 
                 <div class="hint" th:if="${param.purchased}">
@@ -155,6 +157,19 @@
 </main>
 
 <script>
+    function updateBuyButton() {
+        const qtyInput = document.getElementById('qtyInput');
+        const buyBtn = document.getElementById('buyBtn');
+        if (!qtyInput || !buyBtn) return;
+
+        const unitPoint = Number(qtyInput.dataset.unitPoint) || 0;
+        const myPoint = Number(qtyInput.dataset.myPoint) || 0;
+        const qty = Number(qtyInput.value) || 0;
+
+        buyBtn.classList.toggle('enough', myPoint >= unitPoint * qty);
+    }
+    updateBuyButton();
+
     document.querySelectorAll('.tabs .tab').forEach(function (tab) {
         tab.addEventListener('click', function () {
             document.querySelectorAll('.tabs .tab').forEach(function (t) { t.classList.remove('active'); });
