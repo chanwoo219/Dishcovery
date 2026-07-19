@@ -155,6 +155,28 @@ public class RecipeController {
         return "redirect:/recipe/detail?recipeId=" + recipeId;
     }
 
+    @PostMapping("/recipe/comment/delete")
+    public String deleteComment(@RequestParam String recipeId,
+                                @RequestParam Long commentId,
+                                HttpServletRequest request,
+                                RedirectAttributes redirectAttributes) {
+
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
+            return "redirect:/dishcovery_login";
+        }
+
+        try {
+            service.deleteComment(userId, commentId);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/recipe/detail?recipeId=" + recipeId + "&error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+        }
+
+        return "redirect:/recipe/detail?recipeId=" + recipeId;
+    }
+
     @PostMapping("/recipe/like")
     public String toggleLike(@RequestParam String recipeId,
                              HttpServletRequest request,

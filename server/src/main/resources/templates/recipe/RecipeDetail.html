@@ -120,7 +120,16 @@
           <p class="muted" th:if="${#lists.isEmpty(comments)}">아직 등록된 댓글이 없어요.</p>
           <ul class="comment-list">
               <li th:each="c : ${comments}">
-                  <div class="comment-meta" th:text="${c.userName}"></div>
+                  <div class="comment-meta">
+                      <span th:text="${c.userName}"></span>
+                      <form method="post" th:action="@{/recipe/comment/delete}"
+                            th:if="${loginUserId != null and (loginUserId == c.userId or loginUserId == recipe.userId)}"
+                            onsubmit="return confirm('댓글을 삭제하시겠습니까?')">
+                          <input type="hidden" name="recipeId" th:value="${recipe.recipeId}">
+                          <input type="hidden" name="commentId" th:value="${c.commentId}">
+                          <button type="submit" class="comment-delete-btn">삭제</button>
+                      </form>
+                  </div>
                   <p th:text="${c.content}"></p>
               </li>
           </ul>

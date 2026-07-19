@@ -377,6 +377,13 @@
         DELETE FROM RECIPE_MASTER WHERE RECIPE_ID = #{recipeId} AND USER_ID = #{userId}
     </delete>
 
+    <delete id="deleteComment">
+        DELETE rc FROM RECIPE_COMMENT rc
+        JOIN RECIPE_MASTER rm ON rm.RECIPE_ID = rc.RECIPE_ID
+        WHERE rc.COMMENT_ID = #{commentId}
+          AND (rc.USER_ID = #{userId} OR rm.USER_ID = #{userId})
+    </delete>
+
     <!--
 
     <insert id="rgtSingUp" parameterType="com.example.demo.domain.UserVO">

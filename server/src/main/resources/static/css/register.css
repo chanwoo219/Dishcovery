@@ -201,10 +201,28 @@ a{text-decoration:none; color:inherit}
 }
 
 .comment-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     color:var(--brand);
     font-size:13px;
     font-weight:700;
     margin-bottom:4px;
+}
+
+.comment-delete-btn{
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:400;
+    cursor:pointer;
+    padding:0;
+}
+
+.comment-delete-btn:hover{
+    color:#e0453c;
+    text-decoration:underline;
 }
 
 .comment-list p{

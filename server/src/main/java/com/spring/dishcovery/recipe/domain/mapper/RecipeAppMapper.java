@@ -69,4 +69,7 @@ public interface RecipeAppMapper {
 
     int deleteRecipe(@Param("recipeId") String recipeId, @Param("userId") String userId);
 
+    // 댓글 작성자 또는 레시피 작성자만 삭제 가능
+    int deleteComment(@Param("commentId") Long commentId, @Param("userId") String userId);
+
 }

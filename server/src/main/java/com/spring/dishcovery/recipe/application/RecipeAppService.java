@@ -216,6 +216,16 @@ public class RecipeAppService {
         recipeAppMapper.insertComment(recipeId, userId, content.trim());
     }
 
+    // 댓글 작성자 또는 레시피 작성자만 삭제 가능 (권한 확인은 WHERE 절에서 처리)
+    public void deleteComment(String userId, Long commentId) {
+        if (userId == null || userId.isBlank()) throw new IllegalArgumentException("로그인이 필요합니다");
+
+        int deleted = recipeAppMapper.deleteComment(commentId, userId);
+        if (deleted == 0) {
+            throw new IllegalArgumentException("댓글을 삭제할 권한이 없습니다.");
+        }
+    }
+
     public int getLikeCount(String recipeId) {
         return recipeAppMapper.countLikes(recipeId);
     }
