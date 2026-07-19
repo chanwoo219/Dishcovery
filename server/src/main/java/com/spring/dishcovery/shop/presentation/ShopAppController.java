@@ -2,6 +2,7 @@ package com.spring.dishcovery.shop.presentation;
 
 import com.spring.dishcovery.global.config.JwtUtil;
 import com.spring.dishcovery.shop.application.ShopService;
+import com.spring.dishcovery.shop.domain.entity.PurchaseHistoryVo;
 import com.spring.dishcovery.shop.domain.entity.ShopInquiry;
 import com.spring.dishcovery.shop.domain.entity.ShopProduct;
 import com.spring.dishcovery.shop.domain.entity.ShopReview;
@@ -73,6 +74,23 @@ public class ShopAppController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
+    }
+
+    @GetMapping("/purchase-history")
+    public ResponseEntity<List<PurchaseHistoryVo>> purchaseHistory(
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        String userId = extractUserId(authHeader);
+        if (userId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(shopService.listPurchaseHistory(userId));
+    }
+
+    @GetMapping("/products/{productId}/hasPurchased")
+    public ResponseEntity<Map<String, Boolean>> hasPurchased(
+            @PathVariable String productId,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        String userId = extractUserId(authHeader);
+        if (userId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(Map.of("hasPurchased", shopService.hasPurchased(userId, productId)));
     }
 
     @GetMapping("/products/{productId}/reviews")

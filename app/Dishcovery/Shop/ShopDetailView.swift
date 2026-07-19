@@ -69,27 +69,33 @@ struct ShopDetailView: View {
                             }
                         }
 
-                        Picker("별점", selection: $viewModel.reviewRating) {
-                            ForEach(1...5, id: \.self) { star in
-                                Text("\(star)점").tag(star)
+                        if viewModel.hasPurchased {
+                            Picker("별점", selection: $viewModel.reviewRating) {
+                                ForEach(1...5, id: \.self) { star in
+                                    Text("\(star)점").tag(star)
+                                }
                             }
-                        }
-                        .pickerStyle(.segmented)
+                            .pickerStyle(.segmented)
 
-                        TextField("리뷰를 남겨주세요", text: $viewModel.reviewContent)
-                            .textFieldStyle(.roundedBorder)
+                            TextField("리뷰를 남겨주세요", text: $viewModel.reviewContent)
+                                .textFieldStyle(.roundedBorder)
 
-                        Button {
-                            viewModel.submitReview(productId: productId)
-                        } label: {
-                            Text("리뷰 등록")
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 8)
-                                .background(Color.orange.opacity(0.15))
-                                .foregroundColor(.orange)
-                                .cornerRadius(8)
+                            Button {
+                                viewModel.submitReview(productId: productId)
+                            } label: {
+                                Text("리뷰 등록")
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                                    .background(Color.orange.opacity(0.15))
+                                    .foregroundColor(.orange)
+                                    .cornerRadius(8)
+                            }
+                            .disabled(viewModel.reviewContent.isEmpty)
+                        } else {
+                            Text("구매한 상품만 리뷰를 작성할 수 있어요.")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
                         }
-                        .disabled(viewModel.reviewContent.isEmpty)
 
                         ForEach(viewModel.reviews) { review in
                             VStack(alignment: .leading, spacing: 4) {

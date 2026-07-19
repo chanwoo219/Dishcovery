@@ -7,6 +7,7 @@ class ShopDetailViewModel: ObservableObject {
     @Published var reviews: [ShopReview] = []
     @Published var inquiries: [ShopInquiry] = []
     @Published var recommended: [ShopProduct] = []
+    @Published var hasPurchased: Bool = false
 
     @Published var reviewContent: String = ""
     @Published var reviewRating: Int = 5
@@ -41,6 +42,12 @@ class ShopDetailViewModel: ObservableObject {
         } catch {
             myPoint = 0
         }
+
+        do {
+            hasPurchased = try await ShopApiService.shared.fetchHasPurchased(productId: productId)
+        } catch {
+            hasPurchased = false
+        }
     }
 
     func loadReviews(productId: String) async {
@@ -66,6 +73,7 @@ class ShopDetailViewModel: ObservableObject {
                 toastMessage = message
                 showToast = true
                 myPoint = (try? await ShopApiService.shared.fetchMyPoint()) ?? myPoint
+                hasPurchased = (try? await ShopApiService.shared.fetchHasPurchased(productId: productId)) ?? hasPurchased
             } catch {
                 toastMessage = error.localizedDescription
                 showToast = true

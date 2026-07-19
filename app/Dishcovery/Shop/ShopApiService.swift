@@ -78,6 +78,31 @@ class ShopApiService {
         return decoded.message
     }
 
+    func fetchPurchaseHistory() async throws -> [PurchaseHistory] {
+        guard let auth = authHeader() else { throw ShopApiError.unauthorized }
+        guard let url = URL(string: "\(API.baseURL)/api/shop/purchase-history") else { throw URLError(.badURL) }
+        var request = URLRequest(url: url)
+        request.setValue(auth, forHTTPHeaderField: "Authorization")
+        let (data, response) = try await URLSession.shared.data(for: request)
+        if let http = response as? HTTPURLResponse, http.statusCode == 401 {
+            throw ShopApiError.unauthorized
+        }
+        return try JSONDecoder().decode([PurchaseHistory].self, from: data)
+    }
+
+    func fetchHasPurchased(productId: String) async throws -> Bool {
+        guard let auth = authHeader() else { return false }
+        guard let url = URL(string: "\(API.baseURL)/api/shop/products/\(productId)/hasPurchased") else { throw URLError(.badURL) }
+        var request = URLRequest(url: url)
+        request.setValue(auth, forHTTPHeaderField: "Authorization")
+        let (data, response) = try await URLSession.shared.data(for: request)
+        if let http = response as? HTTPURLResponse, http.statusCode == 401 {
+            return false
+        }
+        let decoded = try JSONDecoder().decode([String: Bool].self, from: data)
+        return decoded["hasPurchased"] ?? false
+    }
+
     func fetchReviews(productId: String) async throws -> [ShopReview] {
         guard let url = URL(string: "\(API.baseURL)/api/shop/products/\(productId)/reviews") else { throw URLError(.badURL) }
         let (data, _) = try await URLSession.shared.data(from: url)
