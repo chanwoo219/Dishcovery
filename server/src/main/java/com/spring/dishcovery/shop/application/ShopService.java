@@ -119,6 +119,16 @@ public class ShopService {
         }
     }
 
+    public boolean hasPurchased(String userId, String productId) {
+        if (userId == null || userId.isBlank() || productId == null || productId.isBlank()) return false;
+        try {
+            return shopMapper.countPurchases(userId, productId) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<ShopReview> listReviews(String productId) {
         try {
             return Optional.ofNullable(shopMapper.listReviews(productId))
@@ -139,6 +149,7 @@ public class ShopService {
         if (productId == null || productId.isBlank()) throw new IllegalArgumentException("상품 ID가 올바르지 않습니다");
         if (content == null || content.isBlank()) throw new IllegalArgumentException("리뷰 내용을 입력해주세요");
         if (rating < 1 || rating > 5) throw new IllegalArgumentException("별점은 1~5 사이여야 합니다");
+        if (shopMapper.countPurchases(userId, productId) <= 0) throw new IllegalArgumentException("구매한 상품만 리뷰를 작성할 수 있습니다");
 
         shopMapper.insertReview(productId, userId, rating, content);
     }

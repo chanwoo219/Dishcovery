@@ -56,6 +56,10 @@
         VALUES (#{userId}, #{productId}, NOW())
     </insert>
 
+    <select id="countPurchases" resultType="int">
+        SELECT COUNT(*) FROM PURCHASE_HISTORY WHERE USER_ID = #{userId} AND PRODUCT_ID = #{productId}
+    </select>
+
     <insert id="insertLedger">
         INSERT INTO POINT_LEDGER (USER_ID, POINT_CHANGE, TRANSACTION_TYPE, DESCRIPTION, CREATED_AT)
         VALUES (#{userId}, #{point}, #{transactionType}, #{description}, NOW())

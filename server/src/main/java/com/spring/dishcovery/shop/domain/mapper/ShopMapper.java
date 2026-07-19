@@ -21,6 +21,8 @@ public interface ShopMapper {
 
     void insertPurchaseHistory(@Param("userId") String userId, @Param("productId") String productId);
 
+    int countPurchases(@Param("userId") String userId, @Param("productId") String productId);
+
     List<ShopProduct> listRecommended(@Param("excludeId") String excludeId);
 
     void insertLedger(@Param("userId") String userId,

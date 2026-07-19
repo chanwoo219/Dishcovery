@@ -99,6 +99,8 @@ public class ShopController {
             e.printStackTrace();
         }
 
+        model.addAttribute("hasPurchased", shopService.hasPurchased(userId, productId));
+
         try {
             var recommended = shopService.listRecommended(productId);
             if (recommended == null) recommended = Collections.emptyList();

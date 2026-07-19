@@ -94,7 +94,7 @@
             평균 별점 <b th:text="${#numbers.formatDecimal(avgRating, 1, 1)}">0.0</b> / 5 (<span th:text="${#lists.size(reviews)}">0</span>개)
         </p>
 
-        <form th:action="@{|/shop/product/${product.productId}/review|}" method="post" class="review-form">
+        <form th:if="${hasPurchased}" th:action="@{|/shop/product/${product.productId}/review|}" method="post" class="review-form">
             <select name="rating" required>
                 <option value="5">★★★★★ (5)</option>
                 <option value="4">★★★★ (4)</option>
@@ -105,6 +105,7 @@
             <textarea name="content" rows="2" placeholder="상품에 대한 리뷰를 남겨주세요" required></textarea>
             <button type="submit">리뷰 등록</button>
         </form>
+        <p class="muted" th:unless="${hasPurchased}">구매한 상품만 리뷰를 작성할 수 있어요.</p>
 
         <p class="muted" th:if="${#lists.isEmpty(reviews)}">아직 등록된 리뷰가 없어요.</p>
         <ul class="review-list">
