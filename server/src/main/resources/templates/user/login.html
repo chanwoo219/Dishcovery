@@ -21,7 +21,7 @@
       </div>
 
       <form id="panel-login" th:class="${loginPanel}" role="tabpanel" aria-labelledby="tab-login" autocomplete="on" method="post" th:action="@{/userLogin}">
-        <input type="hidden" name="msg" id="msg" th:value="${msg}"/>
+        <input type="hidden" name="msg" id="msg" th:value="${msg != null ? msg : loginMessage}"/>
 
         <label class="field-label" for="login-userId">아이디</label>
         <input id="login-userId" name="userId" type="text" class="input" placeholder="아이디를 입력하세요" required />

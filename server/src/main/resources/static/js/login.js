@@ -1,6 +1,6 @@
 // Tab toggle + small UX niceties
 window.addEventListener('DOMContentLoaded', function(){
-    const msg = document.querySelector('.msg')?.value;
+    const msg = document.querySelector('#msg')?.value;
     if (msg) {
         alert(msg);
     }
