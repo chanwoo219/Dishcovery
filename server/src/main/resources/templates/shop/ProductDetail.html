@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <form class="buy" method="post" action="/shop/purchase" onsubmit="return confirm('정말로 구매하시겠습니까?')">
+            <form class="buy" method="post" action="/shop/purchase" onsubmit="return handleBuySubmit()">
                 <input type="hidden" name="productId" th:value="${product.productId}" />
 
                 <div class="qty">
@@ -169,6 +169,20 @@
         buyBtn.classList.toggle('enough', myPoint >= unitPoint * qty);
     }
     updateBuyButton();
+
+    function handleBuySubmit() {
+        const qtyInput = document.getElementById('qtyInput');
+        const unitPoint = Number(qtyInput.dataset.unitPoint) || 0;
+        const myPoint = Number(qtyInput.dataset.myPoint) || 0;
+        const qty = Number(qtyInput.value) || 0;
+
+        if (myPoint < unitPoint * qty) {
+            alert('포인트가 부족합니다.');
+            return false;
+        }
+
+        return confirm('정말로 구매하시겠습니까?');
+    }
 
     document.querySelectorAll('.tabs .tab').forEach(function (tab) {
         tab.addEventListener('click', function () {
