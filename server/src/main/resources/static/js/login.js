@@ -38,32 +38,32 @@ window.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    // Persist email when the checkbox is used
-    const saveEmail = $('#save-email');
-    const loginEmail = $('#login-email');
+    // Persist userId when the checkbox is used
+    const saveUserId = $('#save-userid');
+    const loginUserId = $('#login-userId');
 
-    // Load saved email if present
+    // Load saved userId if present
     try {
-        const saved = localStorage.getItem('dishcovery.email');
-        if (saved) {
-            loginEmail.value = saved;
-            if (saveEmail) saveEmail.checked = true;
+        const saved = localStorage.getItem('dishcovery.userId');
+        if (saved && loginUserId) {
+            loginUserId.value = saved;
+            if (saveUserId) saveUserId.checked = true;
         }
     } catch (_) {}
 
-    saveEmail?.addEventListener('change', () => {
+    saveUserId?.addEventListener('change', () => {
         try {
-            if (saveEmail.checked) {
-                localStorage.setItem('dishcovery.email', loginEmail.value.trim());
+            if (saveUserId.checked) {
+                localStorage.setItem('dishcovery.userId', loginUserId.value.trim());
             } else {
-                localStorage.removeItem('dishcovery.email');
+                localStorage.removeItem('dishcovery.userId');
             }
         } catch (_) {}
     });
 
-    loginEmail?.addEventListener('blur', () => {
-        if (saveEmail?.checked) {
-            try { localStorage.setItem('dishcovery.email', loginEmail.value.trim()); } catch (_) {}
+    loginUserId?.addEventListener('blur', () => {
+        if (saveUserId?.checked) {
+            try { localStorage.setItem('dishcovery.userId', loginUserId.value.trim()); } catch (_) {}
         }
     });
 

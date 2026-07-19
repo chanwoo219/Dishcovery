@@ -15,6 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
+    private static final int AUTO_LOGIN_MAX_AGE_SEC = 60 * 60 * 24 * 30; // 30일
+
     @Autowired
     UserService userService;
 
@@ -93,6 +95,7 @@ public class UserController {
     @PostMapping("/userLogin")
     public String userLogin(@RequestParam String userId,
                             @RequestParam String userPswd,
+                            @RequestParam(required = false) String autoLogin,
                             HttpServletResponse response,
                             RedirectAttributes redirectAttributes) {
 
@@ -121,14 +124,18 @@ public class UserController {
         // 3) 비밀번호 확인
         UserEntity user = userService.getUserData(userId, userPswd);
         if (user != null) {
-            // JWT 발급
-            String token = jwtUtil.generateToken(user.getUserId(), user.getUserName());
+            boolean rememberMe = autoLogin != null;
+
+            // JWT 발급 (자동 로그인 체크 시 30일, 아니면 기본 만료시간)
+            String token = rememberMe
+                    ? jwtUtil.generateToken(user.getUserId(), user.getUserName(), AUTO_LOGIN_MAX_AGE_SEC * 1000L)
+                    : jwtUtil.generateToken(user.getUserId(), user.getUserName());
 
             // JWT를 HttpOnly 쿠키로 브라우저에 저장
             Cookie jwtCookie = new Cookie("JWT_TOKEN", token);
             jwtCookie.setHttpOnly(true);
             jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(3600);
+            jwtCookie.setMaxAge(rememberMe ? AUTO_LOGIN_MAX_AGE_SEC : 3600);
             response.addCookie(jwtCookie);
 
             return "redirect:/MainPage";

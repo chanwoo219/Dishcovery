@@ -39,12 +39,17 @@ public class JwtUtil {
     }
 
     public String generateToken(String userId, String userName) {
+        return generateToken(userId, userName, expirationMs);
+    }
+
+    // 자동 로그인 등 커스텀 만료시간이 필요한 경우
+    public String generateToken(String userId, String userName, long customExpirationMs) {
 
         return Jwts.builder()
                 .setSubject(userId)
                 .claim("userName", userName)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + customExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
