@@ -60,6 +60,20 @@
         SELECT COUNT(*) FROM PURCHASE_HISTORY WHERE USER_ID = #{userId} AND PRODUCT_ID = #{productId}
     </select>
 
+    <select id="listPurchaseHistory" resultType="com.spring.dishcovery.shop.domain.entity.PurchaseHistoryVo">
+        SELECT
+            ph.ID AS purchaseId,
+            ph.PRODUCT_ID AS productId,
+            p.PRODUCT_NAME AS productName,
+            p.MAIN_IMAGE AS mainImage,
+            p.PRODUCT_POINT AS productPoint,
+            ph.PURCHASE_DATE AS purchaseDate
+        FROM PURCHASE_HISTORY ph
+        JOIN PRODUCT p ON p.PRODUCT_ID = ph.PRODUCT_ID
+        WHERE ph.USER_ID = #{userId}
+        ORDER BY ph.PURCHASE_DATE DESC
+    </select>
+
     <insert id="insertLedger">
         INSERT INTO POINT_LEDGER (USER_ID, POINT_CHANGE, TRANSACTION_TYPE, DESCRIPTION, CREATED_AT)
         VALUES (#{userId}, #{point}, #{transactionType}, #{description}, NOW())

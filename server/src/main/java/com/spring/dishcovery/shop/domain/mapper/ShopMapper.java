@@ -1,5 +1,6 @@
 package com.spring.dishcovery.shop.domain.mapper;
 
+import com.spring.dishcovery.shop.domain.entity.PurchaseHistoryVo;
 import com.spring.dishcovery.shop.domain.entity.ShopInquiry;
 import com.spring.dishcovery.shop.domain.entity.ShopProduct;
 import com.spring.dishcovery.shop.domain.entity.ShopReview;
@@ -22,6 +23,8 @@ public interface ShopMapper {
     void insertPurchaseHistory(@Param("userId") String userId, @Param("productId") String productId);
 
     int countPurchases(@Param("userId") String userId, @Param("productId") String productId);
+
+    List<PurchaseHistoryVo> listPurchaseHistory(@Param("userId") String userId);
 
     List<ShopProduct> listRecommended(@Param("excludeId") String excludeId);
 

@@ -69,6 +69,21 @@ public class ShopController {
         return "shop/ShopList";
     }
 
+    @GetMapping("/shop/purchase-history")
+    public String purchaseHistory(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+        String userId = shopService.getLoginUserId(request);
+        if (userId == null || userId.isBlank()) {
+            redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
+            return "redirect:/dishcovery_login";
+        }
+
+        model.addAttribute("purchases", shopService.listPurchaseHistory(userId));
+        model.addAttribute("myPoint", shopService.getUserPoint(userId));
+
+        return "shop/PurchaseHistory";
+    }
+
     @GetMapping("/shop/product/{productId}")
     public String productDetail(@PathVariable String productId, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 

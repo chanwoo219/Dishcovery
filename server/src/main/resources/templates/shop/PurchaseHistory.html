@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dishcovery | 구매 내역</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}" />
+    <link rel="stylesheet" href="/css/shop.css" />
+</head>
+<body>
+
+<div th:insert="fragments/header :: site-header"></div>
+
+<main class="wrap">
+
+    <div class="my-point-bar">
+        내 포인트 <b th:text="${myPoint}">0</b>P
+    </div>
+
+    <h2 class="shop-count">구매 내역</h2>
+
+    <div th:if="${#lists.isEmpty(purchases)}" class="shop-empty">
+        아직 구매한 상품이 없습니다.
+    </div>
+
+    <div class="product-grid" th:unless="${#lists.isEmpty(purchases)}">
+        <a class="product-card" th:each="ph : ${purchases}" th:href="@{|/shop/product/${ph.productId}|}">
+            <img th:if="${ph.mainImage != null}" th:src="${ph.mainImage}" alt="상품 이미지" onerror="this.style.display='none'">
+            <div class="product-thumb-empty" th:unless="${ph.mainImage != null}"></div>
+            <div class="product-info">
+                <div class="product-name" th:text="${ph.productName}">상품명</div>
+                <div class="purchase-meta">
+                    <span th:text="${ph.productPoint} + 'P'">0P</span>
+                    ·
+                    <span th:text="${#temporals.format(ph.purchaseDate, 'yyyy.MM.dd HH:mm')}">2026.01.01</span>
+                </div>
+            </div>
+        </a>
+    </div>
+</main>
+
+<script th:src="@{/js/mainPage.js}"></script>
+</body>
+</html>

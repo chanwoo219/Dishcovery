@@ -2,6 +2,7 @@ package com.spring.dishcovery.shop.application;
 
 import com.spring.dishcovery.global.config.CookieUtil;
 import com.spring.dishcovery.global.config.JwtUtil;
+import com.spring.dishcovery.shop.domain.entity.PurchaseHistoryVo;
 import com.spring.dishcovery.shop.domain.entity.ShopInquiry;
 import com.spring.dishcovery.shop.domain.entity.ShopProduct;
 import com.spring.dishcovery.shop.domain.entity.ShopReview;
@@ -126,6 +127,16 @@ public class ShopService {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public List<PurchaseHistoryVo> listPurchaseHistory(String userId) {
+        try {
+            return Optional.ofNullable(shopMapper.listPurchaseHistory(userId))
+                    .orElse(Collections.emptyList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
         }
     }
 
