@@ -97,15 +97,28 @@ margin-left:auto; display:flex; align-items:center; gap:8px; color:var(--brand);
     gap:24px; padding:26px 0 18px;
 }
 .segmented {
+    position:relative;
     background:#eaeaea; border-radius:28px; padding:10px;
     display:flex; gap:10px; width:min(820px, 80%); justify-self:center;
 }
+.seg-indicator {
+    position:absolute; top:10px; bottom:10px; left:10px;
+    width: calc(50% - 15px);
+    background:var(--brand); border-radius:20px;
+    transition:transform .3s ease;
+    z-index:0;
+}
+.seg-indicator.pos-2 {
+    transform: translateX(calc(100% + 10px));
+}
 .segmented .seg-btn {
+    position:relative; z-index:1;
+    display:flex; align-items:center; justify-content:center;
     flex:1; height:56px; border:none; border-radius:20px; background:transparent; color:var(--text);
-    font-size:18px; font-weight:800; cursor:pointer; transition:background-color .15s ease, color .15s ease;
+    font-size:18px; font-weight:800; cursor:pointer; transition:color .15s ease;
 }
 .segmented .seg-btn:hover { background:#f4f4f4; }
-.segmented .seg-btn.active { background:var(--brand); color:#fff; }
+.segmented .seg-btn.active { color:#fff; }
 
 .sorts {
     display:flex; align-items:center; gap:10px; color:#b8bcc2; font-weight:800; justify-self:end;

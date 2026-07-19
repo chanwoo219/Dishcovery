@@ -15,6 +15,23 @@ window.addEventListener('DOMContentLoaded', function(){
     const panelLogin = $('#panel-login');
     const panelSignup = $('#panel-signup');
 
+    function moveTabIndicator(tab, animate) {
+        const tabs = tab.closest('.tabs');
+        if (!tabs) return;
+        let indicator = tabs.querySelector('.tab-indicator');
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.className = 'tab-indicator';
+            tabs.insertBefore(indicator, tabs.firstChild);
+        }
+        if (animate === false) indicator.style.transition = 'none';
+        indicator.classList.toggle('pos-2', tab.id === 'tab-signup');
+        if (animate === false) {
+            void indicator.offsetWidth;
+            indicator.style.transition = '';
+        }
+    }
+
     function activate(tab) {
         const map = {
             'tab-login': panelLogin,
@@ -24,10 +41,13 @@ window.addEventListener('DOMContentLoaded', function(){
         $$('.panel').forEach((p) => p.classList.remove('show'));
         tab.classList.add('active');
         map[tab.id].classList.add('show');
+        moveTabIndicator(tab);
     }
 
     tabLogin.addEventListener('click', () => activate(tabLogin));
     tabSignup.addEventListener('click', () => activate(tabSignup));
+
+    moveTabIndicator($('.tab.active') || tabLogin, false);
 
     panelSignup.addEventListener('submit', (e) => {
         const pswd = $('#userPswd').value;

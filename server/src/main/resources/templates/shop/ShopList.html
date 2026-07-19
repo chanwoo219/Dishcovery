@@ -15,11 +15,11 @@
 <main class="page">
     <section class="controls container">
         <div class="segmented" role="tablist" aria-label="콘텐츠 종류">
-            <button type="button" th:class="${rcpClassNm}"
+            <button type="button" th:class="${rcpClassNm}" data-tab="recipe"
                     onclick="handleSegmentClick(this, '/pageGubun?gubun=recipe')"
                     role="tab" aria-selected="true">레시피</button>
 
-            <button type="button" th:class="${rankClassNm}"
+            <button type="button" th:class="${rankClassNm}" data-tab="shop"
                     onclick="goToShop(this)"
                     role="tab" aria-selected="false">상점</button>
         </div>

@@ -41,6 +41,29 @@ function goToShop(button) {
     handleSegmentClick(button, '/pageGubun?gubun=rank');
 }
 
+function moveSegIndicator(segmented, btn, animate) {
+    if (!segmented || !btn) return;
+    let indicator = segmented.querySelector('.seg-indicator');
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.className = 'seg-indicator';
+        segmented.insertBefore(indicator, segmented.firstChild);
+    }
+    if (animate === false) indicator.style.transition = 'none';
+    indicator.classList.toggle('pos-2', btn.dataset.tab === 'shop');
+    if (animate === false) {
+        void indicator.offsetWidth; // 강제 리플로우로 transition 복원 전에 즉시 위치 반영
+        indicator.style.transition = '';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.segmented').forEach((segmented) => {
+        const activeBtn = segmented.querySelector('.seg-btn.active');
+        moveSegIndicator(segmented, activeBtn, false);
+    });
+});
+
 function handleSegmentClick(button, url) {
     // 활성화 클래스 토글
     const wrap = button.parentElement;
@@ -50,6 +73,7 @@ function handleSegmentClick(button, url) {
     });
     button.classList.add('active');
     button.setAttribute('aria-selected', 'true');
+    moveSegIndicator(wrap, button, true);
 
     setTimeout(() => {
         window.location.href = url;
