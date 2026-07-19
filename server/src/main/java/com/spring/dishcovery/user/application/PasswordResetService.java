@@ -43,7 +43,14 @@ public class PasswordResetService {
         sendMail(userMail, code);
     }
 
-    /** 2️⃣ 코드 검증 + 비밀번호 변경 */
+    /** 2️⃣ 코드 검증만 (비밀번호는 아직 바꾸지 않음) */
+    public boolean verifyResetCode(String userMail, String code) {
+        UserEntity user = userMapper.findByUserMail(userMail);
+        if (user == null) return false;
+        return resetMapper.findUserIdByValidCode(user.getUserId(), code) != null;
+    }
+
+    /** 3️⃣ 코드 검증 + 비밀번호 변경 */
     public boolean resetPasswordByMail(String userMail, String code, String newPassword) {
         UserEntity user = userMapper.findByUserMail(userMail);
         if (user == null) return false;

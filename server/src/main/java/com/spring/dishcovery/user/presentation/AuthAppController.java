@@ -63,6 +63,15 @@ public class AuthAppController {
         return ResponseEntity.ok(Map.of("message", "인증코드를 이메일로 보냈습니다."));
     }
 
+    @PostMapping("/reset/verify-code")
+    public ResponseEntity<?> verifyResetCode(@RequestBody Map<String, String> body) {
+        boolean ok = resetService.verifyResetCode(body.get("userMail"), body.get("code"));
+        if (!ok) {
+            return ResponseEntity.badRequest().body(Map.of("message", "인증코드가 올바르지 않거나 만료되었습니다."));
+        }
+        return ResponseEntity.ok(Map.of("message", "인증되었습니다."));
+    }
+
     @PostMapping("/reset/verify")
     public ResponseEntity<?> verifyReset(@RequestBody Map<String, String> body) {
         String newPassword = body.get("newPassword");

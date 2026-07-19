@@ -3,6 +3,7 @@ import SwiftUI
 @available(iOS 16.0, *)
 struct ResetPasswordView: View {
     let userMail: String
+    let code: String
     @StateObject private var viewModel = ResetPasswordViewModel()
     @Binding var path: NavigationPath
 
@@ -12,10 +13,6 @@ struct ResetPasswordView: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
-            TextField("6자리 인증코드", text: $viewModel.code)
-                .textFieldStyle(.roundedBorder)
-                .keyboardType(.numberPad)
-
             SecureField("새 비밀번호", text: $viewModel.newPassword)
                 .textFieldStyle(.roundedBorder)
 
@@ -23,7 +20,7 @@ struct ResetPasswordView: View {
                 .textFieldStyle(.roundedBorder)
 
             Button {
-                viewModel.reset(userMail: userMail)
+                viewModel.reset(userMail: userMail, code: code)
             } label: {
                 Text("비밀번호 변경")
                     .frame(maxWidth: .infinity)
@@ -32,7 +29,7 @@ struct ResetPasswordView: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
-            .disabled(viewModel.code.isEmpty || viewModel.newPassword.isEmpty || viewModel.confirmPassword.isEmpty)
+            .disabled(viewModel.newPassword.isEmpty || viewModel.confirmPassword.isEmpty)
 
             Spacer()
         }

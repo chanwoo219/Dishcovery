@@ -2,14 +2,13 @@ import Foundation
 
 @MainActor
 class ResetPasswordViewModel: ObservableObject {
-    @Published var code: String = ""
     @Published var newPassword: String = ""
     @Published var confirmPassword: String = ""
     @Published var toastMessage = ""
     @Published var showToast = false
     @Published var didSucceed = false
 
-    func reset(userMail: String) {
+    func reset(userMail: String, code: String) {
         Task {
             guard let url = URL(string: "\(API.baseURL)/api/auth/reset/verify") else { return }
             var request = URLRequest(url: url)

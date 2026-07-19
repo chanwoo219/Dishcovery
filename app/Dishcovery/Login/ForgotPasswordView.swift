@@ -16,26 +16,45 @@ struct ForgotPasswordView: View {
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled(true)
                 .keyboardType(.emailAddress)
+                .disabled(viewModel.showCodeField)
+
+            if viewModel.showCodeField {
+                TextField("인증코드", text: $viewModel.code)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.numberPad)
+
+                Button {
+                    viewModel.sendCode()
+                } label: {
+                    Text("인증코드 재발송")
+                        .foregroundColor(.orange)
+                        .font(.footnote)
+                }
+            }
 
             Button {
-                viewModel.sendCode()
+                if viewModel.showCodeField {
+                    viewModel.verifyCode()
+                } else {
+                    viewModel.sendCode()
+                }
             } label: {
-                Text("인증코드 보내기")
+                Text(viewModel.showCodeField ? "인증하기" : "인증코드 보내기")
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.orange)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
-            .disabled(viewModel.userMail.isEmpty)
+            .disabled(viewModel.showCodeField ? viewModel.code.isEmpty : viewModel.userMail.isEmpty)
 
             Spacer()
         }
         .padding()
         .toast(message: viewModel.toastMessage, isShowing: $viewModel.showToast)
-        .onChange(of: viewModel.didSucceed) { success in
+        .onChange(of: viewModel.didVerify) { success in
             if success {
-                path.append(Page.resetPassword(userMail: viewModel.userMail))
+                path.append(Page.resetPassword(userMail: viewModel.userMail, code: viewModel.code))
             }
         }
     }

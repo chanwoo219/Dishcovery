@@ -106,6 +106,22 @@ public class ApiController {
         return ResponseEntity.ok(response);
     }
 
+    /** 인증 코드 재발송 (계정은 이미 생성된 상태이므로 재생성 시도하지 않고 코드만 다시 보냄) */
+    @PostMapping("/resend-code")
+    public ResponseEntity<Map<String, String>> resendCode(@RequestBody Map<String, String> body) {
+        Map<String, String> response = new HashMap<>();
+
+        UserEntity user = userService.findByUserId(body.get("userId"));
+        if (user == null) {
+            response.put("message", "존재하지 않는 계정입니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        emailVerificationService.sendVerificationCode(user);
+        response.put("message", "인증 코드를 다시 보냈습니다.");
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/categoryList")
     public List<CodeVO> getCategoriList() {
         return codeService.codeList("CTG");

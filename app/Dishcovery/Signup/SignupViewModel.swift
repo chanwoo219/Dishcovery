@@ -114,6 +114,10 @@ final class SignupViewModel: ObservableObject {
         URL(string: "\(API.baseURL)/api/signup")
     }
 
+    private var resendCodeURL: URL? {
+        URL(string: "\(API.baseURL)/api/resend-code")
+    }
+
     // MARK: - Public APIs
 
     /// (선택) 이메일 인증 없이 기존처럼 바로 회원가입 (네가 쓰던 /api/signup 그대로)
@@ -212,13 +216,22 @@ final class SignupViewModel: ObservableObject {
         }
     }
 
-    /// 인증 메일 재발송
+    /// 인증 코드 재발송 (계정은 1단계에서 이미 생성됐으므로 재생성을 시도하지 않고 코드만 재요청)
     func resendVerificationEmail() async {
-        let success = await sendVerificationEmail()
-        if success {
-            message = "인증 메일이 재발송되었습니다."
+        guard let url = resendCodeURL else {
+            message = "서버 주소 오류"
             showAlert = true
+            return
         }
+
+        await request(
+            url: url,
+            body: ["userId": userId],
+            successStatusCodes: [200],
+            failureStatusCodes: [404],
+            successMessageFallback: "인증 코드를 다시 보냈습니다.",
+            failureMessageFallback: "존재하지 않는 계정입니다."
+        ) { _ in }
     }
 
     // MARK: - Private Helpers
