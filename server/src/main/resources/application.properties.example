@@ -1,0 +1,39 @@
+spring.application.name=Dishcovery
+
+spring.main.web-application-type = servlet
+
+server.port = 9191
+
+logging.level.boot.blog = warn
+logging.file.name = src/main/resources/spring_boot.log
+
+spring.thymeleaf.cache = false
+
+spring.datasource.url=jdbc:mysql://localhost:3306/recipedb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+spring.datasource.username=CHANGE_ME
+spring.datasource.password=CHANGE_ME
+
+mybatis.mapper-locations=classpath:mapper/*.xml
+mybatis.type-aliases-package=com.spring.dishcovery.user.domain.entity,com.spring.dishcovery.recipe.domain.entity,com.spring.dishcovery.shop.domain.entity,com.spring.dishcovery.code.domain.entity
+mybatis.configuration.map-underscore-to-camel-case=true
+
+
+jwt.secret=CHANGE_ME
+jwt.expirationMs=3600000
+
+openai.api.key=CHANGE_ME
+
+# 파일 업로드 경로
+file.upload-dir=uploads
+spring.web.resources.static-locations=classpath:/static/,file:uploads/
+
+# 업로드 용량 제한
+spring.servlet.multipart.max-file-size=5MB
+spring.servlet.multipart.max-request-size=20MB
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=CHANGE_ME
+spring.mail.password=CHANGE_ME
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
