@@ -56,6 +56,14 @@
                       </div>
                   </a>
              </div>
+
+              <div class="pagination" th:if="${totalPages != null and totalPages > 1}">
+                  <a th:each="p : ${#numbers.sequence(1, totalPages)}"
+                     th:href="${searchName != null and !#strings.isEmpty(searchName)} ? @{/searchRecipe(searchName=${searchName}, sort=${sort}, page=${p})} : @{/MainPage(sort=${sort}, page=${p})}"
+                     th:text="${p}"
+                     th:class="${p == page} ? 'page-link active' : 'page-link'">
+                  </a>
+              </div>
           </section>
         </main>
     </div>

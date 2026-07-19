@@ -34,6 +34,38 @@
         ORDER BY PRODUCT_POINT DESC
     </select>
 
+    <select id="listProductsPaged" resultType="com.spring.dishcovery.shop.domain.entity.ShopProduct">
+        SELECT
+        PRODUCT_ID    AS productId,
+        PRODUCT_NAME  AS productName,
+        PRODUCT_POINT AS productPoint,
+        MAIN_IMAGE    AS mainImage
+        FROM PRODUCT
+        ORDER BY PRODUCT_POINT DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countProducts" resultType="int">
+        SELECT COUNT(*) FROM PRODUCT
+    </select>
+
+    <select id="searchProductsPaged" resultType="com.spring.dishcovery.shop.domain.entity.ShopProduct">
+        SELECT
+        PRODUCT_ID    AS productId,
+        PRODUCT_NAME  AS productName,
+        PRODUCT_POINT AS productPoint,
+        MAIN_IMAGE    AS mainImage
+        FROM PRODUCT
+        WHERE PRODUCT_NAME LIKE CONCAT('%', #{searchName}, '%')
+        ORDER BY PRODUCT_POINT DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countSearchProducts" resultType="int">
+        SELECT COUNT(*) FROM PRODUCT
+        WHERE PRODUCT_NAME LIKE CONCAT('%', #{searchName}, '%')
+    </select>
+
     <select id="listRecommended" resultType="com.spring.dishcovery.shop.domain.entity.ShopProduct">
         SELECT
         PRODUCT_ID    AS productId,

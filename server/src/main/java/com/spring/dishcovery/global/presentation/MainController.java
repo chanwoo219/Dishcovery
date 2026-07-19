@@ -27,13 +27,17 @@ public class MainController {
 
     @GetMapping("/MainPage")
     public String mainPage(Model model,
-                           @RequestParam(required = false, defaultValue = "latest") String sort) {
+                           @RequestParam(required = false, defaultValue = "latest") String sort,
+                           @RequestParam(required = false, defaultValue = "1") int page) {
 
         String sortKey = mapSort(sort);
-        List<RecipeVo> recipes = service.getAllRecipesSorted(sortKey);
+        List<RecipeVo> recipes = service.getAllRecipesSorted(sortKey, page);
+        int totalPages = (int) Math.ceil(service.countAllRecipes() / (double) RecipeAppService.PAGE_SIZE);
 
         model.addAttribute("recipes", recipes);
         model.addAttribute("sort", sort);
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", Math.max(totalPages, 1));
         model.addAttribute("rcpClassNm", "seg-btn active");
         model.addAttribute("rankClassNm", "seg-btn");
 

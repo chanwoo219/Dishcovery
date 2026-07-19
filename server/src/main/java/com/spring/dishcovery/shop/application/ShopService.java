@@ -21,6 +21,8 @@ import java.util.Optional;
 @Service
 public class ShopService {
 
+    public static final int PAGE_SIZE = 12;
+
     private final ShopMapper shopMapper;
     private final UserMapper userMapper;
     private final CookieUtil cookieUtil;
@@ -50,6 +52,46 @@ public class ShopService {
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
+        }
+    }
+
+    public List<ShopProduct> getProductsPaged(int page) {
+        int offset = Math.max(page - 1, 0) * PAGE_SIZE;
+        try {
+            return Optional.ofNullable(shopMapper.listProductsPaged(offset, PAGE_SIZE))
+                    .orElse(Collections.emptyList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public int countProducts() {
+        try {
+            return shopMapper.countProducts();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public List<ShopProduct> searchProductsPaged(String searchName, int page) {
+        int offset = Math.max(page - 1, 0) * PAGE_SIZE;
+        try {
+            return Optional.ofNullable(shopMapper.searchProductsPaged(searchName, offset, PAGE_SIZE))
+                    .orElse(Collections.emptyList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public int countSearchProducts(String searchName) {
+        try {
+            return shopMapper.countSearchProducts(searchName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 

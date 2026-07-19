@@ -25,6 +25,7 @@ public class ShopController {
 
     @GetMapping("/shop")
     public String shopList(@RequestParam(required = false) String searchName,
+                           @RequestParam(required = false, defaultValue = "1") int page,
                            Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
         // 1) 토큰 체크
@@ -53,11 +54,11 @@ public class ShopController {
         model.addAttribute("searchName", searchName);
 
         // 3) 상품 조회 (절대 null/예외로 화면 죽지 않게)
+        boolean hasSearch = searchName != null && !searchName.isBlank();
         try {
-            boolean hasSearch = searchName != null && !searchName.isBlank();
             var products = hasSearch
-                    ? shopService.searchProducts(searchName)
-                    : shopService.getProductsOrderByPointDesc();
+                    ? shopService.searchProductsPaged(searchName, page)
+                    : shopService.getProductsPaged(page);
             if (products == null) products = Collections.emptyList();
             model.addAttribute("products", products);
         } catch (Exception e) {
@@ -66,6 +67,11 @@ public class ShopController {
             // 필요하면 로그 찍기
             e.printStackTrace();
         }
+
+        int totalCount = hasSearch ? shopService.countSearchProducts(searchName) : shopService.countProducts();
+        int totalPages = (int) Math.ceil(totalCount / (double) ShopService.PAGE_SIZE);
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", Math.max(totalPages, 1));
 
         return "shop/ShopList";
     }

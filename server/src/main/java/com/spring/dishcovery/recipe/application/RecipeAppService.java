@@ -23,6 +23,8 @@ import java.util.Random;
 @Service
 public class RecipeAppService {
 
+    public static final int PAGE_SIZE = 12;
+
     @Value("${file.upload-dir}")
     private String uploadDir;
 
@@ -51,16 +53,26 @@ public class RecipeAppService {
         return recipeAppMapper.getAllRecipes();
     }
 
-    public List<RecipeVo> getAllRecipesSorted(String sort) {
-        return recipeAppMapper.getAllRecipesSorted(sort);
+    public List<RecipeVo> getAllRecipesSorted(String sort, int page) {
+        int offset = Math.max(page - 1, 0) * PAGE_SIZE;
+        return recipeAppMapper.getAllRecipesSorted(sort, offset, PAGE_SIZE);
+    }
+
+    public int countAllRecipes() {
+        return recipeAppMapper.countAllRecipes();
     }
 
     public List<RecipeVo> getSearchRecipes(String searchName) {
         return recipeAppMapper.getSearchRecipes(searchName);
     }
 
-    public List<RecipeVo> getSearchRecipesSorted(String searchName, String sort) {
-        return recipeAppMapper.getSearchRecipesSorted(searchName, sort);
+    public List<RecipeVo> getSearchRecipesSorted(String searchName, String sort, int page) {
+        int offset = Math.max(page - 1, 0) * PAGE_SIZE;
+        return recipeAppMapper.getSearchRecipesSorted(searchName, sort, offset, PAGE_SIZE);
+    }
+
+    public int countSearchRecipes(String searchName) {
+        return recipeAppMapper.countSearchRecipes(searchName);
     }
 
     /**

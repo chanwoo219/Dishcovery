@@ -19,12 +19,20 @@ public interface RecipeAppMapper {
 
     List<RecipeVo> getAllRecipes();
 
-    List<RecipeVo> getAllRecipesSorted(@Param("sort") String sort);
+    List<RecipeVo> getAllRecipesSorted(@Param("sort") String sort,
+                                       @Param("offset") int offset,
+                                       @Param("limit") int limit);
+
+    int countAllRecipes();
 
     List<RecipeVo> getSearchRecipes(String searchName);
 
     List<RecipeVo> getSearchRecipesSorted(@Param("searchName") String searchName,
-                                          @Param("sort") String sort);
+                                          @Param("sort") String sort,
+                                          @Param("offset") int offset,
+                                          @Param("limit") int limit);
+
+    int countSearchRecipes(@Param("searchName") String searchName);
 
     int SaveRecipeData(RecipeVo recipeVo);
 

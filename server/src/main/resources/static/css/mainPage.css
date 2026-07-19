@@ -136,6 +136,20 @@ margin-left:auto; display:flex; align-items:center; gap:8px; color:var(--brand);
     justify-items: center;
 }
 
+.pagination{
+    display:flex; justify-content:center; gap:8px; margin:32px 0;
+}
+.page-link{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:36px; height:36px; border-radius:8px;
+    color:var(--text); text-decoration:none; font-weight:600;
+    border:1px solid var(--line);
+}
+.page-link:hover{ background:var(--bg); }
+.page-link.active{
+    background:var(--brand); border-color:var(--brand); color:#fff;
+}
+
 
 .recipe-card {
     width: 250px;

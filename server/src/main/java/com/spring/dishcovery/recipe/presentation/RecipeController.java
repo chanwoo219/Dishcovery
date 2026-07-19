@@ -36,6 +36,7 @@ public class RecipeController {
     @GetMapping("/searchRecipe")
     public String searchRecipe(@RequestParam String searchName,
                                @RequestParam(required = false, defaultValue = "latest") String sort,
+                               @RequestParam(required = false, defaultValue = "1") int page,
                                Model model) {
 
 //        RecipeVo searchVo = new RecipeVo();
@@ -49,12 +50,14 @@ public class RecipeController {
             default -> "latest";
         };
 
-        List<RecipeVo> recipes = service.getSearchRecipesSorted(searchName, sortKey);
-
+        List<RecipeVo> recipes = service.getSearchRecipesSorted(searchName, sortKey, page);
+        int totalPages = (int) Math.ceil(service.countSearchRecipes(searchName) / (double) RecipeAppService.PAGE_SIZE);
 
         model.addAttribute("recipes", recipes);
         model.addAttribute("searchName", searchName);
         model.addAttribute("sort", sort);
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", Math.max(totalPages, 1));
 
         // 메인 화면 탭(레시피/상점) 스타일 기본값
         model.addAttribute("rcpClassNm", "seg-btn active");

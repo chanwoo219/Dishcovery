@@ -16,6 +16,17 @@ public interface ShopMapper {
 
     List<ShopProduct> searchProductsOrderByPointDesc(@Param("searchName") String searchName);
 
+    // 웹 상점 목록 페이지네이션용 (앱은 기존 메서드 그대로 사용)
+    List<ShopProduct> listProductsPaged(@Param("offset") int offset, @Param("limit") int limit);
+
+    int countProducts();
+
+    List<ShopProduct> searchProductsPaged(@Param("searchName") String searchName,
+                                          @Param("offset") int offset,
+                                          @Param("limit") int limit);
+
+    int countSearchProducts(@Param("searchName") String searchName);
+
     ShopProduct getProduct(@Param("productId") String productId);
 
     void updateUserPoint(@Param("userId") String userId, @Param("point") int point);
