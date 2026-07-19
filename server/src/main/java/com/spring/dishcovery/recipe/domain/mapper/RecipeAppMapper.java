@@ -63,4 +63,10 @@ public interface RecipeAppMapper {
 
     void deleteLike(@Param("recipeId") String recipeId, @Param("userId") String userId);
 
+    int updateRecipeData(RecipeVo recipeVo);
+
+    void deleteRecipeSteps(@Param("recipeId") String recipeId);
+
+    int deleteRecipe(@Param("recipeId") String recipeId, @Param("userId") String userId);
+
 }

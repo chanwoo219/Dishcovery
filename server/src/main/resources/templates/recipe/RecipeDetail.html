@@ -99,6 +99,14 @@
                   좋아요 <span th:text="${likeCount}">0</span>
               </button>
           </form>
+
+          <div class="owner-actions" th:if="${loginUserId != null and loginUserId == recipe.userId}">
+              <a th:href="@{/recipe/edit(recipeId=${recipe.recipeId})}" class="ghost-btn">수정</a>
+              <form method="post" th:action="@{/recipe/delete}" onsubmit="return confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')">
+                  <input type="hidden" name="recipeId" th:value="${recipe.recipeId}">
+                  <button type="submit" class="delete-btn">삭제</button>
+              </form>
+          </div>
       </div>
 
       <div class="form-card comment-card">

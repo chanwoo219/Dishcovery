@@ -160,4 +160,68 @@ public class RecipeController {
         return "redirect:/recipe/detail?recipeId=" + recipeId;
     }
 
+    @GetMapping("/recipe/edit")
+    public String recipeEditForm(@RequestParam String recipeId, Model model, HttpServletRequest request) {
+
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        if (userId == null) {
+            return "redirect:/dishcovery_login";
+        }
+
+        RecipeVo recipe = service.getRecipeForEdit(recipeId);
+        if (recipe == null || !userId.equals(recipe.getUserId())) {
+            return "redirect:/recipe/detail?recipeId=" + recipeId;
+        }
+
+        List<CodeVO> categoryList = codeService.codeList("CTG");
+        List<CodeVO> levelList = codeService.codeList("LV");
+
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("levelList", levelList);
+        model.addAttribute("stepList", recipe.getStepList());
+
+        return "recipe/RecipeEdit";
+    }
+
+    @PostMapping("/recipe/update")
+    public String updateRecipe(@ModelAttribute RecipeVo recipeVo, HttpServletRequest request) {
+
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        if (userId == null) {
+            return "redirect:/dishcovery_login";
+        }
+
+        try {
+            service.updateRecipeData(recipeVo, userId);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/recipe/edit?recipeId=" + recipeVo.getRecipeId() + "&error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+        }
+
+        return "redirect:/recipe/detail?recipeId=" + recipeVo.getRecipeId();
+    }
+
+    @PostMapping("/recipe/delete")
+    public String deleteRecipe(@RequestParam String recipeId,
+                               HttpServletRequest request,
+                               RedirectAttributes redirectAttributes) {
+
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
+            return "redirect:/dishcovery_login";
+        }
+
+        try {
+            service.deleteRecipeData(recipeId, userId);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/recipe/detail?recipeId=" + recipeId + "&error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+        }
+
+        return "redirect:/myPage";
+    }
+
 }

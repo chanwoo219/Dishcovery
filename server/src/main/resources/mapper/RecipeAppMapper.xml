@@ -353,6 +353,30 @@
         DELETE FROM RECIPE_LIKE WHERE RECIPE_ID = #{recipeId} AND USER_ID = #{userId}
     </delete>
 
+    <update id="updateRecipeData" parameterType="com.spring.dishcovery.recipe.domain.entity.RecipeVo">
+        UPDATE RECIPE_MASTER
+           SET CATEGORY_ID  = #{categoryId},
+               TITLE        = #{title},
+               RCP_DISC     = #{rcpDisc},
+               COOK_TIME    = #{cookTime},
+               COOK_DFCT    = #{cookDfct},
+               UPD_DATE     = NOW(),
+               IMG_URL      = #{imgUrl},
+               RECIPE_INGR  = #{recipeIngr},
+               RECIPE_TIP   = #{recipeTip},
+               RECIPE_TAG   = #{recipeTag}
+         WHERE RECIPE_ID = #{recipeId}
+           AND USER_ID = #{userId}
+    </update>
+
+    <delete id="deleteRecipeSteps" parameterType="string">
+        DELETE FROM RECIPE_STEP WHERE RECIPE_ID = #{recipeId}
+    </delete>
+
+    <delete id="deleteRecipe">
+        DELETE FROM RECIPE_MASTER WHERE RECIPE_ID = #{recipeId} AND USER_ID = #{userId}
+    </delete>
+
     <!--
 
     <insert id="rgtSingUp" parameterType="com.example.demo.domain.UserVO">

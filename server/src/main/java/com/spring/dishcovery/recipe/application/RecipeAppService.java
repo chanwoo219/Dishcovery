@@ -234,4 +234,76 @@ public class RecipeAppService {
             recipeAppMapper.insertLike(recipeId, userId);
         }
     }
+
+    // 조회수/포인트 증가 없이 수정 화면용으로만 조회
+    public RecipeVo getRecipeForEdit(String recipeId) {
+        RecipeVo recipeVo = recipeAppMapper.getRecipeDataDetail(recipeId);
+        if (recipeVo != null) {
+            recipeVo.setStepList(recipeAppMapper.selectStepList(recipeId));
+        }
+        return recipeVo;
+    }
+
+    @Transactional
+    public void updateRecipeData(RecipeVo recipeVo, String userId) {
+        if (recipeVo == null) {
+            throw new IllegalArgumentException("레시피 데이터가 비어있습니다.");
+        }
+
+        recipeVo.setUserId(userId);
+
+        // 새 이미지가 업로드된 경우에만 교체, 아니면 폼에 넘어온 기존 imgUrl 유지
+        try {
+            if (recipeVo.getMainImages() != null
+                    && !recipeVo.getMainImages().isEmpty()
+                    && recipeVo.getMainImages().get(0) != null
+                    && !recipeVo.getMainImages().get(0).isEmpty()) {
+
+                List<String> mainImagePaths = FileUploadUtil.saveRecipeFiles(
+                        recipeVo.getMainImages(), uploadDir, recipeVo.getRecipeId()
+                );
+                if (mainImagePaths != null && !mainImagePaths.isEmpty()) {
+                    recipeVo.setImgUrl(mainImagePaths.get(0));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        int updated = recipeAppMapper.updateRecipeData(recipeVo);
+        if (updated == 0) {
+            throw new IllegalArgumentException("본인 레시피만 수정할 수 있습니다.");
+        }
+
+        // 조리 단계는 전체 삭제 후 재등록
+        recipeAppMapper.deleteRecipeSteps(recipeVo.getRecipeId());
+
+        String[] stepArr = recipeVo.getStepDescriptions();
+        List<RecipeVo> stepList = new ArrayList<>();
+
+        if (stepArr != null && stepArr.length > 0) {
+            for (String desc : stepArr) {
+                if (desc == null || desc.trim().isEmpty()) {
+                    continue;
+                }
+
+                RecipeVo step = new RecipeVo();
+                step.setRecipeId(recipeVo.getRecipeId());
+                step.setStepOrder(stepList.size() + 1);
+                step.setStepDescription(desc.trim());
+                stepList.add(step);
+            }
+
+            if (!stepList.isEmpty()) {
+                recipeAppMapper.insertRecipeSteps(stepList);
+            }
+        }
+    }
+
+    public void deleteRecipeData(String recipeId, String userId) {
+        int deleted = recipeAppMapper.deleteRecipe(recipeId, userId);
+        if (deleted == 0) {
+            throw new IllegalArgumentException("본인 레시피만 삭제할 수 있습니다.");
+        }
+    }
 }
