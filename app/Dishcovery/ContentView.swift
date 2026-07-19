@@ -6,16 +6,17 @@ enum Page: Hashable {
     case main
     case aiRecipe
     case recipeWrite
-    case myRecipe
     case recipeDetail(recipe: Recipe)
+    case recipeEdit(recipeId: String)
     case shop
     case shopDetail(productId: String)
+    case purchaseHistory
     case myPage
     case changeNickname
     case withdraw
     case publicProfile(userId: String)
     case forgotPassword
-    case resetPassword(userMail: String)
+    case resetPassword(userMail: String, code: String)
 }
 
 @available(iOS 16.0, *)
@@ -25,12 +26,21 @@ struct ContentView: View {
     @State private var showMenu = false
     @State private var path = NavigationPath()
     @State private var searchText = ""
+    @State private var searchTask: Task<Void, Never>?
 
     @EnvironmentObject var appState: AppState
 
     private var filteredRecipes: [Recipe] {
-        guard !searchText.isEmpty else { return viewModel.recipes }
-        return viewModel.recipes.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+        viewModel.searchResults ?? viewModel.recipes
+    }
+
+    private func scheduleSearch(_ query: String) {
+        searchTask?.cancel()
+        searchTask = Task {
+            try? await Task.sleep(nanoseconds: 300_000_000)
+            guard !Task.isCancelled else { return }
+            await viewModel.searchRecipes(query)
+        }
     }
 
     var body: some View {
@@ -137,6 +147,9 @@ struct ContentView: View {
                     await viewModel.fetchRecipes()
                     await loadMyAvatarIfNeeded()
                 }
+                .onChange(of: searchText) { newValue in
+                    scheduleSearch(newValue)
+                }
                 .onChange(of: appState.isLoggedIn) { isLoggedIn in
                     if isLoggedIn {
                         Task { await loadMyAvatarIfNeeded() }
@@ -170,16 +183,14 @@ struct ContentView: View {
                     RecipeAiView()
                         .navigationTitle("AI 레시피추천")
                         .navigationBarTitleDisplayMode(.inline)
-                case .myRecipe:
-                    MyRecipeView(path: $path)
-                        .navigationTitle("나의 레시피")
-                        .navigationBarTitleDisplayMode(.inline)
                 case .shop:
                     ShopListView(path: $path)
                         .navigationTitle("상점")
                         .navigationBarTitleDisplayMode(.inline)
                 case .shopDetail(let productId):
                     ShopDetailView(productId: productId)
+                case .purchaseHistory:
+                    PurchaseHistoryView(path: $path)
                 case .myPage:
                     MyPageView(path: $path)
                         .navigationTitle("마이페이지")
@@ -200,8 +211,8 @@ struct ContentView: View {
                     ForgotPasswordView(path: $path)
                         .navigationTitle("비밀번호 찾기")
                         .navigationBarTitleDisplayMode(.inline)
-                case .resetPassword(let userMail):
-                    ResetPasswordView(userMail: userMail, path: $path)
+                case .resetPassword(let userMail, let code):
+                    ResetPasswordView(userMail: userMail, code: code, path: $path)
                         .navigationTitle("비밀번호 변경")
                         .navigationBarTitleDisplayMode(.inline)
                 case .main:
@@ -210,7 +221,9 @@ struct ContentView: View {
                         .navigationTitle("메인")
                         .navigationBarTitleDisplayMode(.inline)
                 case .recipeDetail(let recipe):
-                    RecipeDetailView(recipe: recipe)
+                    RecipeDetailView(recipe: recipe, path: $path)
+                case .recipeEdit(let recipeId):
+                    RecipeEditView(recipeId: recipeId, path: $path)
                 }
             }
         }
@@ -221,6 +234,7 @@ struct ContentView: View {
         do {
             let profile = try await UserApiService.shared.fetchMyProfile()
             appState.userImgPath = profile.userImgPath
+            appState.userId = profile.userId
         } catch {
             print("🔴 [ContentView] 프로필 사진 불러오기 실패:", error.localizedDescription)
         }

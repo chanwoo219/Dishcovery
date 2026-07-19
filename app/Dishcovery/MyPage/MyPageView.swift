@@ -8,6 +8,7 @@ struct MyPageView: View {
     @EnvironmentObject var appState: AppState
     @State private var showImagePicker = false
     @State private var pickedImage: UIImage?
+    @State private var showLogoutConfirm = false
 
     var body: some View {
         ScrollView {
@@ -47,16 +48,30 @@ struct MyPageView: View {
                             .foregroundColor(.orange)
                     }
 
-                    Button {
-                        path.append(Page.changeNickname)
-                    } label: {
-                        Text("닉네임 변경")
-                            .font(.subheadline)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 8)
-                            .background(Color.orange)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
+                    HStack(spacing: 10) {
+                        Button {
+                            path.append(Page.changeNickname)
+                        } label: {
+                            Text("닉네임 변경")
+                                .font(.subheadline)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 8)
+                                .background(Color.orange)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
+
+                        Button {
+                            path.append(Page.purchaseHistory)
+                        } label: {
+                            Text("구매 내역")
+                                .font(.subheadline)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 8)
+                                .background(Color.orange.opacity(0.15))
+                                .foregroundColor(.orange)
+                                .cornerRadius(8)
+                        }
                     }
                     .padding(.top, 4)
                 }
@@ -124,12 +139,7 @@ struct MyPageView: View {
                 // 계정 관리
                 HStack(spacing: 12) {
                     Button {
-                        appState.isLoggedIn = false
-                        appState.username = ""
-                        appState.userImgPath = nil
-                        UserDefaults.standard.removeObject(forKey: "JWT_TOKEN")
-                        UserDefaults.standard.removeObject(forKey: "USERNAME")
-                        path.removeLast(path.count)
+                        showLogoutConfirm = true
                     } label: {
                         Text("로그아웃")
                             .font(.subheadline)
@@ -153,6 +163,20 @@ struct MyPageView: View {
         }
         .onChange(of: viewModel.profile?.userImgPath) { newValue in
             appState.userImgPath = newValue
+        }
+        .alert("로그아웃", isPresented: $showLogoutConfirm) {
+            Button("취소", role: .cancel) {}
+            Button("로그아웃", role: .destructive) {
+                appState.isLoggedIn = false
+                appState.username = ""
+                appState.userImgPath = nil
+                appState.userId = ""
+                UserDefaults.standard.removeObject(forKey: "JWT_TOKEN")
+                UserDefaults.standard.removeObject(forKey: "USERNAME")
+                path.removeLast(path.count)
+            }
+        } message: {
+            Text("정말 로그아웃 하시겠습니까?")
         }
     }
 }
