@@ -54,8 +54,8 @@
                 <div class="slider-wrapper">
                     <button class="slide-btn left" onclick="slideLeft()">&#10094;</button>
                     <div class="recipe-scroll" id="recipeScroll">
-                        <div class="recipe-card-mypage" th:each="recipe : ${myRecipes}">
-                            <img th:src="${recipe.imgUrl}" alt="레시피 이미지" th:attr="data-recipe-id=${recipe.recipeId}" onclick="selectDetail(this.dataset.recipeId)">
+                        <div class="recipe-card-mypage" th:attr="data-recipe-id=${recipe.recipeId}" th:each="recipe : ${myRecipes}" onclick="selectDetail(this.dataset.recipeId)">
+                            <img th:src="${recipe.imgUrl}" alt="레시피 이미지">
                             <div class="recipe-info-mypage">
                                 <p th:text="${recipe.title}">레시피 제목</p>
                             </div>
