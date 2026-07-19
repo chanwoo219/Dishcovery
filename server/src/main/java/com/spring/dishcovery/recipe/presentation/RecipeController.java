@@ -1,15 +1,12 @@
 package com.spring.dishcovery.recipe.presentation;
 
 
-import com.spring.dishcovery.global.config.CookieUtil;
 import com.spring.dishcovery.global.config.JwtUtil;
 import com.spring.dishcovery.code.domain.entity.CodeVO;
 import com.spring.dishcovery.recipe.domain.entity.RecipeVo;
-import com.spring.dishcovery.code.domain.mapper.CodeMapper;
 import com.spring.dishcovery.code.application.CodeService;
 import com.spring.dishcovery.recipe.application.RecipeAppService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,7 +26,6 @@ public class RecipeController {
 
     private final RecipeAppService service;
     private final CodeService codeService;
-    private final CookieUtil cookieUtil;
     private final JwtUtil jwtUtil;
 
     @GetMapping("/searchRecipe")
@@ -38,9 +33,6 @@ public class RecipeController {
                                @RequestParam(required = false, defaultValue = "latest") String sort,
                                @RequestParam(required = false, defaultValue = "1") int page,
                                Model model) {
-
-//        RecipeVo searchVo = new RecipeVo();
-//        searchVo.setSearchName(searchName);
 
         String sortKey = switch (sort) {
             case "popular" -> "views";
@@ -64,7 +56,7 @@ public class RecipeController {
         model.addAttribute("rankClassNm", "seg-btn");
         model.addAttribute("lastClassNm", "seg-btn");
 
-        return "/mainPage";
+        return "mainPage";
     }
 
 
@@ -84,8 +76,7 @@ public class RecipeController {
     @PostMapping("/SaveRecipeData")
     public String saveRecipeData(@ModelAttribute RecipeVo recipeVo, HttpServletRequest request) {
 
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        String userId = jwtUtil.getUserIdFromRequest(request);
         if (userId == null) {
             return "redirect:/dishcovery_login";
         }
@@ -100,22 +91,16 @@ public class RecipeController {
     public String recipeDetail(@RequestParam String recipeId, Model model, HttpServletRequest request,
                                RedirectAttributes redirectAttributes) {
 
-        RecipeVo recipe = new RecipeVo();
-        String userId ="";
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        if(token != null) {
-            userId = jwtUtil.getUserIdFromToken(token);
-        }
-
-        List<RecipeVo> stepList = new ArrayList<>();
+        String userId = jwtUtil.getUserIdFromRequest(request);
+        if (userId == null) userId = "";
 
         List<CodeVO> categoryList = codeService.codeList("CTG");
-        recipe = service.getRecipeDataDetail(recipeId,userId);
+        RecipeVo recipe = service.getRecipeDataDetail(recipeId, userId);
         if (recipe == null) {
             redirectAttributes.addFlashAttribute("loginMessage", "레시피를 찾을 수 없습니다.");
             return "redirect:/MainPage";
         }
-        stepList = recipe.getStepList();
+        List<RecipeVo> stepList = recipe.getStepList();
 
         String categoryId = recipe.getCategoryId();
         String categoryName = categoryList.stream()
@@ -142,8 +127,7 @@ public class RecipeController {
                              HttpServletRequest request,
                              RedirectAttributes redirectAttributes) {
 
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        String userId = jwtUtil.getUserIdFromRequest(request);
         if (userId == null) {
             redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
             return "redirect:/dishcovery_login";
@@ -164,8 +148,7 @@ public class RecipeController {
                                 HttpServletRequest request,
                                 RedirectAttributes redirectAttributes) {
 
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        String userId = jwtUtil.getUserIdFromRequest(request);
         if (userId == null) {
             redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
             return "redirect:/dishcovery_login";
@@ -185,8 +168,7 @@ public class RecipeController {
                              HttpServletRequest request,
                              RedirectAttributes redirectAttributes) {
 
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        String userId = jwtUtil.getUserIdFromRequest(request);
         if (userId == null) {
             redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
             return "redirect:/dishcovery_login";
@@ -200,8 +182,7 @@ public class RecipeController {
     @GetMapping("/recipe/edit")
     public String recipeEditForm(@RequestParam String recipeId, Model model, HttpServletRequest request) {
 
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        String userId = jwtUtil.getUserIdFromRequest(request);
         if (userId == null) {
             return "redirect:/dishcovery_login";
         }
@@ -225,8 +206,7 @@ public class RecipeController {
     @PostMapping("/recipe/update")
     public String updateRecipe(@ModelAttribute RecipeVo recipeVo, HttpServletRequest request) {
 
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        String userId = jwtUtil.getUserIdFromRequest(request);
         if (userId == null) {
             return "redirect:/dishcovery_login";
         }
@@ -245,8 +225,7 @@ public class RecipeController {
                                HttpServletRequest request,
                                RedirectAttributes redirectAttributes) {
 
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        String userId = jwtUtil.getUserIdFromRequest(request);
         if (userId == null) {
             redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
             return "redirect:/dishcovery_login";

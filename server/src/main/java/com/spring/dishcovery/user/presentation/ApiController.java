@@ -55,12 +55,9 @@ public class ApiController {
         if (result > 0) {
             response.put("message", "회원가입 성공!");
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-            //return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공!");
-           //return ResponseEntity.ok("회원가입 성공!");
         } else {
             response.put("message","회원가입실패!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            //return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 실패!");
         }
 
     }

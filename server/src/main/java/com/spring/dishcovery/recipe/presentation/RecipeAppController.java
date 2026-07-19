@@ -31,11 +31,6 @@ public class RecipeAppController {
     private final JwtUtil jwtUtil;
 
     private final OpenAiService aiService;
-//
-//    @GetMapping("/getAppRecipes")
-//    public List<RecipeAppVo> getAppRecipes() {
-//        return recipeAppService.getAppRecipes();
-//    }
 
     @GetMapping(value = "/getAppRecipes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RecipeAppVo>> getAppRecipes() {

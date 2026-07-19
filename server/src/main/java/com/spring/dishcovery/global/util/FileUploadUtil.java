@@ -1,5 +1,6 @@
 package com.spring.dishcovery.global.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -8,6 +9,7 @@ import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Slf4j
 public class FileUploadUtil {
 
     // ✅ 파일 크기 제한 (5MB)
@@ -39,7 +41,7 @@ public class FileUploadUtil {
             // ✅ 경로 없으면 생성
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
-                System.out.println("[FileUploadUtil] 디렉토리 생성: " + uploadPath);
+                log.info("디렉토리 생성: {}", uploadPath);
             }
 
             for (MultipartFile file : files) {
@@ -47,7 +49,7 @@ public class FileUploadUtil {
 
                 // ✅ 크기 제한
                 if (file.getSize() > MAX_FILE_SIZE) {
-                    System.err.println("[FileUploadUtil] 파일 크기 초과: " + file.getOriginalFilename());
+                    log.warn("파일 크기 초과: {}", file.getOriginalFilename());
                     continue; // 초과 파일은 무시
                 }
 
@@ -64,12 +66,11 @@ public class FileUploadUtil {
                 String webPath = "/uploads/" + folderName + "/" + fileName;
                 filePaths.add(webPath);
 
-                System.out.println("[FileUploadUtil] 업로드 완료: " + webPath);
+                log.info("업로드 완료: {}", webPath);
             }
 
         } catch (IOException e) {
-            System.err.println("[FileUploadUtil] 파일 업로드 중 오류 발생: " + e.getMessage());
-            e.printStackTrace();
+            log.error("파일 업로드 중 오류 발생", e);
             return Collections.emptyList();
         }
 
@@ -87,7 +88,7 @@ public class FileUploadUtil {
     public static String saveProfileImage(MultipartFile file, String baseUploadDir, String userId) {
         if (file == null || file.isEmpty()) return null;
         if (file.getSize() > MAX_FILE_SIZE) {
-            System.err.println("[FileUploadUtil] 파일 크기 초과: " + file.getOriginalFilename());
+            log.warn("파일 크기 초과: {}", file.getOriginalFilename());
             return null;
         }
 
@@ -108,8 +109,7 @@ public class FileUploadUtil {
 
             return "/uploads/profile/" + fileName;
         } catch (IOException e) {
-            System.err.println("[FileUploadUtil] 프로필 사진 업로드 중 오류 발생: " + e.getMessage());
-            e.printStackTrace();
+            log.error("프로필 사진 업로드 중 오류 발생", e);
             return null;
         }
     }

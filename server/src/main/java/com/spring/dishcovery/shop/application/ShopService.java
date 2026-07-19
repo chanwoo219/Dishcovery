@@ -1,6 +1,5 @@
 package com.spring.dishcovery.shop.application;
 
-import com.spring.dishcovery.global.config.CookieUtil;
 import com.spring.dishcovery.global.config.JwtUtil;
 import com.spring.dishcovery.shop.domain.entity.PurchaseHistoryVo;
 import com.spring.dishcovery.shop.domain.entity.ShopInquiry;
@@ -10,6 +9,7 @@ import com.spring.dishcovery.user.domain.entity.UserEntity;
 import com.spring.dishcovery.shop.domain.mapper.ShopMapper;
 import com.spring.dishcovery.user.domain.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ShopService {
 
@@ -25,13 +26,11 @@ public class ShopService {
 
     private final ShopMapper shopMapper;
     private final UserMapper userMapper;
-    private final CookieUtil cookieUtil;
     private final JwtUtil jwtUtil;
 
-    public ShopService(ShopMapper shopMapper, UserMapper userMapper, CookieUtil cookieUtil, JwtUtil jwtUtil) {
+    public ShopService(ShopMapper shopMapper, UserMapper userMapper, JwtUtil jwtUtil) {
         this.shopMapper = shopMapper;
         this.userMapper = userMapper;
-        this.cookieUtil = cookieUtil;
         this.jwtUtil = jwtUtil;
     }
 
@@ -40,7 +39,7 @@ public class ShopService {
             return Optional.ofNullable(shopMapper.listProductsOrderByPointDesc())
                     .orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("상품 목록 조회 실패", e);
             return Collections.emptyList();
         }
     }
@@ -50,7 +49,7 @@ public class ShopService {
             return Optional.ofNullable(shopMapper.searchProductsOrderByPointDesc(searchName))
                     .orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("상품 검색 실패: searchName={}", searchName, e);
             return Collections.emptyList();
         }
     }
@@ -61,7 +60,7 @@ public class ShopService {
             return Optional.ofNullable(shopMapper.listProductsPaged(offset, PAGE_SIZE))
                     .orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("상품 목록 페이징 조회 실패: page={}", page, e);
             return Collections.emptyList();
         }
     }
@@ -70,7 +69,7 @@ public class ShopService {
         try {
             return shopMapper.countProducts();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("상품 총개수 조회 실패", e);
             return 0;
         }
     }
@@ -81,7 +80,7 @@ public class ShopService {
             return Optional.ofNullable(shopMapper.searchProductsPaged(searchName, offset, PAGE_SIZE))
                     .orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("상품 검색 페이징 조회 실패: searchName={}, page={}", searchName, page, e);
             return Collections.emptyList();
         }
     }
@@ -90,7 +89,7 @@ public class ShopService {
         try {
             return shopMapper.countSearchProducts(searchName);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("상품 검색 결과 개수 조회 실패: searchName={}", searchName, e);
             return 0;
         }
     }
@@ -100,7 +99,7 @@ public class ShopService {
         try {
             return shopMapper.getProduct(productId);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("상품 조회 실패: productId={}", productId, e);
             return null;
         }
     }
@@ -110,15 +109,13 @@ public class ShopService {
             return Optional.ofNullable(shopMapper.listRecommended(excludeId))
                     .orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("추천 상품 조회 실패: excludeId={}", excludeId, e);
             return Collections.emptyList();
         }
     }
 
     public String getLoginUserId(HttpServletRequest request) {
-        if (request == null) return null;
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        return token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        return request != null ? jwtUtil.getUserIdFromRequest(request) : null;
     }
 
     public int getUserPoint(String userId) {
@@ -127,7 +124,7 @@ public class ShopService {
             UserEntity user = userMapper.findByUserId(userId);
             return user != null ? user.getPointBalance() : 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("사용자 포인트 조회 실패: userId={}", userId, e);
             return 0;
         }
     }
@@ -167,7 +164,7 @@ public class ShopService {
         try {
             return shopMapper.countPurchases(userId, productId) > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("구매 여부 조회 실패: userId={}, productId={}", userId, productId, e);
             return false;
         }
     }
@@ -177,7 +174,7 @@ public class ShopService {
             return Optional.ofNullable(shopMapper.listPurchaseHistory(userId))
                     .orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("구매 내역 조회 실패: userId={}", userId, e);
             return Collections.emptyList();
         }
     }
@@ -187,7 +184,7 @@ public class ShopService {
             return Optional.ofNullable(shopMapper.listReviews(productId))
                     .orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("리뷰 목록 조회 실패: productId={}", productId, e);
             return Collections.emptyList();
         }
     }
@@ -212,7 +209,7 @@ public class ShopService {
             return Optional.ofNullable(shopMapper.listInquiries(productId))
                     .orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("문의 목록 조회 실패: productId={}", productId, e);
             return Collections.emptyList();
         }
     }

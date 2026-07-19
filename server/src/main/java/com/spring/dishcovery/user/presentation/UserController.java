@@ -135,7 +135,7 @@ public class UserController {
             Cookie jwtCookie = new Cookie("JWT_TOKEN", token);
             jwtCookie.setHttpOnly(true);
             jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(rememberMe ? AUTO_LOGIN_MAX_AGE_SEC : 3600);
+            jwtCookie.setMaxAge(rememberMe ? AUTO_LOGIN_MAX_AGE_SEC : jwtUtil.getExpirationSeconds());
             response.addCookie(jwtCookie);
 
             return "redirect:/MainPage";

@@ -3,6 +3,8 @@ package com.spring.dishcovery.global.config;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +15,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
     //JWT 생성 & 검증 유틸리티
+
+    private final CookieUtil cookieUtil;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -42,6 +47,11 @@ public class JwtUtil {
         return generateToken(userId, userName, expirationMs);
     }
 
+    // 기본 JWT 만료시간(초 단위) - 로그인 쿠키 maxAge를 여기에 맞춰야 토큰/쿠키 만료가 어긋나지 않는다
+    public int getExpirationSeconds() {
+        return (int) (expirationMs / 1000);
+    }
+
     // 자동 로그인 등 커스텀 만료시간이 필요한 경우
     public String generateToken(String userId, String userName, long customExpirationMs) {
 
@@ -58,6 +68,12 @@ public class JwtUtil {
     public String getUserIdFromToken(String token) {
         Claims claims = parse(token);
         return claims == null ? null : claims.getSubject();
+    }
+
+    // JWT_TOKEN 쿠키에서 바로 userId 추출 (컨트롤러마다 반복되던 쿠키+토큰 파싱을 한 곳으로 모음)
+    public String getUserIdFromRequest(HttpServletRequest request) {
+        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
+        return token != null ? getUserIdFromToken(token) : null;
     }
 
     // userName 추출

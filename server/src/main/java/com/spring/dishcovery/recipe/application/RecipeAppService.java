@@ -7,6 +7,7 @@ import com.spring.dishcovery.recipe.domain.mapper.RecipeAppMapper;
 import com.spring.dishcovery.shop.domain.mapper.ShopMapper;
 import com.spring.dishcovery.user.domain.mapper.UserMapper;
 import com.spring.dishcovery.global.util.FileUploadUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+@Slf4j
 @Service
 public class RecipeAppService {
 
@@ -110,7 +112,7 @@ public class RecipeAppService {
             }
         } catch (Exception e) {
             // 파일 저장 실패해도 등록 자체가 500으로 죽지 않게
-            e.printStackTrace();
+            log.error("레시피 이미지 저장 실패: recipeId={}", recipeId, e);
             mainImagePaths = new ArrayList<>();
         }
 
@@ -216,7 +218,7 @@ public class RecipeAppService {
         try {
             return Optional.ofNullable(recipeAppMapper.listComments(recipeId)).orElse(Collections.emptyList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("댓글 목록 조회 실패: recipeId={}", recipeId, e);
             return Collections.emptyList();
         }
     }
@@ -289,7 +291,7 @@ public class RecipeAppService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("레시피 이미지 교체 실패: recipeId={}", recipeVo.getRecipeId(), e);
         }
 
         int updated = recipeAppMapper.updateRecipeData(recipeVo);

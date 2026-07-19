@@ -1,6 +1,5 @@
 package com.spring.dishcovery.user.presentation;
 
-import com.spring.dishcovery.global.config.CookieUtil;
 import com.spring.dishcovery.global.config.JwtUtil;
 import com.spring.dishcovery.recipe.application.RecipeAppService;
 import com.spring.dishcovery.user.application.ProfileService;
@@ -24,12 +23,10 @@ public class UserProfileController {
     private final ProfileService profileService;
     private final UserService userService;
     private final RecipeAppService recipeAppService;
-    private final CookieUtil cookieUtil;
     private final JwtUtil jwtUtil;
 
     private String currentUserId(HttpServletRequest request) {
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        return token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        return jwtUtil.getUserIdFromRequest(request);
     }
 
     /** 다른 유저의 공개 프로필 */
@@ -99,7 +96,7 @@ public class UserProfileController {
         Cookie jwtCookie = new Cookie("JWT_TOKEN", token);
         jwtCookie.setHttpOnly(true);
         jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(3600);
+        jwtCookie.setMaxAge(jwtUtil.getExpirationSeconds());
         response.addCookie(jwtCookie);
 
         return "redirect:/myPage";

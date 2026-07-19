@@ -62,8 +62,6 @@ public class SecurityConfig {
                 )
                 .formLogin(FormLoginConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable);
-        //.httpBasic(basic -> basic.disable());
-        //.formLogin(form -> form.disable())
 
         return http.build();
     }

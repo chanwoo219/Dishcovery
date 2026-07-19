@@ -1,11 +1,13 @@
 package com.spring.dishcovery.global.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
 
+@Slf4j
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -29,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
             uploadPath = devPath;
         }
 
-        System.out.println("Uploads folder set to: " + uploadPath);
+        log.info("Uploads folder set to: {}", uploadPath);
     }
 
     @Override

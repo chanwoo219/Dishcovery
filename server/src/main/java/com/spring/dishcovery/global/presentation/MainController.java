@@ -1,6 +1,5 @@
 package com.spring.dishcovery.global.presentation;
 
-import com.spring.dishcovery.global.config.CookieUtil;
 import com.spring.dishcovery.global.config.JwtUtil;
 import com.spring.dishcovery.recipe.domain.entity.RecipeVo;
 import com.spring.dishcovery.user.domain.entity.UserEntity;
@@ -23,7 +22,6 @@ public class MainController {
     private final RecipeAppService service;
     private final UserService userService;
     private final JwtUtil jwtUtil;
-    private final CookieUtil cookieUtil;
 
     @GetMapping("/MainPage")
     public String mainPage(Model model,
@@ -58,9 +56,7 @@ public class MainController {
     @GetMapping("/myPage")
     public String myPage(Model model, HttpServletRequest request) {
 
-        // JWT 쿠키에서 토큰 가져오기
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        String userId = token != null ? jwtUtil.getUserIdFromToken(token) : null;
+        String userId = jwtUtil.getUserIdFromRequest(request);
         if (userId == null) {
             return "redirect:/dishcovery_login";
         }

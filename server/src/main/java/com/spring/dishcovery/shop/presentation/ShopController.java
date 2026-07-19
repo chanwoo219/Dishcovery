@@ -1,11 +1,12 @@
 package com.spring.dishcovery.shop.presentation;
 
-import com.spring.dishcovery.global.config.CookieUtil;
 import com.spring.dishcovery.global.config.JwtUtil;
 import com.spring.dishcovery.shop.application.ShopService;
 import com.spring.dishcovery.shop.domain.entity.PurchaseHistoryVo;
+import com.spring.dishcovery.shop.domain.entity.ShopProduct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,38 +14,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ShopController {
 
     private final ShopService shopService;
     private final JwtUtil jwtUtil;
-    private final CookieUtil cookieUtil;
 
     @GetMapping("/shop")
     public String shopList(@RequestParam(required = false) String searchName,
                            @RequestParam(required = false, defaultValue = "1") int page,
                            Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
-        // 1) 토큰 체크
-        String token = cookieUtil.getTokenFromCookies(request, "JWT_TOKEN");
-        if (token == null || token.isBlank()) {
+        String userId = jwtUtil.getUserIdFromRequest(request);
+        if (userId == null || userId.isBlank()) {
             redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
-            return "redirect:/dishcovery_login";
-        }
-
-        // 2) 토큰에서 userId 추출 (여기서 터져도 로그인으로)
-        String userId;
-        try {
-            userId = jwtUtil.getUserIdFromToken(token);
-            if (userId == null || userId.isBlank()) {
-                redirectAttributes.addFlashAttribute("loginMessage", "로그인 정보가 유효하지 않습니다. 다시 로그인 해주세요.");
-                return "redirect:/dishcovery_login";
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("loginMessage", "로그인 정보가 만료되었거나 유효하지 않습니다. 다시 로그인 해주세요.");
             return "redirect:/dishcovery_login";
         }
 
@@ -53,20 +39,12 @@ public class ShopController {
         model.addAttribute("rankClassNm", "seg-btn active");
         model.addAttribute("searchName", searchName);
 
-        // 3) 상품 조회 (절대 null/예외로 화면 죽지 않게)
+        // ShopService가 실패 시 이미 빈 목록을 반환하므로 여기서는 그대로 사용한다.
         boolean hasSearch = searchName != null && !searchName.isBlank();
-        try {
-            var products = hasSearch
-                    ? shopService.searchProductsPaged(searchName, page)
-                    : shopService.getProductsPaged(page);
-            if (products == null) products = Collections.emptyList();
-            model.addAttribute("products", products);
-        } catch (Exception e) {
-            model.addAttribute("products", Collections.emptyList());
-            model.addAttribute("errorMessage", "상품 목록을 불러오지 못했습니다. (서버/DB 확인 필요)");
-            // 필요하면 로그 찍기
-            e.printStackTrace();
-        }
+        var products = hasSearch
+                ? shopService.searchProductsPaged(searchName, page)
+                : shopService.getProductsPaged(page);
+        model.addAttribute("products", products);
 
         int totalCount = hasSearch ? shopService.countSearchProducts(searchName) : shopService.countProducts();
         int totalPages = (int) Math.ceil(totalCount / (double) ShopService.PAGE_SIZE);
@@ -98,50 +76,29 @@ public class ShopController {
     @GetMapping("/shop/product/{productId}")
     public String productDetail(@PathVariable String productId, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
-        String userId;
-        try {
-            userId = shopService.getLoginUserId(request);
-            if (userId == null || userId.isBlank()) {
-                redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
-                return "redirect:/dishcovery_login";
-            }
-        } catch (Exception e) {
+        String userId = shopService.getLoginUserId(request);
+        if (userId == null || userId.isBlank()) {
             redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
             return "redirect:/dishcovery_login";
         }
 
-        try {
-            model.addAttribute("product", shopService.getProduct(productId));
-        } catch (Exception e) {
-            model.addAttribute("product", null);
+        // ShopService의 조회 메서드들은 실패 시 이미 로그를 남기고 null/빈 값을 반환하므로 여기서 다시 감싸지 않는다.
+        ShopProduct product = shopService.getProduct(productId);
+        model.addAttribute("product", product);
+        if (product == null) {
             model.addAttribute("errorMessage", "상품 정보를 불러오지 못했습니다.");
-            e.printStackTrace();
         }
 
-        try {
-            model.addAttribute("myPoint", shopService.getUserPoint(userId));
-        } catch (Exception e) {
-            model.addAttribute("myPoint", 0);
-            e.printStackTrace();
-        }
-
+        model.addAttribute("myPoint", shopService.getUserPoint(userId));
         model.addAttribute("hasPurchased", shopService.hasPurchased(userId, productId));
-
-        try {
-            var recommended = shopService.listRecommended(productId);
-            if (recommended == null) recommended = Collections.emptyList();
-            model.addAttribute("recommended", recommended);
-        } catch (Exception e) {
-            model.addAttribute("recommended", Collections.emptyList());
-            e.printStackTrace();
-        }
+        model.addAttribute("recommended", shopService.listRecommended(productId));
 
         var reviews = shopService.listReviews(productId);
         model.addAttribute("reviews", reviews);
         model.addAttribute("avgRating", shopService.getAverageRating(reviews));
         model.addAttribute("inquiries", shopService.listInquiries(productId));
 
-        return "shop/productDetail";
+        return "shop/ProductDetail";
     }
 
     @PostMapping("/shop/product/{productId}/review")
@@ -193,14 +150,8 @@ public class ShopController {
                            HttpServletRequest request,
                            RedirectAttributes redirectAttributes) {
 
-        String userId;
-        try {
-            userId = shopService.getLoginUserId(request);
-            if (userId == null || userId.isBlank()) {
-                redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
-                return "redirect:/dishcovery_login";
-            }
-        } catch (Exception e) {
+        String userId = shopService.getLoginUserId(request);
+        if (userId == null || userId.isBlank()) {
             redirectAttributes.addFlashAttribute("loginMessage", "로그인이 필요한 서비스입니다.");
             return "redirect:/dishcovery_login";
         }
@@ -211,7 +162,7 @@ public class ShopController {
         } catch (IllegalArgumentException e) {
             return "redirect:/shop/product/" + productId + "?error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("구매 처리 실패: userId={}, productId={}, qty={}", userId, productId, qty, e);
             return "redirect:/shop/product/" + productId + "?error=" + URLEncoder.encode("구매 처리 중 오류가 발생했습니다", StandardCharsets.UTF_8);
         }
     }
