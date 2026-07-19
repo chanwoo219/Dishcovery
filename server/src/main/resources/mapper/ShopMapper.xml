@@ -52,8 +52,8 @@
     </update>
 
     <insert id="insertPurchaseHistory">
-        INSERT INTO PURCHASE_HISTORY (USER_ID, PRODUCT_ID, PURCHASE_DATE)
-        VALUES (#{userId}, #{productId}, NOW())
+        INSERT INTO PURCHASE_HISTORY (USER_ID, PRODUCT_ID, QTY, PURCHASE_DATE)
+        VALUES (#{userId}, #{productId}, #{qty}, NOW())
     </insert>
 
     <select id="countPurchases" resultType="int">
@@ -67,6 +67,7 @@
             p.PRODUCT_NAME AS productName,
             p.MAIN_IMAGE AS mainImage,
             p.PRODUCT_POINT AS productPoint,
+            ph.QTY AS qty,
             ph.PURCHASE_DATE AS purchaseDate
         FROM PURCHASE_HISTORY ph
         JOIN PRODUCT p ON p.PRODUCT_ID = ph.PRODUCT_ID

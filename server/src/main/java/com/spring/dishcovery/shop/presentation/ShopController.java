@@ -3,6 +3,7 @@ package com.spring.dishcovery.shop.presentation;
 import com.spring.dishcovery.global.config.CookieUtil;
 import com.spring.dishcovery.global.config.JwtUtil;
 import com.spring.dishcovery.shop.application.ShopService;
+import com.spring.dishcovery.shop.domain.entity.PurchaseHistoryVo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -78,7 +79,11 @@ public class ShopController {
             return "redirect:/dishcovery_login";
         }
 
-        model.addAttribute("purchases", shopService.listPurchaseHistory(userId));
+        var purchases = shopService.listPurchaseHistory(userId);
+        int totalQty = purchases.stream().mapToInt(PurchaseHistoryVo::getQty).sum();
+
+        model.addAttribute("purchases", purchases);
+        model.addAttribute("totalQty", totalQty);
         model.addAttribute("myPoint", shopService.getUserPoint(userId));
 
         return "shop/PurchaseHistory";

@@ -11,5 +11,6 @@ public class PurchaseHistoryVo {
     private String productName;
     private String mainImage;
     private int productPoint;
+    private int qty;
     private LocalDateTime purchaseDate;
 }

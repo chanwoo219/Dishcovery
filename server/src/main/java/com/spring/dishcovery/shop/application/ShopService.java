@@ -106,7 +106,7 @@ public class ShopService {
         if (myPoint < totalPoint) throw new IllegalArgumentException("포인트가 부족합니다");
 
         shopMapper.updateUserPoint(userId, -totalPoint);
-        shopMapper.insertPurchaseHistory(userId, productId);
+        shopMapper.insertPurchaseHistory(userId, productId, qty);
 
         try {
             shopMapper.insertLedger(

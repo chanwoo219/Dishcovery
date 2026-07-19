@@ -14,8 +14,9 @@
 
 <main class="wrap">
 
-    <div class="my-point-bar">
-        내 포인트 <b th:text="${myPoint}">0</b>P
+    <div class="my-point-bar with-count">
+        <span>총 <b th:text="${totalQty}">0</b>개 구매</span>
+        <span>내 포인트 <b th:text="${myPoint}">0</b>P</span>
     </div>
 
     <h2 class="shop-count">구매 내역</h2>
@@ -31,6 +32,8 @@
             <div class="product-info">
                 <div class="product-name" th:text="${ph.productName}">상품명</div>
                 <div class="purchase-meta">
+                    <span th:text="${ph.qty} + '개'">1개</span>
+                    ·
                     <span th:text="${ph.productPoint} + 'P'">0P</span>
                     ·
                     <span th:text="${#temporals.format(ph.purchaseDate, 'yyyy.MM.dd HH:mm')}">2026.01.01</span>

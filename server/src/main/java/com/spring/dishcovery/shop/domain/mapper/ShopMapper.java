@@ -20,7 +20,7 @@ public interface ShopMapper {
 
     void updateUserPoint(@Param("userId") String userId, @Param("point") int point);
 
-    void insertPurchaseHistory(@Param("userId") String userId, @Param("productId") String productId);
+    void insertPurchaseHistory(@Param("userId") String userId, @Param("productId") String productId, @Param("qty") int qty);
 
     int countPurchases(@Param("userId") String userId, @Param("productId") String productId);
 
