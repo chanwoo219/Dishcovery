@@ -14,11 +14,11 @@
 
     <section class="auth-card" aria-label="비밀번호 변경">
         <form method="post" action="/reset_password/verify" class="stacked-form">
-            <input type="email" name="userMail" placeholder="이메일" required />
-            <input name="code" placeholder="6자리 인증코드" inputmode="numeric" maxlength="6" required />
-            <input type="password" name="newPassword" placeholder="새 비밀번호" minlength="8" required />
-            <input type="password" name="confirmPassword" placeholder="비밀번호 확인" minlength="8" required />
-            <button type="submit">비밀번호 변경</button>
+            <input type="email" name="userMail" class="input" placeholder="이메일" required />
+            <input name="code" class="input" placeholder="6자리 인증코드" inputmode="numeric" maxlength="6" required />
+            <input type="password" name="newPassword" class="input" placeholder="새 비밀번호" minlength="8" required />
+            <input type="password" name="confirmPassword" class="input" placeholder="비밀번호 확인" minlength="8" required />
+            <button type="submit" class="btn primary">비밀번호 변경</button>
         </form>
 
         <p th:if="${msg}" th:text="${msg}" class="error-msg"></p>
