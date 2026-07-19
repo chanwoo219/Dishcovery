@@ -15,6 +15,7 @@
 <main class="page">
     <section class="controls container">
         <div class="segmented" role="tablist" aria-label="콘텐츠 종류">
+            <div th:class="${#strings.contains(rankClassNm,'active')} ? 'seg-indicator pos-2' : 'seg-indicator'"></div>
             <button type="button" th:class="${rcpClassNm}" data-tab="recipe"
                     onclick="handleSegmentClick(this, '/pageGubun?gubun=recipe')"
                     role="tab" aria-selected="true">레시피</button>
