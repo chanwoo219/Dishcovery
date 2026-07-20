@@ -187,23 +187,7 @@ public class RecipeAppService {
             recipeAppMapper.updateViewCount(recipeId);
 
             // 4) 조회수 1회당 1포인트 적립 (작성자에게)
-            java.util.Map<String, Object> state = recipeAppMapper.selectRecipePointState(recipeId);
-            if (state != null) {
-                String writerId = String.valueOf(state.get("userId"));
-
-                // 작성자 본인 조회는 제외
-                if (writerId != null && !writerId.isBlank() && !writerId.equals(userId)) {
-                    userMapper.addUserPoints(writerId, 1);
-
-                    // 원장 기록
-                    shopMapper.insertLedger(
-                            writerId,
-                            1,
-                            "EARN_VIEW",
-                            "레시피 조회 적립: " + recipeId
-                    );
-                }
-            }
+            awardPointsToWriter(recipeId, userId, "EARN_VIEW", "레시피 조회 적립: " + recipeId);
         }
 
         recipeVo = recipeAppMapper.getRecipeDataDetail(recipeId);
@@ -228,6 +212,9 @@ public class RecipeAppService {
         if (content == null || content.isBlank()) throw new IllegalArgumentException("댓글 내용을 입력해주세요");
 
         recipeAppMapper.insertComment(recipeId, userId, content.trim());
+
+        // 댓글 1개당 1포인트 적립 (작성자에게, 댓글 삭제해도 회수 안 함)
+        awardPointsToWriter(recipeId, userId, "EARN_COMMENT", "레시피 댓글 적립: " + recipeId);
     }
 
     // 댓글 작성자 또는 레시피 작성자만 삭제 가능 (권한 확인은 WHERE 절에서 처리)
@@ -256,7 +243,21 @@ public class RecipeAppService {
             recipeAppMapper.deleteLike(recipeId, userId);
         } else {
             recipeAppMapper.insertLike(recipeId, userId);
+            // 좋아요 1개당 1포인트 적립 (작성자에게, 좋아요 취소해도 회수 안 함)
+            awardPointsToWriter(recipeId, userId, "EARN_LIKE", "레시피 좋아요 적립: " + recipeId);
         }
+    }
+
+    // 레시피 작성자에게 포인트 적립 (본인 행동은 제외)
+    private void awardPointsToWriter(String recipeId, String actorUserId, String ledgerType, String description) {
+        java.util.Map<String, Object> state = recipeAppMapper.selectRecipePointState(recipeId);
+        if (state == null) return;
+
+        String writerId = String.valueOf(state.get("userId"));
+        if (writerId == null || writerId.isBlank() || writerId.equals(actorUserId)) return;
+
+        userMapper.addUserPoints(writerId, 1);
+        shopMapper.insertLedger(writerId, 1, ledgerType, description);
     }
 
     // 조회수/포인트 증가 없이 수정 화면용으로만 조회
