@@ -13,18 +13,112 @@
     <p class="subtitle">가입한 이메일로 인증코드를 보내드려요</p>
 
     <section class="auth-card" aria-label="비밀번호 재설정">
-        <form method="post" action="/reset_password" class="stacked-form">
-            <input type="email" name="userMail" class="input" placeholder="이메일" required />
-            <button type="submit" class="btn primary">인증코드 보내기</button>
-        </form>
+        <div class="stacked-form">
+            <input type="email" id="userMail" class="input" placeholder="이메일" required />
 
-        <p th:if="${msg}" th:text="${msg}" class="error-msg"></p>
+            <div id="codeArea" hidden>
+                <input id="code" class="input" placeholder="6자리 인증코드" inputmode="numeric" maxlength="6" />
+                <div class="helper-row end">
+                    <a href="#" id="resendLink">인증코드 재발송</a>
+                </div>
+            </div>
+
+            <button type="button" id="actionBtn" class="btn primary">인증코드 보내기</button>
+        </div>
+
+        <div id="passwordArea" hidden>
+            <form method="post" action="/reset_password/verify" class="stacked-form">
+                <input type="hidden" name="userMail" id="hiddenUserMail" />
+                <input type="hidden" name="code" id="hiddenCode" />
+                <input type="password" name="newPassword" class="input" placeholder="새 비밀번호" minlength="8" required />
+                <input type="password" name="confirmPassword" class="input" placeholder="비밀번호 확인" minlength="8" required />
+                <button type="submit" class="btn primary">비밀번호 변경</button>
+            </form>
+        </div>
+
+        <p id="errorMsg" th:text="${msg}" class="error-msg"></p>
 
         <div class="helper-row end">
             <a th:href="@{/dishcovery_login(gubun='login')}">로그인으로</a>
         </div>
     </section>
 </main>
+
+<script>
+    const emailInput = document.getElementById('userMail');
+    const codeArea = document.getElementById('codeArea');
+    const codeInput = document.getElementById('code');
+    const actionBtn = document.getElementById('actionBtn');
+    const resendLink = document.getElementById('resendLink');
+    const passwordArea = document.getElementById('passwordArea');
+    const errorMsg = document.getElementById('errorMsg');
+
+    let codeSent = false;
+
+    function showError(message) {
+        errorMsg.textContent = message;
+    }
+
+    async function sendCode() {
+        if (!emailInput.value) {
+            showError('이메일을 입력해주세요.');
+            return;
+        }
+        const res = await fetch('/api/auth/reset/request', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userMail: emailInput.value })
+        });
+        const data = await res.json().catch(() => ({}));
+        showError(data.message || '인증코드를 이메일로 보냈습니다.');
+
+        if (!codeSent) {
+            codeSent = true;
+            emailInput.disabled = true;
+            codeArea.hidden = false;
+            actionBtn.textContent = '인증하기';
+        }
+    }
+
+    async function verifyCode() {
+        if (!codeInput.value) {
+            showError('인증코드를 입력해주세요.');
+            return;
+        }
+        const res = await fetch('/api/auth/reset/verify-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userMail: emailInput.value, code: codeInput.value })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+            showError(data.message || '인증코드가 올바르지 않거나 만료되었습니다.');
+            return;
+        }
+
+        document.getElementById('hiddenUserMail').value = emailInput.value;
+        document.getElementById('hiddenCode').value = codeInput.value;
+        showError('');
+        actionBtn.hidden = true;
+        codeArea.hidden = true;
+        emailInput.hidden = true;
+        passwordArea.hidden = false;
+    }
+
+    actionBtn.addEventListener('click', () => {
+        if (!codeSent) {
+            sendCode();
+        } else {
+            verifyCode();
+        }
+    });
+
+    resendLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        sendCode();
+    });
+</script>
 
 </body>
 </html>
